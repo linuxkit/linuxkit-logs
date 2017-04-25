@@ -1,0 +1,73 @@
+=== Build LinuxKit
+[2017-04-25 10:43.51] Starting...
+HEAD is now at 8d33b2de Merge pull request #1700 from AkihiroSuda/fix-doc
+[2017-04-25 10:43.51] Running "git" "clone" "/repos/linuxkit" "/tmp/moby-fa8430a/src"
+Cloning into '/tmp/moby-fa8430a/src'...
+done.
+[2017-04-25 10:47.57] Running "make" "ci" "CLOUDSDK_IMAGE_NAME=linuxkit-ci-0"
+make clean
+make[1]: Entering directory '/tmp/moby-fa8430a/src'
+rm -rf bin *.log *-bzImage *-cmdline *.img *.iso *.tar.gz *.qcow2 *.vhd
+make[1]: Leaving directory '/tmp/moby-fa8430a/src'
+make
+make[1]: Entering directory '/tmp/moby-fa8430a/src'
+mkdir -p bin
+tar cf - vendor src/initrd src/pad4 -C src/cmd/moby . | docker run --rm --net=none --log-driver=none -i  linuxkit/go-compile:4513068d9a7e919e4ec42e2d7ee879ff5b95b7f5@sha256:bdfadbe3e4ec699ca45b67453662321ec270f2d1a1dbdbf09625776d3ebd68c5 --package github.com/linuxkit/linuxkit --ldflags "-X main.GitCommit=8d33b2def0e9a0278031c15d66f118e0a9df0df5 -X main.Version="0.0" " -o bin/moby > tmp_moby_bin.tar
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_moby_bin.tar > bin/moby
+rm tmp_moby_bin.tar
+touch bin/moby
+tar cf - vendor -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i  linuxkit/go-compile:4513068d9a7e919e4ec42e2d7ee879ff5b95b7f5@sha256:bdfadbe3e4ec699ca45b67453662321ec270f2d1a1dbdbf09625776d3ebd68c5 --package github.com/linuxkit/linuxkit --ldflags "-X main.GitCommit=8d33b2def0e9a0278031c15d66f118e0a9df0df5 -X main.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_linuxkit_bin.tar > bin/linuxkit
+rm tmp_linuxkit_bin.tar
+touch bin/linuxkit
+make[1]: Leaving directory '/tmp/moby-fa8430a/src'
+make test
+make[1]: Entering directory '/tmp/moby-fa8430a/src'
+bin/moby build test/test.yml
+Extract kernel image: linuxkit/kernel:4.9.x
+Add init containers:
+Process init image: linuxkit/init:63eed9ca7a09d2ce4c0c5e7238ac005fa44f564b
+Process init image: linuxkit/runc:b0fb122e10dbb7e4e45115177a61a3f8d68c19a9
+Process init image: linuxkit/containerd:18eaf72f3f4f9a9f29ca1951f66df701f873060b
+Process init image: linuxkit/ca-certificates:eabc5a6e59f05aa91529d80e9a595b85b046f935
+Add onboot containers:
+  Create OCI config for linuxkit/dhcpcd:48e249ebef6a521eed886b3bce032db69fbb4afa
+  Create OCI config for linuxkit/check:43c4147dda4e02d066ef158cd81718dbff8c8bd0
+Add service containers:
+Add files:
+Create outputs:
+  test-bzImage test-initrd.img test-cmdline
+  test.iso
+  test-efi.iso
+  test.img.tar.gz
+bin/linuxkit run test | tee test.log
+Unable to find qemu-system-x86_64 within the $PATH. Using a container
+qemu: could not load kernel 'test-bzImage': No such file or directory
+time="2017-04-25T10:49:19Z" level=fatal msg="exit status 1" 
+make[1]: *** [Makefile:80: test] Error 1
+make[1]: Leaving directory '/tmp/moby-fa8430a/src'
+make: *** [Makefile:95: ci] Error 2
+[2017-04-25 10:49.19] Removing test VM...
+[2017-04-25 10:49.19] Running "/gcloud/destroy.py" "linuxkit-ci-0"
+INFO:root:Destroying VM
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+Traceback (most recent call last):
+  File "/gcloud/destroy.py", line 12, in <module>
+    resp = common.compute.instances().delete(instance=name, project=common.project, zone=common.zone).execute()
+  File "/usr/lib/python2.7/site-packages/oauth2client/_helpers.py", line 133, in positional_wrapper
+    return wrapped(*args, **kwargs)
+  File "/usr/lib/python2.7/site-packages/googleapiclient/http.py", line 840, in execute
+    raise HttpError(resp, content, uri=self.uri)
+googleapiclient.errors.HttpError: <HttpError 404 when requesting https://www.googleapis.com/compute/v1/projects/moby-datakit-ci/zones/europe-west1-b/instances/linuxkit-ci-0?alt=json returned "The resource 'projects/moby-datakit-ci/zones/europe-west1-b/instances/linuxkit-ci-0' was not found">
+[2017-04-25 10:49.20] Failed: qemu: could not load kernel 'test-bzImage': No such file or directory
