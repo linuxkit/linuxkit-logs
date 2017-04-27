@@ -1,0 +1,79 @@
+=== Build LinuxKit
+[2017-04-27 11:03.17] Starting...
+HEAD is now at b009769e arm64: more notes
+[2017-04-27 11:03.20] Running "git" "clone" "/repos/linuxkit" "/tmp/linuxkit-23a65f0b/src"
+Cloning into '/tmp/linuxkit-23a65f0b/src'...
+done.
+[2017-04-27 11:07.32] Running "/gcloud/create.py" "linuxkit-ci-3"
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Using source disk image https://www.googleapis.com/compute/v1/projects/moby-datakit-ci/global/images/linuxkit-ci-builder-2
+INFO:root:Creating VM
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Getting VM details
+[2017-04-27 11:08.04] Created new VM linuxkit-ci-3
+[2017-04-27 11:08.04] Running "ssh" "-i" "/run/secrets/builder-ssh" "-o" "StrictHostKeyChecking=no" "root@130.211.85.8" "/usr/local/bin/test.sh"
+Warning: Permanently added '130.211.85.8' (ECDSA) to the list of known hosts.
++ rm -rf /tmp/build
++ mkdir /tmp/build
++ cd /tmp/build
++ tar xf -
++ make ci-pr
+make clean
+make[1]: Entering directory '/tmp/build'
+rm -rf bin *.log *-bzImage *-cmdline *.img *.iso *.tar.gz *.qcow2 *.vhd
+make[1]: Leaving directory '/tmp/build'
+make
+make[1]: Entering directory '/tmp/build'
+mkdir -p bin
+fatal: Not a git repository (or any of the parent directories): .git
+tar cf - vendor src/initrd src/pad4 -C src/cmd/moby . | docker run --rm --net=none --log-driver=none -i -e GOOS=linux -e GOARCH=arm64 mor1/go-compile:021f2dca9228cdd27cffc304aafae1b1f900bfc2 --package github.com/linuxkit/linuxkit --ldflags "-X main.GitCommit= -X main.Version="0.0" " -o bin/moby > tmp_moby_bin.tar
+Unable to find image 'mor1/go-compile:021f2dca9228cdd27cffc304aafae1b1f900bfc2' locally
+021f2dca9228cdd27cffc304aafae1b1f900bfc2: Pulling from mor1/go-compile
+91e476ef78e5: Pulling fs layer
+c2b31c52910b: Pulling fs layer
+36b053d1a10d: Pulling fs layer
+68ce19588cd9: Pulling fs layer
+68ce19588cd9: Waiting
+91e476ef78e5: Verifying Checksum
+91e476ef78e5: Download complete
+91e476ef78e5: Pull complete
+68ce19588cd9: Verifying Checksum
+68ce19588cd9: Download complete
+36b053d1a10d: Verifying Checksum
+36b053d1a10d: Download complete
+c2b31c52910b: Verifying Checksum
+c2b31c52910b: Download complete
+c2b31c52910b: Pull complete
+36b053d1a10d: Pull complete
+68ce19588cd9: Pull complete
+Digest: sha256:a39944916ae9c1c6e47b0933902e45095e596c0be78cd65c7a327965864ec010
+Status: Downloaded newer image for mor1/go-compile:021f2dca9228cdd27cffc304aafae1b1f900bfc2
+standard_init_linux.go:178: exec user process caused "exec format error"
+read unix @->/var/run/docker.sock: read: connection reset by peer
+Makefile:29: recipe for target 'bin/moby' failed
+make[1]: Leaving directory '/tmp/build'
+Makefile:108: recipe for target 'ci-pr' failed
+make[1]: *** [bin/moby] Error 1
+make: *** [ci-pr] Error 2
+[2017-04-27 11:08.51] Removing test VM...
+[2017-04-27 11:08.51] Running "/gcloud/destroy.py" "linuxkit-ci-3"
+INFO:root:Destroying VM
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+[2017-04-27 11:09.41] Failed: recipe for target 'ci-pr' failed
