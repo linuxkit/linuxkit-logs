@@ -1,0 +1,85 @@
+=== Build LinuxKit
+[2017-05-08 19:32.42] Starting...
+HEAD is now at 618c86fc Merge pull request #1786 from justincormack/mobyup
+[2017-05-08 19:32.42] Running "git" "clone" "/repos/linuxkit" "/tmp/linuxkit-5c39e96/src"
+Cloning into '/tmp/linuxkit-5c39e96/src'...
+done.
+[2017-05-08 19:32.43] Running "make" "ci" "CLOUDSDK_IMAGE_NAME=linuxkit-ci-0"
+make clean
+make[1]: Entering directory '/tmp/linuxkit-5c39e96/src'
+rm -rf bin *.log *-kernel *-cmdline *.img *.iso *.tar.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar
+make -C test clean
+make[2]: Entering directory '/tmp/linuxkit-5c39e96/src/test'
+rm -rf bin *.log *-kernel *-cmdline *.img *.iso *.tar.gz *.qcow2 *.vhd *.vmx *.vmdk
+make[2]: Leaving directory '/tmp/linuxkit-5c39e96/src/test'
+make[1]: Leaving directory '/tmp/linuxkit-5c39e96/src'
+make
+make[1]: Entering directory '/tmp/linuxkit-5c39e96/src'
+mkdir -p bin
+docker run --rm --log-driver=none  linuxkit/go-compile:5bf17af781df44f07906099402680b9a661f999b --clone-path github.com/moby/tool --clone https://github.com/moby/tool.git --commit a1b24b4de2cc0261c4802b3f008395e973d96671 --package github.com/moby/tool/cmd/moby --ldflags "-X main.GitCommit=618c86fcc968006d46c1287f9edaad528e3dadca -X main.Version="0.0" " -o bin/moby > tmp_moby_bin.tar
+Cloning into '.'...
+Note: checking out 'a1b24b4de2cc0261c4802b3f008395e973d96671'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at a1b24b4... Merge pull request #24 from MagnusS/fix-build
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_moby_bin.tar > bin/moby
+rm tmp_moby_bin.tar
+touch bin/moby
+tar cf - vendor -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i  linuxkit/go-compile:5bf17af781df44f07906099402680b9a661f999b --package github.com/linuxkit/linuxkit --ldflags "-X main.GitCommit=618c86fcc968006d46c1287f9edaad528e3dadca -X main.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_linuxkit_bin.tar > bin/linuxkit
+rm tmp_linuxkit_bin.tar
+touch bin/linuxkit
+make[1]: Leaving directory '/tmp/linuxkit-5c39e96/src'
+make install
+make[1]: Entering directory '/tmp/linuxkit-5c39e96/src'
+cp -R ./bin/* /usr/local//bin
+make[1]: Leaving directory '/tmp/linuxkit-5c39e96/src'
+make -C test all
+make[1]: Entering directory '/tmp/linuxkit-5c39e96/src/test'
+/usr/local/bin/moby build --pull cases/test-kernel-config.yml
+Pull kernel image: linuxkit/kernel:4.9.x
+Extract kernel image: linuxkit/kernel:4.9.x
+Pull image: linuxkit/kernel:4.9.x
+Add init containers:
+Process init image: linuxkit/init:63eed9ca7a09d2ce4c0c5e7238ac005fa44f564b
+Pull image: linuxkit/init:63eed9ca7a09d2ce4c0c5e7238ac005fa44f564b
+Process init image: linuxkit/runc:b0fb122e10dbb7e4e45115177a61a3f8d68c19a9
+Pull image: linuxkit/runc:b0fb122e10dbb7e4e45115177a61a3f8d68c19a9
+Process init image: linuxkit/containerd:18eaf72f3f4f9a9f29ca1951f66df701f873060b
+Pull image: linuxkit/containerd:18eaf72f3f4f9a9f29ca1951f66df701f873060b
+time="2017-05-08T19:33:27Z" level=fatal msg="Failed to build init tarball from linuxkit/containerd:18eaf72f3f4f9a9f29ca1951f66df701f873060b: Failed to docker rm container 3722ba68131ae14b844a79ee2ee501227fc05d876dc09a618c0bfcaaaa8048c2: Error response from daemon: Driver aufs failed to remove root filesystem 3722ba68131ae14b844a79ee2ee501227fc05d876dc09a618c0bfcaaaa8048c2: rename /var/lib/docker/aufs/mnt/8b5d54f150b3ee17199b0eece77b38063bba01c5919e28776573c33c7910f3ec /var/lib/docker/aufs/mnt/8b5d54f150b3ee17199b0eece77b38063bba01c5919e28776573c33c7910f3ec-removing: device or resource busy" 
+make[1]: *** [Makefile:27: test-kernel-config-initrd.img] Error 1
+make[1]: Leaving directory '/tmp/linuxkit-5c39e96/src/test'
+make: *** [Makefile:52: ci] Error 2
+[2017-05-08 19:33.27] Removing test VM...
+[2017-05-08 19:33.27] Running "/gcloud/destroy.py" "linuxkit-ci-0"
+INFO:root:Destroying VM
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+Traceback (most recent call last):
+  File "/gcloud/destroy.py", line 12, in <module>
+    resp = common.compute.instances().delete(instance=name, project=common.project, zone=common.zone).execute()
+  File "/usr/lib/python2.7/site-packages/oauth2client/_helpers.py", line 133, in positional_wrapper
+    return wrapped(*args, **kwargs)
+  File "/usr/lib/python2.7/site-packages/googleapiclient/http.py", line 840, in execute
+    raise HttpError(resp, content, uri=self.uri)
+googleapiclient.errors.HttpError: <HttpError 404 when requesting https://www.googleapis.com/compute/v1/projects/moby-datakit-ci/zones/europe-west1-b/instances/linuxkit-ci-0?alt=json returned "The resource 'projects/moby-datakit-ci/zones/europe-west1-b/instances/linuxkit-ci-0' was not found">
+[2017-05-08 19:33.29] Failed: Failed to build init tarball from linuxkit/containerd:18eaf72f3f4f9a9f29ca1951f66df701f873060b: Failed to docker rm container 3722ba68131ae14b844a79ee2ee501227fc05d876dc09a618c0bfcaaaa8048c2: Error response from daemon: Driver aufs failed to remove root filesystem 3722ba68131ae14b844a79ee2ee501227fc05d876dc09a618c0bfcaaaa8048c2: rename /var/lib/docker/aufs/mnt/8b5d54f150b3ee17199b0eece77b38063bba01c5919e28776573c33c7910f3ec /var/lib/docker/aufs/mnt/8b5d54f150b3ee17199b0eece77b38063bba01c5919e28776573c33c7910f3ec-removing: device or resource busy
