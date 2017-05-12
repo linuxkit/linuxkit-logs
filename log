@@ -1,0 +1,130 @@
+=== Build LinuxKit
+[2017-05-12 10:42.54] Starting...
+HEAD is now at 8f89f29b Update Moby tool
+[2017-05-12 10:42.54] Running "git" "clone" "/repos/linuxkit" "/tmp/linuxkit-192b5c2a/src"
+Cloning into '/tmp/linuxkit-192b5c2a/src'...
+done.
+[2017-05-12 10:42.54] Running "/gcloud/create.py" "linuxkit-ci-2"
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Using source disk image https://www.googleapis.com/compute/v1/projects/moby-datakit-ci/global/images/linuxkit-ci-builder-2
+INFO:root:Creating VM
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Getting VM details
+[2017-05-12 10:43.18] Created new VM linuxkit-ci-2
+[2017-05-12 10:43.18] Running "ssh" "-i" "/run/secrets/builder-ssh" "-o" "StrictHostKeyChecking=no" "root@35.187.191.246" "/usr/local/bin/test.sh"
+Warning: Permanently added '35.187.191.246' (ECDSA) to the list of known hosts.
++ rm -rf /tmp/build
++ mkdir /tmp/build
++ cd /tmp/build
++ tar xf -
++ make ci-pr
+make clean
+make[1]: Entering directory '/tmp/build'
+rm -rf bin *.log *-kernel *-cmdline *.img *.iso *.tar.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar
+make -C test clean
+make[2]: Entering directory '/tmp/build/test'
+rm -rf bin *.log *-kernel *-cmdline *.img *.iso *.tar.gz *.qcow2 *.vhd *.vmx *.vmdk
+make[2]: Leaving directory '/tmp/build/test'
+make[1]: Leaving directory '/tmp/build'
+make
+make[1]: Entering directory '/tmp/build'
+mkdir -p bin
+fatal: Not a git repository (or any of the parent directories): .git
+docker run --rm --log-driver=none  linuxkit/go-compile:5bf17af781df44f07906099402680b9a661f999b --clone-path github.com/moby/tool --clone https://github.com/moby/tool.git --commit 91e78b73b988f7b2ecf064ea60947836aa6a417d --package github.com/moby/tool/cmd/moby --ldflags "-X main.GitCommit= -X main.Version="0.0" " -o bin/moby > tmp_moby_bin.tar
+Unable to find image 'linuxkit/go-compile:5bf17af781df44f07906099402680b9a661f999b' locally
+5bf17af781df44f07906099402680b9a661f999b: Pulling from linuxkit/go-compile
+627beaf3eaaf: Already exists
+98e502457679: Pulling fs layer
+ecae82f11762: Pulling fs layer
+cc422136b77c: Pulling fs layer
+cc422136b77c: Verifying Checksum
+cc422136b77c: Download complete
+ecae82f11762: Verifying Checksum
+ecae82f11762: Download complete
+98e502457679: Verifying Checksum
+98e502457679: Download complete
+98e502457679: Pull complete
+ecae82f11762: Pull complete
+cc422136b77c: Pull complete
+Digest: sha256:0bf523bcebb96ccc525f983a118f1fd8cb5e17dbf90e83044ca71bb983000e70
+Status: Downloaded newer image for linuxkit/go-compile:5bf17af781df44f07906099402680b9a661f999b
+Cloning into '.'...
+Note: checking out '91e78b73b988f7b2ecf064ea60947836aa6a417d'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at 91e78b7... Merge pull request #31 from justincormack/fix-exec
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_moby_bin.tar > bin/moby
+rm tmp_moby_bin.tar
+touch bin/moby
+fatal: Not a git repository (or any of the parent directories): .git
+tar cf - vendor -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i  linuxkit/go-compile:5bf17af781df44f07906099402680b9a661f999b --package github.com/linuxkit/linuxkit --ldflags "-X main.GitCommit= -X main.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_linuxkit_bin.tar > bin/linuxkit
+rm tmp_linuxkit_bin.tar
+touch bin/linuxkit
+make[1]: Leaving directory '/tmp/build'
+make install
+make[1]: Entering directory '/tmp/build'
+cp -R ./bin/* /usr/local//bin
+make[1]: Leaving directory '/tmp/build'
+make -C test pr
+make[1]: Entering directory '/tmp/build/test'
+/usr/local/bin/moby build --pull cases/test-kernel-config.yml
+Pull kernel image: linuxkit/kernel:4.9.x
+Extract kernel image: linuxkit/kernel:4.9.x
+Pull image: linuxkit/kernel:4.9.x
+Pull image: linuxkit/kernel:4.9.x
+Add init containers:
+Process init image: linuxkit/init:deea956a9ab07bf262083e93a86930bdc610cc2f
+Pull image: linuxkit/init:deea956a9ab07bf262083e93a86930bdc610cc2f
+Pull image: linuxkit/init:deea956a9ab07bf262083e93a86930bdc610cc2f
+Process init image: linuxkit/runc:2649198589ef0020d99f613adaeda45ce0093a38
+Pull image: linuxkit/runc:2649198589ef0020d99f613adaeda45ce0093a38
+Pull image: linuxkit/runc:2649198589ef0020d99f613adaeda45ce0093a38
+Process init image: linuxkit/containerd:cf2614f5a96c569a0bd4bd54e054a65ba17d167f
+Pull image: linuxkit/containerd:cf2614f5a96c569a0bd4bd54e054a65ba17d167f
+Pull image: linuxkit/containerd:cf2614f5a96c569a0bd4bd54e054a65ba17d167f
+time="2017-05-12T10:45:01Z" level=fatal msg="Failed to build init tarball from linuxkit/containerd:cf2614f5a96c569a0bd4bd54e054a65ba17d167f: Failed to docker create image linuxkit/containerd:cf2614f5a96c569a0bd4bd54e054a65ba17d167f: Error: No such image: linuxkit/containerd:cf2614f5a96c569a0bd4bd54e054a65ba17d167f" 
+Makefile:27: recipe for target 'test-kernel-config-initrd.img' failed
+make[1]: Leaving directory '/tmp/build/test'
+make[1]: *** [test-kernel-config-initrd.img] Error 1
+Makefile:61: recipe for target 'ci-pr' failed
+make: *** [ci-pr] Error 2
+[2017-05-12 10:45.01] Removing test VM...
+[2017-05-12 10:45.01] Running "/gcloud/destroy.py" "linuxkit-ci-2"
+INFO:root:Destroying VM
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+[2017-05-12 10:45.50] Failed: Failed to build init tarball from linuxkit/containerd:cf2614f5a96c569a0bd4bd54e054a65ba17d167f: Failed to docker create image linuxkit/containerd:cf2614f5a96c569a0bd4bd54e054a65ba17d167f: Error: No such image: linuxkit/containerd:cf2614f5a96c569a0bd4bd54e054a65ba17d167f
