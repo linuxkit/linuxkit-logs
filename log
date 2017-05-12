@@ -1,0 +1,99 @@
+=== Build LinuxKit
+[2017-05-12 10:34.41] Starting...
+HEAD is now at 15930e9c Update Moby tool
+[2017-05-12 10:34.41] Running "git" "clone" "/repos/linuxkit" "/tmp/linuxkit-3ad0630b/src"
+Cloning into '/tmp/linuxkit-3ad0630b/src'...
+done.
+[2017-05-12 10:34.41] Running "/gcloud/create.py" "linuxkit-ci-2"
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Using source disk image https://www.googleapis.com/compute/v1/projects/moby-datakit-ci/global/images/linuxkit-ci-builder-2
+INFO:root:Creating VM
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Getting VM details
+[2017-05-12 10:35.11] Created new VM linuxkit-ci-2
+[2017-05-12 10:35.11] Running "ssh" "-i" "/run/secrets/builder-ssh" "-o" "StrictHostKeyChecking=no" "root@35.187.174.240" "/usr/local/bin/test.sh"
+Warning: Permanently added '35.187.174.240' (ECDSA) to the list of known hosts.
++ rm -rf /tmp/build
++ mkdir /tmp/build
++ cd /tmp/build
++ tar xf -
++ make ci-pr
+make clean
+make[1]: Entering directory '/tmp/build'
+rm -rf bin *.log *-kernel *-cmdline *.img *.iso *.tar.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar
+make -C test clean
+make[2]: Entering directory '/tmp/build/test'
+rm -rf bin *.log *-kernel *-cmdline *.img *.iso *.tar.gz *.qcow2 *.vhd *.vmx *.vmdk
+make[2]: Leaving directory '/tmp/build/test'
+make[1]: Leaving directory '/tmp/build'
+make
+make[1]: Entering directory '/tmp/build'
+mkdir -p bin
+fatal: Not a git repository (or any of the parent directories): .git
+docker run --rm --log-driver=none  linuxkit/go-compile:5bf17af781df44f07906099402680b9a661f999b --clone-path github.com/moby/tool --clone https://github.com/moby/tool.git --commit 9afbc24c79fa362d8233d9828c21ecba5f3168f8 --package github.com/moby/tool/cmd/moby --ldflags "-X main.GitCommit= -X main.Version="0.0" " -o bin/moby > tmp_moby_bin.tar
+Unable to find image 'linuxkit/go-compile:5bf17af781df44f07906099402680b9a661f999b' locally
+5bf17af781df44f07906099402680b9a661f999b: Pulling from linuxkit/go-compile
+627beaf3eaaf: Already exists
+98e502457679: Pulling fs layer
+ecae82f11762: Pulling fs layer
+cc422136b77c: Pulling fs layer
+cc422136b77c: Verifying Checksum
+cc422136b77c: Download complete
+ecae82f11762: Verifying Checksum
+ecae82f11762: Download complete
+98e502457679: Verifying Checksum
+98e502457679: Download complete
+98e502457679: Pull complete
+ecae82f11762: Pull complete
+cc422136b77c: Pull complete
+Digest: sha256:0bf523bcebb96ccc525f983a118f1fd8cb5e17dbf90e83044ca71bb983000e70
+Status: Downloaded newer image for linuxkit/go-compile:5bf17af781df44f07906099402680b9a661f999b
+Cloning into '.'...
+Note: checking out '9afbc24c79fa362d8233d9828c21ecba5f3168f8'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at 9afbc24... Merge pull request #30 from riyazdf/revert-run-api
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+# github.com/moby/tool/cmd/moby
+./docker.go:24: undefined: exec in exec.LookPath
+./docker.go:29: undefined: exec in exec.Command
+./docker.go:67: undefined: exec in exec.LookPath
+./docker.go:72: undefined: exec in exec.Command
+Makefile:22: recipe for target 'bin/moby' failed
+make[1]: Leaving directory '/tmp/build'
+make[1]: *** [bin/moby] Error 2
+Makefile:61: recipe for target 'ci-pr' failed
+make: *** [ci-pr] Error 2
+[2017-05-12 10:36.13] Removing test VM...
+[2017-05-12 10:36.13] Running "/gcloud/destroy.py" "linuxkit-ci-2"
+INFO:root:Destroying VM
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+[2017-05-12 10:36.57] Failed: recipe for target 'ci-pr' failed
