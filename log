@@ -1,0 +1,668 @@
+=== Build LinuxKit
+[2017-05-12 15:09.25] Starting...
+HEAD is now at 2388f483 Merge pull request #1810 from justincormack/init-clean
+[2017-05-12 15:09.25] Running "git" "clone" "/repos/linuxkit" "/tmp/linuxkit-3740131f/src"
+Cloning into '/tmp/linuxkit-3740131f/src'...
+done.
+[2017-05-12 15:09.25] Running "make" "ci" "CLOUDSDK_IMAGE_NAME=linuxkit-ci-0"
+make clean
+make[1]: Entering directory '/tmp/linuxkit-3740131f/src'
+rm -rf bin *.log *-kernel *-cmdline *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar
+make -C test clean
+make[2]: Entering directory '/tmp/linuxkit-3740131f/src/test'
+rm -rf bin *.log *-kernel *-cmdline *.img *.iso *.tar.gz *.qcow2 *.vhd *.vmx *.vmdk
+make[2]: Leaving directory '/tmp/linuxkit-3740131f/src/test'
+make[1]: Leaving directory '/tmp/linuxkit-3740131f/src'
+make
+make[1]: Entering directory '/tmp/linuxkit-3740131f/src'
+mkdir -p bin
+docker run --rm --log-driver=none  linuxkit/go-compile:5bf17af781df44f07906099402680b9a661f999b --clone-path github.com/moby/tool --clone https://github.com/moby/tool.git --commit a9a00fae6204a89baeed6903c7e2901412c1ede0 --package github.com/moby/tool/cmd/moby --ldflags "-X main.GitCommit=2388f483c397010d528a9a97b71224dbdb3897b5 -X main.Version="0.0" " -o bin/moby > tmp_moby_bin.tar
+Cloning into '.'...
+Note: checking out 'a9a00fae6204a89baeed6903c7e2901412c1ede0'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at a9a00fa... Merge pull request #33 from justincormack/img-gz
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_moby_bin.tar > bin/moby
+rm tmp_moby_bin.tar
+touch bin/moby
+tar cf - vendor -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i  linuxkit/go-compile:5bf17af781df44f07906099402680b9a661f999b --package github.com/linuxkit/linuxkit --ldflags "-X main.GitCommit=2388f483c397010d528a9a97b71224dbdb3897b5 -X main.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_linuxkit_bin.tar > bin/linuxkit
+rm tmp_linuxkit_bin.tar
+touch bin/linuxkit
+make[1]: Leaving directory '/tmp/linuxkit-3740131f/src'
+make install
+make[1]: Entering directory '/tmp/linuxkit-3740131f/src'
+cp -R ./bin/* /usr/local//bin
+make[1]: Leaving directory '/tmp/linuxkit-3740131f/src'
+make -C test all
+make[1]: Entering directory '/tmp/linuxkit-3740131f/src/test'
+/usr/local/bin/moby build --pull cases/test-kernel-config.yml
+Pull kernel image: linuxkit/kernel:4.9.x
+Extract kernel image: linuxkit/kernel:4.9.x
+Pull image: linuxkit/kernel:4.9.x
+Add init containers:
+Process init image: linuxkit/init:b3740303f3d1e5689a84c87b7dfb48fd2a40a192
+Pull image: linuxkit/init:b3740303f3d1e5689a84c87b7dfb48fd2a40a192
+Process init image: linuxkit/runc:2649198589ef0020d99f613adaeda45ce0093a38
+Pull image: linuxkit/runc:2649198589ef0020d99f613adaeda45ce0093a38
+Process init image: linuxkit/containerd:cf2614f5a96c569a0bd4bd54e054a65ba17d167f
+Pull image: linuxkit/containerd:cf2614f5a96c569a0bd4bd54e054a65ba17d167f
+Process init image: linuxkit/ca-certificates:3344cdca1bc59fdfa17bd7f0fcbf491b9dbaa288
+Pull image: linuxkit/ca-certificates:3344cdca1bc59fdfa17bd7f0fcbf491b9dbaa288
+Add onboot containers:
+  Create OCI config for linuxkit/dhcpcd:2def74ab3f9233b4c09ebb196ba47c27c08b0ed8
+Pull image: linuxkit/dhcpcd:2def74ab3f9233b4c09ebb196ba47c27c08b0ed8
+  Create OCI config for linuxkit/test-kernel-config:ecff41279ccbc408079a3996a956432651c6eb9c
+Pull image: linuxkit/test-kernel-config:ecff41279ccbc408079a3996a956432651c6eb9c
+Add service containers:
+  Create OCI config for linuxkit/poweroff:961412b8ef5c5285de0d40ec076701d955eaa084
+Pull image: linuxkit/poweroff:961412b8ef5c5285de0d40ec076701d955eaa084
+Create outputs:
+  test-kernel-config-kernel test-kernel-config-initrd.img test-kernel-config-cmdline
+  test-kernel-config.iso
+  test-kernel-config-efi.iso
+  test-kernel-config.img.tar.gz
+/usr/local/bin/linuxkit run qemu test-kernel-config 2>&1 | tee test.log
+[    0.000000] Linux version 4.9.27-linuxkit (root@84baa8e89c00) (gcc version 6.2.1 20160822 (Alpine 6.2.1) ) #1 SMP Wed May 10 09:29:22 UTC 2017
+[    0.000000] Command line: console=ttyS0
+[    0.000000] x86/fpu: Legacy x87 FPU detected.
+[    0.000000] x86/fpu: Using 'eager' FPU context switches.
+[    0.000000] e820: BIOS-provided physical RAM map:
+[    0.000000] BIOS-e820: [mem 0x0000000000000000-0x000000000009fbff] usable
+[    0.000000] BIOS-e820: [mem 0x000000000009fc00-0x000000000009ffff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000000f0000-0x00000000000fffff] reserved
+[    0.000000] BIOS-e820: [mem 0x0000000000100000-0x000000003ffdefff] usable
+[    0.000000] BIOS-e820: [mem 0x000000003ffdf000-0x000000003fffffff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000b0000000-0x00000000bfffffff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000fed1c000-0x00000000fed1ffff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000fffc0000-0x00000000ffffffff] reserved
+[    0.000000] NX (Execute Disable) protection: active
+[    0.000000] SMBIOS 2.8 present.
+[    0.000000] e820: last_pfn = 0x3ffdf max_arch_pfn = 0x400000000
+[    0.000000] x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WC  UC- WT  
+[    0.000000] found SMP MP-table at [mem 0x000f6aa0-0x000f6aaf] mapped at [ffff900d400f6aa0]
+[    0.000000] RAMDISK: [mem 0x3e407000-0x3ffcffff]
+[    0.000000] ACPI: Early table checksum verification disabled
+[    0.000000] ACPI: RSDP 0x00000000000F68C0 000014 (v00 BOCHS )
+[    0.000000] ACPI: RSDT 0x000000003FFE2404 000034 (v01 BOCHS  BXPCRSDT 00000001 BXPC 00000001)
+[    0.000000] ACPI: FACP 0x000000003FFE22A4 000074 (v01 BOCHS  BXPCFACP 00000001 BXPC 00000001)
+[    0.000000] ACPI: DSDT 0x000000003FFE0040 002264 (v01 BOCHS  BXPCDSDT 00000001 BXPC 00000001)
+[    0.000000] ACPI: FACS 0x000000003FFE0000 000040
+[    0.000000] ACPI: APIC 0x000000003FFE2318 000078 (v01 BOCHS  BXPCAPIC 00000001 BXPC 00000001)
+[    0.000000] ACPI: HPET 0x000000003FFE2390 000038 (v01 BOCHS  BXPCHPET 00000001 BXPC 00000001)
+[    0.000000] ACPI: MCFG 0x000000003FFE23C8 00003C (v01 BOCHS  BXPCMCFG 00000001 BXPC 00000001)
+[    0.000000] Zone ranges:
+[    0.000000]   DMA      [mem 0x0000000000001000-0x0000000000ffffff]
+[    0.000000]   DMA32    [mem 0x0000000001000000-0x000000003ffdefff]
+[    0.000000]   Normal   empty
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000000001000-0x000000000009efff]
+[    0.000000]   node   0: [mem 0x0000000000100000-0x000000003ffdefff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000000001000-0x000000003ffdefff]
+[    0.000000] ACPI: PM-Timer IO Port: 0x608
+[    0.000000] ACPI: LAPIC_NMI (acpi_id[0xff] dfl dfl lint[0x1])
+[    0.000000] IOAPIC[0]: apic_id 0, version 32, address 0xfec00000, GSI 0-23
+[    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 0 global_irq 2 dfl dfl)
+[    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 5 global_irq 5 high level)
+[    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 high level)
+[    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 10 global_irq 10 high level)
+[    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 11 global_irq 11 high level)
+[    0.000000] Using ACPI (MADT) for SMP configuration information
+[    0.000000] ACPI: HPET id: 0x8086a201 base: 0xfed00000
+[    0.000000] smpboot: Allowing 1 CPUs, 0 hotplug CPUs
+[    0.000000] e820: [mem 0x40000000-0xafffffff] available for PCI devices
+[    0.000000] Booting paravirtualized kernel on bare hardware
+[    0.000000] clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+[    0.000000] setup_percpu: NR_CPUS:128 nr_cpumask_bits:128 nr_cpu_ids:1 nr_node_ids:1
+[    0.000000] percpu: Embedded 35 pages/cpu @ffff900d7e200000 s105240 r8192 d29928 u2097152
+[    0.000000] Built 1 zonelists in Zone order, mobility grouping on.  Total pages: 257896
+[    0.000000] Kernel command line: console=ttyS0
+[    0.000000] PID hash table entries: 4096 (order: 3, 32768 bytes)
+[    0.000000] Dentry cache hash table entries: 131072 (order: 8, 1048576 bytes)
+[    0.000000] Inode-cache hash table entries: 65536 (order: 7, 524288 bytes)
+[    0.000000] Memory: 983328K/1048052K available (9407K kernel code, 1592K rwdata, 3084K rodata, 1456K init, 604K bss, 64724K reserved, 0K cma-reserved)
+[    0.000000] Hierarchical RCU implementation.
+[    0.000000] 	Build-time adjustment of leaf fanout to 64.
+[    0.000000] 	RCU restricting CPUs from NR_CPUS=128 to nr_cpu_ids=1.
+[    0.000000] RCU: Adjusting geometry for rcu_fanout_leaf=64, nr_cpu_ids=1
+[    0.000000] NR_IRQS:8448 nr_irqs:256 16
+[    0.000000] Console: colour VGA+ 80x25
+[    0.000000] console [ttyS0] enabled
+[    0.000000] clocksource: hpet: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604467 ns
+[    0.000000] tsc: Unable to calibrate against PIT
+[    0.000000] tsc: using HPET reference calibration
+[    0.000000] tsc: Detected 2300.020 MHz processor
+[    0.051413] Calibrating delay loop (skipped), value calculated using timer frequency.. 4600.04 BogoMIPS (lpj=23000200)
+[    0.053498] pid_max: default: 32768 minimum: 301
+[    0.054867] ACPI: Core revision 20160831
+[    0.100454] ACPI: 1 ACPI AML tables successfully acquired and loaded
+[    0.104355] Security Framework initialized
+[    0.105090] Yama: becoming mindful.
+[    0.107452] Mount-cache hash table entries: 2048 (order: 2, 16384 bytes)
+[    0.108615] Mountpoint-cache hash table entries: 2048 (order: 2, 16384 bytes)
+[    0.128711] Last level iTLB entries: 4KB 0, 2MB 0, 4MB 0
+[    0.129680] Last level dTLB entries: 4KB 0, 2MB 0, 4MB 0, 1GB 0
+[    0.506096] Freeing SMP alternatives memory: 24K (ffffffff980fc000 - ffffffff98102000)
+[    0.515424] ftrace: allocating 41522 entries in 163 pages
+[    0.710924] smpboot: Max logical packages: 1
+[    0.715999] ..TIMER: vector=0x30 apic1=0 pin1=2 apic2=-1 pin2=-1
+[    0.820000] smpboot: CPU0: AMD QEMU Virtual CPU version 2.5+ (family: 0x6, model: 0x6, stepping: 0x3)
+[    0.820000] Performance Events: PMU not available due to virtualization, using software events only.
+[    0.827948] NMI watchdog: disabled (cpu0): hardware events not enabled
+[    0.828269] NMI watchdog: Shutting down hard lockup detector on all cpus
+[    0.830830] x86: Booted up 1 node, 1 CPUs
+[    0.831121] smpboot: Total of 1 processors activated (4600.04 BogoMIPS)
+[    0.843909] devtmpfs: initialized
+[    0.848409] x86/mm: Memory block size: 128MB
+[    0.913197] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+[    0.913880] futex hash table entries: 256 (order: 2, 16384 bytes)
+[    0.921536] NET: Registered protocol family 16
+[    0.930709] cpuidle: using governor ladder
+[    0.931075] cpuidle: using governor menu
+[    0.932072] ACPI: bus type PCI registered
+[    0.934700] PCI: MMCONFIG for domain 0000 [bus 00-ff] at [mem 0xb0000000-0xbfffffff] (base 0xb0000000)
+[    0.935244] PCI: MMCONFIG at [mem 0xb0000000-0xbfffffff] reserved in E820
+[    0.936374] PCI: Using configuration type 1 for base access
+[    1.002784] HugeTLB registered 2 MB page size, pre-allocated 0 pages
+[    1.012888] ACPI: Added _OSI(Module Device)
+[    1.013120] ACPI: Added _OSI(Processor Device)
+[    1.013332] ACPI: Added _OSI(3.0 _SCP Extensions)
+[    1.013540] ACPI: Added _OSI(Processor Aggregator Device)
+[    1.088950] ACPI: Interpreter enabled
+[    1.090521] ACPI: (supports S0 S5)
+[    1.090748] ACPI: Using IOAPIC for interrupt routing
+[    1.092384] PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
+[    1.156774] ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
+[    1.157542] acpi PNP0A08:00: _OSC: OS supports [ExtendedConfig ASPM ClockPM Segments MSI]
+[    1.163014] acpi PNP0A08:00: _OSC: OS now controls [PCIeHotplug PME PCIeCapability]
+[    1.166325] PCI host bridge to bus 0000:00
+[    1.166661] pci_bus 0000:00: root bus resource [io  0x0000-0x0cf7 window]
+[    1.166971] pci_bus 0000:00: root bus resource [io  0x0d00-0xffff window]
+[    1.167269] pci_bus 0000:00: root bus resource [mem 0x000a0000-0x000bffff window]
+[    1.167576] pci_bus 0000:00: root bus resource [mem 0xc0000000-0xfebfffff window]
+[    1.168012] pci_bus 0000:00: root bus resource [bus 00-ff]
+[    1.253974] pci 0000:00:1f.0: quirk: [io  0x0600-0x067f] claimed by ICH6 ACPI/GPIO/TCO
+[    1.308523] ACPI: PCI Interrupt Link [LNKA] (IRQs 5 *10 11)
+[    1.311267] ACPI: PCI Interrupt Link [LNKB] (IRQs 5 *10 11)
+[    1.312930] ACPI: PCI Interrupt Link [LNKC] (IRQs 5 10 *11)
+[    1.314590] ACPI: PCI Interrupt Link [LNKD] (IRQs 5 10 *11)
+[    1.316248] ACPI: PCI Interrupt Link [LNKE] (IRQs 5 *10 11)
+[    1.317902] ACPI: PCI Interrupt Link [LNKF] (IRQs 5 *10 11)
+[    1.319550] ACPI: PCI Interrupt Link [LNKG] (IRQs 5 10 *11)
+[    1.321356] ACPI: PCI Interrupt Link [LNKH] (IRQs 5 10 *11)
+[    1.322147] ACPI: PCI Interrupt Link [GSIA] (IRQs *16)
+[    1.322696] ACPI: PCI Interrupt Link [GSIB] (IRQs *17)
+[    1.323241] ACPI: PCI Interrupt Link [GSIC] (IRQs *18)
+[    1.323770] ACPI: PCI Interrupt Link [GSID] (IRQs *19)
+[    1.324314] ACPI: PCI Interrupt Link [GSIE] (IRQs *20)
+[    1.324843] ACPI: PCI Interrupt Link [GSIF] (IRQs *21)
+[    1.325383] ACPI: PCI Interrupt Link [GSIG] (IRQs *22)
+[    1.325916] ACPI: PCI Interrupt Link [GSIH] (IRQs *23)
+[    1.329344] ACPI: Enabled 2 GPEs in block 00 to 3F
+[    1.333511] SCSI subsystem initialized
+[    1.335762] pps_core: LinuxPPS API ver. 1 registered
+[    1.335995] pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+[    1.336516] PTP clock support registered
+[    1.337523] wmi: Mapper loaded
+[    1.338478] PCI: Using ACPI for IRQ routing
+[    1.356991] NetLabel: Initializing
+[    1.357179] NetLabel:  domain hash size = 128
+[    1.357384] NetLabel:  protocols = UNLABELED CIPSOv4
+[    1.360054] NetLabel:  unlabeled traffic allowed by default
+[    1.360923] HPET: 3 timers in total, 0 timers will be used for per-cpu timer
+[    1.361492] hpet0: at MMIO 0xfed00000, IRQs 2, 8, 0
+[    1.361921] hpet0: 3 comparators, 64-bit 100.000000 MHz counter
+[    1.367953] clocksource: Switched to clocksource hpet
+[    1.647150] VFS: Disk quotas dquot_6.6.0
+[    1.647743] VFS: Dquot-cache hash table entries: 512 (order 0, 4096 bytes)
+[    1.650606] FS-Cache: Loaded
+[    1.655377] CacheFiles: Loaded
+[    1.656880] pnp: PnP ACPI init
+[    1.668381] pnp: PnP ACPI: found 5 devices
+[    1.715603] clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xffffff, max_idle_ns: 2085701024 ns
+[    1.718087] NET: Registered protocol family 2
+[    1.725178] TCP established hash table entries: 8192 (order: 4, 65536 bytes)
+[    1.725768] TCP bind hash table entries: 8192 (order: 5, 131072 bytes)
+[    1.726717] TCP: Hash tables configured (established 8192 bind 8192)
+[    1.728449] UDP hash table entries: 512 (order: 2, 16384 bytes)
+[    1.728869] UDP-Lite hash table entries: 512 (order: 2, 16384 bytes)
+[    1.731202] NET: Registered protocol family 1
+[    1.734461] RPC: Registered named UNIX socket transport module.
+[    1.734778] RPC: Registered udp transport module.
+[    1.734985] RPC: Registered tcp transport module.
+[    1.735210] RPC: Registered tcp NFSv4.1 backchannel transport module.
+[    1.735823] pci 0000:00:01.0: Video device with shadowed ROM at [mem 0x000c0000-0x000dffff]
+[    1.744143] Unpacking initramfs...
+[    5.983663] Freeing initrd memory: 28452K (ffff900d7e407000 - ffff900d7ffd0000)
+[    6.006062] PCLMULQDQ-NI instructions are not detected.
+[    6.008297] AVX or AES-NI instructions are not detected.
+[    6.009871] CPU feature 'AVX registers' is not supported.
+[    6.011683] CPU feature 'AVX registers' is not supported.
+[    6.013308] CPU feature 'AVX registers' is not supported.
+[    6.014900] CPU feature 'AVX registers' is not supported.
+[    6.016406] AVX2 or AES-NI instructions are not detected.
+[    6.017916] AVX2 instructions are not detected.
+[    6.027531] audit: initializing netlink subsys (disabled)
+[    6.029970] audit: type=2000 audit(1494601883.020:1): initialized
+[    6.037964] workingset: timestamp_bits=46 max_order=18 bucket_order=0
+[    6.044884] FS-Cache: Netfs 'nfs' registered for caching
+[    6.047824] NFS: Registering the id_resolver key type
+[    6.050102] Key type id_resolver registered
+[    6.051633] Key type id_legacy registered
+[    6.052829] nfs4filelayout_init: NFSv4 File Layout Driver Registering...
+[    6.054900] Installing knfsd (copyright (C) 1996 okir@monad.swb.de).
+[    6.061171] FS-Cache: Netfs 'cifs' registered for caching
+[    6.063205] ntfs: driver 2.1.32 [Flags: R/O].
+[    6.064593] fuse init (API version 7.26)
+[    6.067426] SGI XFS with ACLs, security attributes, no debug enabled
+[    6.072665] 9p: Installing v9fs 9p2000 file system support
+[    6.074324] FS-Cache: Netfs '9p' registered for caching
+[    6.108635] NET: Registered protocol family 38
+[    6.110001] Key type asymmetric registered
+[    6.111975] Asymmetric key parser 'x509' registered
+[    6.113687] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 251)
+[    6.116321] io scheduler noop registered
+[    6.117426] io scheduler deadline registered (default)
+[    6.118978] io scheduler cfq registered
+[    6.123258] pci_hotplug: PCI Hot Plug PCI Core version: 0.5
+[    6.124941] pciehp: PCI Express Hot Plug Controller Driver version: 0.4
+[    6.127080] shpchp: Standard Hot Plug PCI Controller Driver version: 0.4
+[    6.129147] hv_vmbus: registering driver hyperv_fb
+[    6.133892] input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input0
+[    6.136303] ACPI: Power Button [PWRF]
+[    6.141843] GHES: HEST is not enabled!
+[    6.153950] ACPI: PCI Interrupt Link [GSIH] enabled at IRQ 23
+[    6.160933] xenfs: not registering filesystem on non-xen platform
+[    6.163822] Serial: 8250/16550 driver, 4 ports, IRQ sharing disabled
+[    6.190663] 00:04: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+[    6.198494] Initializing Nozomi driver 2.1d
+[    6.209306] Non-volatile memory driver v1.3
+[    6.215820] Hangcheck: starting hangcheck timer 0.9.1 (tick is 180 seconds, margin is 60 seconds).
+[    6.220717] random: fast init done
+[    6.221742] random: crng init done
+[    6.255676] loop: module loaded
+[    6.270538] nbd: registered device at major 43
+[    6.311475] lpc_ich 0000:00:1f.0: I/O space for GPIO uninitialized
+[    6.312923] VMware PVSCSI driver - version 1.0.7.0-k
+[    6.313526] hv_vmbus: registering driver hv_storvsc
+[    6.323428] ACPI: PCI Interrupt Link [GSIA] enabled at IRQ 16
+[    6.329179] ahci 0000:00:1f.2: AHCI 0001.0000 32 slots 6 ports 1.5 Gbps 0x3f impl SATA mode
+[    6.329677] ahci 0000:00:1f.2: flags: ncq only 
+[    6.349553] scsi host0: ahci
+[    6.353092] scsi host1: ahci
+[    6.355228] scsi host2: ahci
+[    6.357307] scsi host3: ahci
+[    6.359317] scsi host4: ahci
+[    6.361716] scsi host5: ahci
+[    6.363442] ata1: SATA max UDMA/133 abar m4096@0xfebf1000 port 0xfebf1100 irq 24
+[    6.363839] ata2: SATA max UDMA/133 abar m4096@0xfebf1000 port 0xfebf1180 irq 24
+[    6.364157] ata3: SATA max UDMA/133 abar m4096@0xfebf1000 port 0xfebf1200 irq 24
+[    6.364485] ata4: SATA max UDMA/133 abar m4096@0xfebf1000 port 0xfebf1280 irq 24
+[    6.364809] ata5: SATA max UDMA/133 abar m4096@0xfebf1000 port 0xfebf1300 irq 24
+[    6.365132] ata6: SATA max UDMA/133 abar m4096@0xfebf1000 port 0xfebf1380 irq 24
+[    6.374147] Ethernet Channel Bonding Driver: v3.7.1 (April 27, 2011)
+[    6.392707] tun: Universal TUN/TAP device driver, 1.6
+[    6.392967] tun: (C) 1999-2004 Max Krasnyansky <maxk@qualcomm.com>
+[    6.394306] ena: Elastic Network Adapter (ENA) v1.0.2
+[    6.395344] e1000: Intel(R) PRO/1000 Network Driver - version 7.3.21-k8-NAPI
+[    6.395673] e1000: Copyright (c) 1999-2006 Intel Corporation.
+[    6.403301] ACPI: PCI Interrupt Link [GSIG] enabled at IRQ 22
+[    6.700863] ata2: SATA link down (SStatus 0 SControl 300)
+[    6.702663] ata1: SATA link down (SStatus 0 SControl 300)
+[    6.703248] ata4: SATA link down (SStatus 0 SControl 300)
+[    6.703851] ata3: SATA link up 1.5 Gbps (SStatus 113 SControl 300)
+[    6.707084] ata3.00: ATAPI: QEMU DVD-ROM, 2.5+, max UDMA/100
+[    6.707451] ata3.00: applying bridge limits
+[    6.709001] ata3.00: configured for UDMA/100
+[    6.710744] ata5: SATA link down (SStatus 0 SControl 300)
+[    6.711116] ata6: SATA link down (SStatus 0 SControl 300)
+[    6.722689] scsi 2:0:0:0: CD-ROM            QEMU     QEMU DVD-ROM     2.5+ PQ: 0 ANSI: 5
+[    6.744161] sr 2:0:0:0: [sr0] scsi3-mmc drive: 4x/4x cd/rw xa/form2 tray
+[    6.744629] cdrom: Uniform CD-ROM driver Revision: 3.20
+[    6.761263] sr 2:0:0:0: Attached scsi generic sg0 type 5
+[    6.765805] e1000 0000:00:02.0 eth0: (PCI:33MHz:32-bit) 52:54:00:12:34:56
+[    6.766205] e1000 0000:00:02.0 eth0: Intel(R) PRO/1000 Network Connection
+[    6.766887] e1000e: Intel(R) PRO/1000 Network Driver - 3.2.6-k
+[    6.767156] e1000e: Copyright(c) 1999 - 2015 Intel Corporation.
+[    6.767771] igb: Intel(R) Gigabit Ethernet Network Driver - version 5.4.0-k
+[    6.768061] igb: Copyright (c) 2007-2014 Intel Corporation.
+[    6.768660] igbvf: Intel(R) Gigabit Virtual Function Network Driver - version 2.4.0-k
+[    6.768979] igbvf: Copyright (c) 2009 - 2012 Intel Corporation.
+[    6.769556] ixgbe: Intel(R) 10 Gigabit PCI Express Network Driver - version 4.4.0-k
+[    6.769869] ixgbe: Copyright (c) 1999-2016 Intel Corporation.
+[    6.771375] ixgbevf: Intel(R) 10 Gigabit PCI Express Virtual Function Network Driver - version 3.2.2-k
+[    6.771779] ixgbevf: Copyright (c) 2009 - 2015 Intel Corporation.
+[    6.772840] ixgb: Intel(R) PRO/10GbE Network Driver - version 1.0.135-k2-NAPI
+[    6.773162] ixgb: Copyright (c) 1999-2008 Intel Corporation.
+[    6.774011] PPP generic driver version 2.4.2
+[    6.775205] PPP BSD Compression module registered
+[    6.775504] PPP Deflate Compression module registered
+[    6.775915] PPP MPPE Compression module registered
+[    6.776169] NET: Registered protocol family 24
+[    6.776603] PPTP driver version 0.8.5
+[    6.777651] VMware vmxnet3 virtual NIC driver - version 1.4.a.0-k-NAPI
+[    6.778341] hv_vmbus: registering driver hv_netvsc
+[    6.778597] Fusion MPT base driver 3.04.20
+[    6.778778] Copyright (c) 1999-2008 LSI Corporation
+[    6.779205] Fusion MPT SPI Host driver 3.04.20
+[    6.784590] aoe: AoE v85 initialised.
+[    6.786300] i8042: PNP: PS/2 Controller [PNP0303:KBD,PNP0f13:MOU] at 0x60,0x64 irq 1,12
+[    6.789595] serio: i8042 KBD port at 0x60,0x64 irq 1
+[    6.790275] serio: i8042 AUX port at 0x60,0x64 irq 12
+[    6.793747] hv_vmbus: registering driver hyperv_keyboard
+[    6.795578] mousedev: PS/2 mouse device common for all mice
+[    6.800029] input: AT Translated Set 2 keyboard as /devices/platform/i8042/serio0/input/input1
+[    6.801939] input: PC Speaker as /devices/platform/pcspkr/input/input2
+[    6.806122] rtc_cmos 00:00: RTC can wake from S4
+[    6.809096] rtc_cmos 00:00: rtc core: registered rtc_cmos as rtc0
+[    6.810277] rtc_cmos 00:00: alarms up to one day, y3k, 114 bytes nvram, hpet irqs
+[    6.810869] i2c /dev entries driver
+[    6.812425] device-mapper: ioctl: 4.35.0-ioctl (2016-06-23) initialised: dm-devel@redhat.com
+[    6.816469] hv_utils: Registering HyperV Utility Driver
+[    6.816714] hv_vmbus: registering driver hv_util
+[    6.816927] hv_vmbus: registering driver hv_balloon
+[    6.817321] oprofile: using NMI interrupt.
+[    6.818253] GACT probability on
+[    6.818606] Mirror/redirect action on
+[    6.819370] Simple TC action Loaded
+[    6.822663] netem: version 1.3
+[    6.822882] u32 classifier
+[    6.823030]     Performance counters on
+[    6.823230]     input device check on
+[    6.823402]     Actions configured
+[    6.823868] Netfilter messages via NETLINK v0.30.
+[    6.824313] nfnl_acct: registering with nfnetlink.
+[    6.825429] nf_conntrack version 0.5.0 (8192 buckets, 32768 max)
+[    6.828483] ctnetlink v0.93: registering with nfnetlink.
+[    6.831697] nf_tables: (c) 2007-2009 Patrick McHardy <kaber@trash.net>
+[    6.832462] nf_tables_compat: (c) 2012 Pablo Neira Ayuso <pablo@netfilter.org>
+[    6.834574] xt_time: kernel timezone is -0000
+[    6.834989] ip_set: protocol 6
+[    6.835516] IPVS: Registered protocols (TCP, UDP, SCTP, AH, ESP)
+[    6.835935] IPVS: Connection hash table configured (size=4096, memory=64Kbytes)
+[    6.837396] IPVS: Creating netns size=2104 id=0
+[    6.839846] IPVS: ipvs loaded.
+[    6.840429] IPVS: [rr] scheduler registered.
+[    6.840683] IPVS: [wrr] scheduler registered.
+[    6.840891] IPVS: [lc] scheduler registered.
+[    6.841131] IPVS: [wlc] scheduler registered.
+[    6.841330] IPVS: [fo] scheduler registered.
+[    6.841533] IPVS: [ovf] scheduler registered.
+[    6.841850] IPVS: [lblc] scheduler registered.
+[    6.842153] IPVS: [lblcr] scheduler registered.
+[    6.842385] IPVS: [dh] scheduler registered.
+[    6.842580] IPVS: [sh] scheduler registered.
+[    6.842784] IPVS: [sed] scheduler registered.
+[    6.842995] IPVS: [nq] scheduler registered.
+[    6.843586] IPVS: ftp: loaded support on port[0] = 21
+[    6.844295] ipip: IPv4 and MPLS over IPv4 tunneling driver
+[    6.847940] gre: GRE over IPv4 demultiplexor driver
+[    6.848199] ip_gre: GRE over IPv4 tunneling driver
+[    6.853850] IPv4 over IPsec tunneling driver
+[    6.859082] ip_tables: (C) 2000-2006 Netfilter Core Team
+[    6.862700] ipt_CLUSTERIP: ClusterIP Version 0.8 loaded successfully
+[    6.863293] arp_tables: arp_tables: (C) 2002 David S. Miller
+[    6.865874] Initializing XFRM netlink socket
+[    6.866773] NET: Registered protocol family 10
+[    6.878346] mip6: Mobile IPv6
+[    6.879177] ip6_tables: (C) 2000-2006 Netfilter Core Team
+[    6.887319] sit: IPv6, IPv4 and MPLS over IPv4 tunneling driver
+[    6.894383] ip6_gre: GRE over IPv6 tunneling driver
+[    6.897896] NET: Registered protocol family 17
+[    6.898505] NET: Registered protocol family 15
+[    6.899285] Bridge firewalling registered
+[    6.899705] Ebtables v2.0 registered
+[    6.902852] l2tp_core: L2TP core driver, V2.0
+[    6.903242] l2tp_ppp: PPPoL2TP kernel driver, V2.0
+[    6.903498] 8021q: 802.1Q VLAN Support v1.8
+[    6.904767] 9pnet: Installing 9P2000 support
+[    6.905411] Key type dns_resolver registered
+[    6.905678] openvswitch: Open vSwitch switching datapath
+[    6.907386] mpls_gso: MPLS GSO support
+[    6.907798] microcode: AMD CPU family 0x6 not supported
+[    6.911536] registered taskstats version 1
+[    7.040553] tsc: Refined TSC clocksource calibration: 2300.326 MHz
+[    7.040952] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x2128693c1c3, max_idle_ns: 440795309799 ns
+[    7.043768] Key type big_key registered
+[    7.083801] Key type encrypted registered
+[    7.087736] rtc_cmos 00:00: setting system clock to 2017-05-12 15:11:25 UTC (1494601885)
+[    7.252813] Freeing unused kernel memory: 1456K (ffffffff97f90000 - ffffffff980fc000)
+[    7.253291] Write protecting the kernel read-only data: 14336k
+[    7.264546] Freeing unused kernel memory: 820K (ffff900d45933000 - ffff900d45a00000)
+[    7.339620] Freeing unused kernel memory: 1012K (ffff900d45d03000 - ffff900d45e00000)
+[    8.060856] clocksource: Switched to clocksource tsc
+
+Welcome to LinuxKit
+
+                        ##         .
+                  ## ## ##        ==
+               ## ## ## ## ##    ===
+           /"""""""""""""""""\___/ ===
+      ~~~ {~~ ~~~~ ~~~ ~~~~ ~~~ ~ /  ===- ~~~
+           \______ o           __/
+             \    \         __/
+              \____\_______/
+
+
+Starting containerd
+
+/ # [6n[34mINFO[0m[0000] starting containerd boot...                   [34mmodule[0m=containerd
+[34mINFO[0m[0000] starting debug API...                         [34mdebug[0m="/run/containerd/debug.sock" [34mmodule[0m=containerd
+[34mINFO[0m[0000] loading monitor plugin "cgroups"...           [34mmodule[0m=containerd
+[34mINFO[0m[0000] loading runtime plugin "linux"...             [34mmodule[0m=containerd
+[34mINFO[0m[0000] loading snapshot plugin "snapshot-overlay"...  [34mmodule[0m=containerd
+[34mINFO[0m[0000] loading grpc service plugin "content-grpc"...  [34mmodule[0m=containerd
+[34mINFO[0m[0001] loading grpc service plugin "runtime-grpc"...  [34mmodule[0m=containerd
+[34mINFO[0m[0001] loading grpc service plugin "images-grpc"...  [34mmodule[0m=containerd
+[34mINFO[0m[0001] loading grpc service plugin "rootfs-grpc"...  [34mmodule[0m=containerd
+[34mINFO[0m[0001] loading grpc service plugin "healthcheck-grpc"...  [34mmodule[0m=containerd
+[34mINFO[0m[0001] loading grpc service plugin "metrics-grpc"...  [34mmodule[0m=containerd
+[34mINFO[0m[0001] starting GRPC API server...                   [34mmodule[0m=containerd
+[34mINFO[0m[0001] starting metrics API...                       [34mmetrics[0m=":13337" [34mmodule[0m=containerd
+[34mINFO[0m[0001] containerd successfully booted in 0.613381s   [34mmodule[0m=containerd
+[   17.176162] IPv6: ADDRCONF(NETDEV_UP): eth0: link is not ready
+[   17.176483] 8021q: adding VLAN 0 to HW filter on device eth0
+eth0: waiting for carrier
+[   17.191360] e1000: eth0 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX
+[   17.193068] IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
+eth0: carrier acquired
+DUID 00:01:00:01:20:a8:8d:27:52:54:00:12:34:56
+eth0: IAID 00:12:34:56
+eth0: adding address fe80::44b6:573e:9412:3fb6
+eth0: soliciting an IPv6 router
+eth0: soliciting a DHCP lease
+eth0: offered 10.0.2.15 from 10.0.2.2
+eth0: leased 10.0.2.15 for 86400 seconds
+eth0: adding route to 10.0.2.0/24
+eth0: adding default route via 10.0.2.2
+exiting due to oneshot
+dhcpcd exited
+ - 000-dhcpcd
+[   17.988248] IPVS: Creating netns size=2104 id=1
+[   17.989772] IPVS: ftp: loaded support on port[0] = 21
+starting kernel config sanity test with /proc/config.gz
+kernel config test succeeded!
+[37minfo: reading kernel config from /proc/config.gz ...[m
+
+Generally Necessary:
+- [37mcgroup hierarchy[m: [32mproperly mounted[m [/sys/fs/cgroup]
+- [37mCONFIG_NAMESPACES[m: [32menabled[m
+- [37mCONFIG_NET_NS[m: [32menabled[m
+- [37mCONFIG_PID_NS[m: [32menabled[m
+- [37mCONFIG_IPC_NS[m: [32menabled[m
+- [37mCONFIG_UTS_NS[m: [32menabled[m
+- [37mCONFIG_CGROUPS[m: [32menabled[m
+- [37mCONFIG_CGROUP_CPUACCT[m: [32menabled[m
+- [37mCONFIG_CGROUP_DEVICE[m: [32menabled[m
+- [37mCONFIG_CGROUP_FREEZER[m: [32menabled[m
+- [37mCONFIG_CGROUP_SCHED[m: [32menabled[m
+- [37mCONFIG_CPUSETS[m: [32menabled[m
+- [37mCONFIG_MEMCG[m: [32menabled[m
+- [37mCONFIG_KEYS[m: [32menabled[m
+- [37mCONFIG_VETH[m: [32menabled[m
+- [37mCONFIG_BRIDGE[m: [32menabled[m
+- [37mCONFIG_BRIDGE_NETFILTER[m: [32menabled[m
+- [37mCONFIG_NF_NAT_IPV4[m: [32menabled[m
+- [37mCONFIG_IP_NF_FILTER[m: [32menabled[m
+- [37mCONFIG_IP_NF_TARGET_MASQUERADE[m: [32menabled[m
+- [37mCONFIG_NETFILTER_XT_MATCH_ADDRTYPE[m: [32menabled[m
+- [37mCONFIG_NETFILTER_XT_MATCH_CONNTRACK[m: [32menabled[m
+- [37mCONFIG_NETFILTER_XT_MATCH_IPVS[m: [32menabled[m
+- [37mCONFIG_IP_NF_NAT[m: [32menabled[m
+- [37mCONFIG_NF_NAT[m: [32menabled[m
+- [37mCONFIG_NF_NAT_NEEDED[m: [32menabled[m
+- [37mCONFIG_POSIX_MQUEUE[m: [32menabled[m
+
+Optional Features:
+- [37mCONFIG_USER_NS[m: [32menabled[m
+- [37mCONFIG_SECCOMP[m: [32menabled[m
+- [37mCONFIG_CGROUP_PIDS[m: [32menabled[m
+- [37mCONFIG_MEMCG_SWAP[m: [32menabled[m
+- [37mCONFIG_MEMCG_SWAP_ENABLED[m: [32menabled[m
+    [1;30m(cgroup swap accounting is currently enabled)[m
+- [1mCONFIG_LEGACY_VSYSCALL_NONE[m: [1;31menabled[m
+    [1;30m(containers using eglibc <= 2.13 will not work. Switch to[m
+    [1;30m "CONFIG_VSYSCALL_[NATIVE|EMULATE]" or use "vsyscall=[native|emulate]"[m
+    [1;30m on kernel command line. Note that this will disable ASLR for the,[m
+    [1;30m VDSO which may assist in exploiting security vulnerabilities.)[m
+- [37mCONFIG_BLK_CGROUP[m: [32menabled[m
+- [37mCONFIG_BLK_DEV_THROTTLING[m: [32menabled[m
+- [37mCONFIG_IOSCHED_CFQ[m: [32menabled[m
+- [37mCONFIG_CFQ_GROUP_IOSCHED[m: [32menabled[m
+- [37mCONFIG_CGROUP_PERF[m: [32menabled[m
+- [37mCONFIG_CGROUP_HUGETLB[m: [32menabled[m
+- [37mCONFIG_NET_CLS_CGROUP[m: [32menabled[m
+- [37mCONFIG_CGROUP_NET_PRIO[m: [32menabled[m
+- [37mCONFIG_CFS_BANDWIDTH[m: [32menabled[m
+- [37mCONFIG_FAIR_GROUP_SCHED[m: [32menabled[m
+- [37mCONFIG_RT_GROUP_SCHED[m: [32menabled[m
+- [37mCONFIG_IP_VS[m: [32menabled[m
+- [37mCONFIG_IP_VS_NFCT[m: [32menabled[m
+- [37mCONFIG_IP_VS_RR[m: [32menabled[m
+- [37mCONFIG_EXT4_FS[m: [32menabled[m
+- [37mCONFIG_EXT4_FS_POSIX_ACL[m: [32menabled[m
+- [37mCONFIG_EXT4_FS_SECURITY[m: [32menabled[m
+- Network Drivers:
+  - "[34moverlay[m":
+    - [37mCONFIG_VXLAN[m: [32menabled[m
+      Optional (for encrypted networks):
+      - [37mCONFIG_CRYPTO[m: [32menabled[m
+      - [37mCONFIG_CRYPTO_AEAD[m: [32menabled[m
+      - [37mCONFIG_CRYPTO_GCM[m: [32menabled[m
+      - [37mCONFIG_CRYPTO_SEQIV[m: [32menabled[m
+      - [37mCONFIG_CRYPTO_GHASH[m: [32menabled[m
+      - [37mCONFIG_XFRM[m: [32menabled[m
+      - [37mCONFIG_XFRM_USER[m: [32menabled[m
+      - [37mCONFIG_XFRM_ALGO[m: [32menabled[m
+      - [37mCONFIG_INET_ESP[m: [32menabled[m
+      - [37mCONFIG_INET_XFRM_MODE_TRANSPORT[m: [32menabled[m
+  - "[34mipvlan[m":
+    - [37mCONFIG_IPVLAN[m: [32menabled[m
+  - "[34mmacvlan[m":
+    - [37mCONFIG_MACVLAN[m: [32menabled[m
+    - [37mCONFIG_DUMMY[m: [32menabled[m
+  - "[34mftp,tftp client in container[m":
+    - [37mCONFIG_NF_NAT_FTP[m: [32menabled[m
+    - [37mCONFIG_NF_CONNTRACK_FTP[m: [32menabled[m
+    - [37mCONFIG_NF_NAT_TFTP[m: [32menabled[m
+    - [37mCONFIG_NF_CONNTRACK_TFTP[m: [32menabled[m
+- Storage Drivers:
+  - "[34maufs[m":
+    - [1mCONFIG_AUFS_FS[m: [1;31mmissing[m
+  - "[34mbtrfs[m":
+    - [37mCONFIG_BTRFS_FS[m: [32menabled (as module)[m
+    - [37mCONFIG_BTRFS_FS_POSIX_ACL[m: [32menabled[m
+  - "[34mdevicemapper[m":
+    - [37mCONFIG_BLK_DEV_DM[m: [32menabled[m
+    - [37mCONFIG_DM_THIN_PROVISIONING[m: [32menabled[m
+  - "[34moverlay[m":
+    - [37mCONFIG_OVERLAY_FS[m: [32menabled[m
+  - "[34mzfs[m":
+    - [1m/dev/zfs[m: [1;31mmissing[m
+    - [1mzfs command[m: [1;31mmissing[m
+    - [1mzpool command[m: [1;31mmissing[m
+
+Limits:
+[37m- /proc/sys/kernel/keys/root_maxkeys[m: [32m1000000[m
+
+Kernel config test suite PASSED
+
+                        ##         .
+                  ## ## ##        ==
+               ## ## ## ## ##    ===
+           /"""""""""""""""""\___/ ===
+      ~~~ {~~ ~~~~ ~~~ ~~~~ ~~~ ~ /  ===- ~~~
+           \______ o           __/
+             \    \         __/
+              \____\_______/
+ - 001-check-kernel-config
+ - poweroff
+[   40.430223] IPVS: Creating netns size=2104 id=2
+[   40.433768] IPVS: ftp: loaded support on port[0] = 21
+[   46.582610] ACPI: Preparing to enter system sleep state S5
+[   46.585471] reboot: Power down
+/usr/local/bin/moby build --pull cases/test-ltp.yml
+Pull kernel image: linuxkit/kernel:4.9.x
+Extract kernel image: linuxkit/kernel:4.9.x
+Pull image: linuxkit/kernel:4.9.x
+Add init containers:
+Process init image: linuxkit/init:b3740303f3d1e5689a84c87b7dfb48fd2a40a192
+Pull image: linuxkit/init:b3740303f3d1e5689a84c87b7dfb48fd2a40a192
+Process init image: linuxkit/runc:2649198589ef0020d99f613adaeda45ce0093a38
+Pull image: linuxkit/runc:2649198589ef0020d99f613adaeda45ce0093a38
+Process init image: linuxkit/containerd:cf2614f5a96c569a0bd4bd54e054a65ba17d167f
+Pull image: linuxkit/containerd:cf2614f5a96c569a0bd4bd54e054a65ba17d167f
+Process init image: linuxkit/ca-certificates:3344cdca1bc59fdfa17bd7f0fcbf491b9dbaa288
+Pull image: linuxkit/ca-certificates:3344cdca1bc59fdfa17bd7f0fcbf491b9dbaa288
+Add onboot containers:
+  Create OCI config for linuxkit/test-ltp-20170116:81229df2d25065b06f0a3071faaace8d66c87e67
+Pull image: linuxkit/test-ltp-20170116:81229df2d25065b06f0a3071faaace8d66c87e67
+Add service containers:
+  Create OCI config for linuxkit/poweroff:961412b8ef5c5285de0d40ec076701d955eaa084
+Pull image: linuxkit/poweroff:961412b8ef5c5285de0d40ec076701d955eaa084
+Add files:
+  /etc/ltp/baseline
+Create outputs:
+  test-ltp-kernel test-ltp-initrd.img test-ltp-cmdline
+  test-ltp.iso
+  test-ltp-efi.iso
+  test-ltp.img.tar.gz
+/usr/local/bin/linuxkit push gcp ../artifacts/test-ltp.img.tar.gz
+Uploading file ../artifacts/test-ltp.img.tar.gz to Google Storage as linuxkit-ci-0.img.tar.gz
+time="2017-05-12T15:16:50Z" level=fatal msg="Error copying to Google Storage: open ../artifacts/test-ltp.img.tar.gz: no such file or directory" 
+make[1]: *** [Makefile:62: ltp] Error 1
+make[1]: Leaving directory '/tmp/linuxkit-3740131f/src/test'
+make: *** [Makefile:52: ci] Error 2
+[2017-05-12 15:16.50] Removing test VM...
+[2017-05-12 15:16.50] Running "/gcloud/destroy.py" "linuxkit-ci-0"
+INFO:root:Destroying VM
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+Traceback (most recent call last):
+  File "/gcloud/destroy.py", line 12, in <module>
+    resp = common.compute.instances().delete(instance=name, project=common.project, zone=common.zone).execute()
+  File "/usr/lib/python2.7/site-packages/oauth2client/_helpers.py", line 133, in positional_wrapper
+    return wrapped(*args, **kwargs)
+  File "/usr/lib/python2.7/site-packages/googleapiclient/http.py", line 840, in execute
+    raise HttpError(resp, content, uri=self.uri)
+googleapiclient.errors.HttpError: <HttpError 404 when requesting https://www.googleapis.com/compute/v1/projects/moby-datakit-ci/zones/europe-west1-b/instances/linuxkit-ci-0?alt=json returned "The resource 'projects/moby-datakit-ci/zones/europe-west1-b/instances/linuxkit-ci-0' was not found">
+[2017-05-12 15:16.51] Failed: Error copying to Google Storage: open ../artifacts/test-ltp.img.tar.gz: no such file or directory
