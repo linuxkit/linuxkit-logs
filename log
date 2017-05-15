@@ -1,0 +1,438 @@
+=== Build LinuxKit
+[2017-05-15 15:58.36] Starting...
+HEAD is now at a6fad340 tests: Consolidate platform tests
+[2017-05-15 15:58.36] Running "git" "clone" "/repos/linuxkit" "/tmp/linuxkit-6863645/src"
+Cloning into '/tmp/linuxkit-6863645/src'...
+done.
+[2017-05-15 15:58.37] Running "/gcloud/create.py" "linuxkit-ci-3"
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Using source disk image https://www.googleapis.com/compute/v1/projects/moby-datakit-ci/global/images/linuxkit-ci-builder-2
+INFO:root:Creating VM
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Getting VM details
+[2017-05-15 15:59.01] Created new VM linuxkit-ci-3
+[2017-05-15 15:59.01] Running "ssh" "-i" "/run/secrets/builder-ssh" "-o" "StrictHostKeyChecking=no" "root@104.155.31.97" "/usr/local/bin/test.sh"
+Warning: Permanently added '104.155.31.97' (ECDSA) to the list of known hosts.
++ rm -rf /tmp/build
++ mkdir /tmp/build
++ cd /tmp/build
++ tar xf -
++ make ci-pr
+make clean
+make[1]: Entering directory '/tmp/build'
+rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar 
+make[1]: Leaving directory '/tmp/build'
+make
+make[1]: Entering directory '/tmp/build'
+mkdir -p bin
+fatal: Not a git repository (or any of the parent directories): .git
+docker run --rm --log-driver=none  linuxkit/go-compile:5bf17af781df44f07906099402680b9a661f999b --clone-path github.com/moby/tool --clone https://github.com/moby/tool.git --commit a9a00fae6204a89baeed6903c7e2901412c1ede0 --package github.com/moby/tool/cmd/moby --ldflags "-X main.GitCommit= -X main.Version="0.0" " -o bin/moby > tmp_moby_bin.tar
+Unable to find image 'linuxkit/go-compile:5bf17af781df44f07906099402680b9a661f999b' locally
+5bf17af781df44f07906099402680b9a661f999b: Pulling from linuxkit/go-compile
+627beaf3eaaf: Already exists
+98e502457679: Pulling fs layer
+ecae82f11762: Pulling fs layer
+cc422136b77c: Pulling fs layer
+cc422136b77c: Verifying Checksum
+cc422136b77c: Download complete
+ecae82f11762: Verifying Checksum
+ecae82f11762: Download complete
+98e502457679: Verifying Checksum
+98e502457679: Download complete
+98e502457679: Pull complete
+ecae82f11762: Pull complete
+cc422136b77c: Pull complete
+Digest: sha256:0bf523bcebb96ccc525f983a118f1fd8cb5e17dbf90e83044ca71bb983000e70
+Status: Downloaded newer image for linuxkit/go-compile:5bf17af781df44f07906099402680b9a661f999b
+Cloning into '.'...
+Note: checking out 'a9a00fae6204a89baeed6903c7e2901412c1ede0'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at a9a00fa... Merge pull request #33 from justincormack/img-gz
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_moby_bin.tar > bin/moby
+rm tmp_moby_bin.tar
+touch bin/moby
+fatal: Not a git repository (or any of the parent directories): .git
+tar cf - vendor -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i  linuxkit/go-compile:5bf17af781df44f07906099402680b9a661f999b --package github.com/linuxkit/linuxkit --ldflags "-X main.GitCommit= -X main.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_linuxkit_bin.tar > bin/linuxkit
+rm tmp_linuxkit_bin.tar
+touch bin/linuxkit
+docker run --rm --log-driver=none  linuxkit/go-compile:5bf17af781df44f07906099402680b9a661f999b --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 3ced00340aacfc1932e8c03281bf3bfc586c147c --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=3ced00340aacfc1932e8c03281bf3bfc586c147c -X github.com/linuxkit/rtf/cmd.Version="0.0" " -o bin/rtf > tmp_rtf_bin.tar
+Cloning into '.'...
+Note: checking out '3ced00340aacfc1932e8c03281bf3bfc586c147c'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at 3ced003... Merge pull request #12 from dave-tucker/exit-1-fail
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_rtf_bin.tar > bin/rtf
+rm tmp_rtf_bin.tar
+touch bin/rtf
+make[1]: Leaving directory '/tmp/build'
+make install
+make[1]: Entering directory '/tmp/build'
+cp -R ./bin/* /usr/local//bin
+make[1]: Leaving directory '/tmp/build'
+make -C test pr
+make[1]: Entering directory '/tmp/build/test'
+LABELS: Debian, 8.7, amd64, build, linux
+ID: 33afd986-2354-4ef5-8fb0-4f12ac816c68
+[INFO    ] 2017-05-15T16:00:34.917196237Z: linuxkit::ginit()
+[INFO    ] 2017-05-15T16:00:34.917300529Z: Running command: [/bin/sh -x /tmp/build/test/cases/group.sh init]
+[STDERR  ] 2017-05-15T16:00:34.918248948Z: + . /tmp/build/test/cases/_lib/lib.sh
+[STDERR  ] 2017-05-15T16:00:34.918344563Z: + [ -f src/github.com/linuxkit/rtf/lib/lib.sh ]
+[STDERR  ] 2017-05-15T16:00:34.91839588Z: + LINUXKIT_TMPDIR=/tmp/build/test/cases/_tmp
+[STDERR  ] 2017-05-15T16:00:34.918432102Z: + LINUXKIT_ARTIFACTS_DIR=/tmp/build/test/cases/../../artifacts
+[STDERR  ] 2017-05-15T16:00:34.91849153Z: + [ -f /tmp/build/test/cases/_tmp/env.sh ]
+[STDERR  ] 2017-05-15T16:00:34.918522994Z: + RT_CANCEL=253
+[STDERR  ] 2017-05-15T16:00:34.918583144Z: + CMD=init
+[STDERR  ] 2017-05-15T16:00:34.918617723Z: + group_init
+[STDERR  ] 2017-05-15T16:00:34.91865712Z: + [ -r /tmp/build/test/cases/_tmp ]
+[STDERR  ] 2017-05-15T16:00:34.918690993Z: + mkdir /tmp/build/test/cases/_tmp
+[STDERR  ] 2017-05-15T16:00:34.919677092Z: + [ -r /tmp/build/test/cases/../../artifacts ]
+[STDERR  ] 2017-05-15T16:00:34.919686126Z: + mkdir /tmp/build/test/cases/../../artifacts
+[STDERR  ] 2017-05-15T16:00:34.920395986Z: + echo export LINUXKIT_EXAMPLES_DIR=/tmp/build/test/cases/../../examples
+[STDERR  ] 2017-05-15T16:00:34.920400832Z: + return 0
+[STDERR  ] 2017-05-15T16:00:34.920412443Z: + res=0
+[STDERR  ] 2017-05-15T16:00:34.920417903Z: + exit 0
+[INFO    ] 2017-05-15T16:00:34.920499486Z: linuxkit.build::ginit()
+[INFO    ] 2017-05-15T16:00:34.920559571Z: Running command: [/bin/sh -x /tmp/build/test/cases/000_build/group.sh init]
+[STDERR  ] 2017-05-15T16:00:34.921205751Z: + CMD=init
+[STDERR  ] 2017-05-15T16:00:34.921250996Z: + group_init
+[STDERR  ] 2017-05-15T16:00:34.921277994Z: + return 0
+[STDERR  ] 2017-05-15T16:00:34.921313721Z: + res=0
+[STDERR  ] 2017-05-15T16:00:34.921340988Z: + exit 0
+[INFO    ] 2017-05-15T16:00:34.921423122Z: linuxkit.build.examples::ginit()
+[INFO    ] 2017-05-15T16:00:34.921486554Z: Running command: [/bin/sh -x /tmp/build/test/cases/000_build/100_examples/group.sh init]
+[STDERR  ] 2017-05-15T16:00:34.922072786Z: + CMD=init
+[STDERR  ] 2017-05-15T16:00:34.922121795Z: + group_init
+[STDERR  ] 2017-05-15T16:00:34.922150625Z: + return 0
+[STDERR  ] 2017-05-15T16:00:34.922194618Z: + res=0
+[STDERR  ] 2017-05-15T16:00:34.922223488Z: + exit 0
+[INFO    ] 2017-05-15T16:00:34.922345595Z: Running Test linuxkit.build.examples.minimal in /tmp/build/test/cases/000_build/100_examples/000_minimal
+[INFO    ] 2017-05-15T16:00:34.922398506Z: Running command: [/bin/sh -x /tmp/build/test/cases/000_build/100_examples/000_minimal/test.sh]
+[STDERR  ] 2017-05-15T16:00:34.922912891Z: + set -e
+[STDERR  ] 2017-05-15T16:00:34.922966666Z: + . /tmp/build/test/cases/_lib/lib.sh
+[STDERR  ] 2017-05-15T16:00:34.92302063Z: + [ -f src/github.com/linuxkit/rtf/lib/lib.sh ]
+[STDERR  ] 2017-05-15T16:00:34.923066171Z: + LINUXKIT_TMPDIR=/tmp/build/test/cases/_tmp
+[STDERR  ] 2017-05-15T16:00:34.923096427Z: + LINUXKIT_ARTIFACTS_DIR=/tmp/build/test/cases/../../artifacts
+[STDERR  ] 2017-05-15T16:00:34.923142877Z: + [ -f /tmp/build/test/cases/_tmp/env.sh ]
+[STDERR  ] 2017-05-15T16:00:34.923170329Z: + . /tmp/build/test/cases/_tmp/env.sh
+[STDERR  ] 2017-05-15T16:00:34.923224551Z: + export LINUXKIT_EXAMPLES_DIR=/tmp/build/test/cases/../../examples
+[STDERR  ] 2017-05-15T16:00:34.923252737Z: + RT_CANCEL=253
+[STDERR  ] 2017-05-15T16:00:34.923292948Z: + IMAGE_NAME=minimal
+[STDERR  ] 2017-05-15T16:00:34.923324344Z: + trap clean_up EXIT
+[STDERR  ] 2017-05-15T16:00:34.92337373Z: + moby build /tmp/build/test/cases/../../examples/minimal.yml
+[STDERR  ] 2017-05-15T16:00:34.933256182Z: Extract kernel image: linuxkit/kernel:4.9.x
+[STDERR  ] 2017-05-15T16:00:34.935502889Z: Pull image: linuxkit/kernel:4.9.x
+[STDERR  ] 2017-05-15T16:00:40.668282754Z: Add init containers:
+[STDERR  ] 2017-05-15T16:00:40.668497568Z: Process init image: linuxkit/init:b3740303f3d1e5689a84c87b7dfb48fd2a40a192
+[STDERR  ] 2017-05-15T16:00:40.669766478Z: Pull image: linuxkit/init:b3740303f3d1e5689a84c87b7dfb48fd2a40a192
+[STDERR  ] 2017-05-15T16:00:42.901723133Z: Process init image: linuxkit/runc:47b1c38d63468c0f3078f8b1b055d07965a1895d
+[STDERR  ] 2017-05-15T16:00:42.903133292Z: Pull image: linuxkit/runc:47b1c38d63468c0f3078f8b1b055d07965a1895d
+[STDERR  ] 2017-05-15T16:00:45.09656002Z: Process init image: linuxkit/containerd:cf2614f5a96c569a0bd4bd54e054a65ba17d167f
+[STDERR  ] 2017-05-15T16:00:45.097934225Z: Pull image: linuxkit/containerd:cf2614f5a96c569a0bd4bd54e054a65ba17d167f
+[STDERR  ] 2017-05-15T16:00:49.225548265Z: Add onboot containers:
+[STDERR  ] 2017-05-15T16:00:49.225715222Z:   Create OCI config for linuxkit/dhcpcd:2def74ab3f9233b4c09ebb196ba47c27c08b0ed8
+[STDERR  ] 2017-05-15T16:00:51.897077664Z: Create outputs:
+[STDERR  ] 2017-05-15T16:00:56.093534058Z:   minimal-kernel minimal-initrd.img minimal-cmdline
+[STDERR  ] 2017-05-15T16:00:56.142024143Z: + exit 0
+[STDERR  ] 2017-05-15T16:00:56.142057046Z: + clean_up
+[STDERR  ] 2017-05-15T16:00:56.142066931Z: + rm -rf minimal-cmdline minimal-initrd.img minimal-kernel
+[PASS    ] linuxkit.build.examples.minimal 21.22s
+[INFO    ] 2017-05-15T16:00:56.146402773Z: Running Test linuxkit.build.examples.docker in /tmp/build/test/cases/000_build/100_examples/010_docker
+[INFO    ] 2017-05-15T16:00:56.146476923Z: Running command: [/bin/sh -x /tmp/build/test/cases/000_build/100_examples/010_docker/test.sh]
+[STDERR  ] 2017-05-15T16:00:56.147435213Z: + set -e
+[STDERR  ] 2017-05-15T16:00:56.147518236Z: + . /tmp/build/test/cases/_lib/lib.sh
+[STDERR  ] 2017-05-15T16:00:56.147575942Z: + [ -f src/github.com/linuxkit/rtf/lib/lib.sh ]
+[STDERR  ] 2017-05-15T16:00:56.147634757Z: + LINUXKIT_TMPDIR=/tmp/build/test/cases/_tmp
+[STDERR  ] 2017-05-15T16:00:56.147677229Z: + LINUXKIT_ARTIFACTS_DIR=/tmp/build/test/cases/../../artifacts
+[STDERR  ] 2017-05-15T16:00:56.147726098Z: + [ -f /tmp/build/test/cases/_tmp/env.sh ]
+[STDERR  ] 2017-05-15T16:00:56.14776764Z: + . /tmp/build/test/cases/_tmp/env.sh
+[STDERR  ] 2017-05-15T16:00:56.147818867Z: + export LINUXKIT_EXAMPLES_DIR=/tmp/build/test/cases/../../examples
+[STDERR  ] 2017-05-15T16:00:56.147860076Z: + RT_CANCEL=253
+[STDERR  ] 2017-05-15T16:00:56.147892775Z: + IMAGE_NAME=docker
+[STDERR  ] 2017-05-15T16:00:56.147933932Z: + trap clean_up EXIT
+[STDERR  ] 2017-05-15T16:00:56.147976749Z: + moby build /tmp/build/test/cases/../../examples/docker.yml
+[STDERR  ] 2017-05-15T16:00:56.158298547Z: Extract kernel image: linuxkit/kernel:4.9.x
+[STDERR  ] 2017-05-15T16:00:56.699129575Z: Add init containers:
+[STDERR  ] 2017-05-15T16:00:56.699320643Z: Process init image: linuxkit/init:b3740303f3d1e5689a84c87b7dfb48fd2a40a192
+[STDERR  ] 2017-05-15T16:00:56.823594964Z: Process init image: linuxkit/runc:47b1c38d63468c0f3078f8b1b055d07965a1895d
+[STDERR  ] 2017-05-15T16:00:56.958916858Z: Process init image: linuxkit/containerd:cf2614f5a96c569a0bd4bd54e054a65ba17d167f
+[STDERR  ] 2017-05-15T16:00:57.399654337Z: Process init image: linuxkit/ca-certificates:3344cdca1bc59fdfa17bd7f0fcbf491b9dbaa288
+[STDERR  ] 2017-05-15T16:00:57.401901148Z: Pull image: linuxkit/ca-certificates:3344cdca1bc59fdfa17bd7f0fcbf491b9dbaa288
+[STDERR  ] 2017-05-15T16:00:59.185881084Z: Add onboot containers:
+[STDERR  ] 2017-05-15T16:00:59.18607091Z:   Create OCI config for linuxkit/sysctl:1f5ec5d5e6f7a7a1b3d2ff9dd9e36fd6fb14756a
+[STDERR  ] 2017-05-15T16:01:01.079957524Z:   Create OCI config for linuxkit/sysfs:6c1d06f28ddd9681799d3950cddf044b930b221c
+[STDERR  ] 2017-05-15T16:01:03.015817555Z:   Create OCI config for linuxkit/binfmt:131026c0cf6084467316395fed3b358f64bda00c
+[STDERR  ] 2017-05-15T16:01:05.425753031Z:   Create OCI config for linuxkit/format:d78093e943f9c88386e30c00353f9476d34fb551
+[STDERR  ] 2017-05-15T16:01:07.582797581Z:   Create OCI config for linuxkit/mount:fc7164d7c4e1fe5d1da395c7f949fb332cffe752
+[STDERR  ] 2017-05-15T16:01:10.924577213Z: Add service containers:
+[STDERR  ] 2017-05-15T16:01:10.924735872Z:   Create OCI config for linuxkit/rngd:61a07ced77a9747708223ca16a4aec621eacf518
+[STDERR  ] 2017-05-15T16:01:13.40368972Z:   Create OCI config for linuxkit/dhcpcd:2def74ab3f9233b4c09ebb196ba47c27c08b0ed8
+[STDERR  ] 2017-05-15T16:01:13.552082998Z:   Create OCI config for linuxkit/openntpd:a38eabb308d0405f58894979f8b8031a6c7e1134
+[STDERR  ] 2017-05-15T16:01:15.731501959Z:   Create OCI config for linuxkit/docker-ce:050e734489f2d19b42ec818a4242a318ea446bc3
+[STDERR  ] 2017-05-15T16:01:22.461320134Z: Add files:
+[STDERR  ] 2017-05-15T16:01:22.46147394Z:   etc/docker/daemon.json
+[STDERR  ] 2017-05-15T16:01:22.46161574Z: Create outputs:
+[STDERR  ] 2017-05-15T16:01:36.465033911Z:   docker-kernel docker-initrd.img docker-cmdline
+[STDERR  ] 2017-05-15T16:01:36.587444754Z: + exit 0
+[STDERR  ] 2017-05-15T16:01:36.587463727Z: + clean_up
+[STDERR  ] 2017-05-15T16:01:36.587514805Z: + rm -rf docker-cmdline docker-initrd.img docker-kernel
+[PASS    ] linuxkit.build.examples.docker 40.45s
+[INFO    ] 2017-05-15T16:01:36.599740465Z: Running Test linuxkit.build.examples.sshd in /tmp/build/test/cases/000_build/100_examples/020_sshd
+[INFO    ] 2017-05-15T16:01:36.599833979Z: Running command: [/bin/sh -x /tmp/build/test/cases/000_build/100_examples/020_sshd/test.sh]
+[STDERR  ] 2017-05-15T16:01:36.600914908Z: + set -e
+[STDERR  ] 2017-05-15T16:01:36.601035936Z: + . /tmp/build/test/cases/_lib/lib.sh
+[STDERR  ] 2017-05-15T16:01:36.60113628Z: + [ -f src/github.com/linuxkit/rtf/lib/lib.sh ]
+[STDERR  ] 2017-05-15T16:01:36.601203828Z: + LINUXKIT_TMPDIR=/tmp/build/test/cases/_tmp
+[STDERR  ] 2017-05-15T16:01:36.601260344Z: + LINUXKIT_ARTIFACTS_DIR=/tmp/build/test/cases/../../artifacts
+[STDERR  ] 2017-05-15T16:01:36.601324389Z: + [ -f /tmp/build/test/cases/_tmp/env.sh ]
+[STDERR  ] 2017-05-15T16:01:36.601394441Z: + . /tmp/build/test/cases/_tmp/env.sh
+[STDERR  ] 2017-05-15T16:01:36.601463531Z: + export LINUXKIT_EXAMPLES_DIR=/tmp/build/test/cases/../../examples
+[STDERR  ] 2017-05-15T16:01:36.601506725Z: + RT_CANCEL=253
+[STDERR  ] 2017-05-15T16:01:36.601568637Z: + IMAGE_NAME=sshd
+[STDERR  ] 2017-05-15T16:01:36.601622348Z: + trap clean_up EXIT
+[STDERR  ] 2017-05-15T16:01:36.601672106Z: + moby build /tmp/build/test/cases/../../examples/sshd.yml
+[STDERR  ] 2017-05-15T16:01:36.613880889Z: Extract kernel image: linuxkit/kernel:4.9.x
+[STDERR  ] 2017-05-15T16:01:37.129201049Z: Add init containers:
+[STDERR  ] 2017-05-15T16:01:37.129345303Z: Process init image: linuxkit/init:b3740303f3d1e5689a84c87b7dfb48fd2a40a192
+[STDERR  ] 2017-05-15T16:01:37.255546798Z: Process init image: linuxkit/runc:47b1c38d63468c0f3078f8b1b055d07965a1895d
+[STDERR  ] 2017-05-15T16:01:37.384370071Z: Process init image: linuxkit/containerd:cf2614f5a96c569a0bd4bd54e054a65ba17d167f
+[STDERR  ] 2017-05-15T16:01:37.783763189Z: Process init image: linuxkit/ca-certificates:3344cdca1bc59fdfa17bd7f0fcbf491b9dbaa288
+[STDERR  ] 2017-05-15T16:01:37.871105113Z: Add onboot containers:
+[STDERR  ] 2017-05-15T16:01:37.87130534Z:   Create OCI config for linuxkit/sysctl:2cf2f9d5b4d314ba1bfc22b2fe931924af666d8c
+[STDERR  ] 2017-05-15T16:01:39.913530935Z: Add service containers:
+[STDERR  ] 2017-05-15T16:01:39.913679604Z:   Create OCI config for linuxkit/rngd:61a07ced77a9747708223ca16a4aec621eacf518
+[STDERR  ] 2017-05-15T16:01:40.015597029Z:   Create OCI config for linuxkit/dhcpcd:2def74ab3f9233b4c09ebb196ba47c27c08b0ed8
+[STDERR  ] 2017-05-15T16:01:40.133712024Z:   Create OCI config for linuxkit/sshd:e108d208adf692c8a0954f602743e0eec445364e
+[STDERR  ] 2017-05-15T16:01:43.081498955Z: Add files:
+[STDERR  ] 2017-05-15T16:01:43.081696225Z:   root/.ssh/authorized_keys
+[STDERR  ] 2017-05-15T16:01:43.081834964Z: Create outputs:
+[STDERR  ] 2017-05-15T16:01:49.275463285Z:   sshd-kernel sshd-initrd.img sshd-cmdline
+[STDERR  ] 2017-05-15T16:01:55.19192005Z:   sshd.iso
+[STDERR  ] 2017-05-15T16:02:05.974905969Z:   sshd-efi.iso
+[STDERR  ] 2017-05-15T16:02:13.586069444Z: + exit 0
+[STDERR  ] 2017-05-15T16:02:13.586083067Z: + clean_up
+[STDERR  ] 2017-05-15T16:02:13.586093509Z: + rm -rf sshd-cmdline sshd-efi.iso sshd-initrd.img sshd-kernel sshd.iso
+[PASS    ] linuxkit.build.examples.sshd 37.00s
+[INFO    ] 2017-05-15T16:02:13.597177521Z: Running Test linuxkit.build.examples.redis in /tmp/build/test/cases/000_build/100_examples/030_redis
+[INFO    ] 2017-05-15T16:02:13.597263775Z: Running command: [/bin/sh -x /tmp/build/test/cases/000_build/100_examples/030_redis/test.sh]
+[STDERR  ] 2017-05-15T16:02:13.598285288Z: + set -e
+[STDERR  ] 2017-05-15T16:02:13.598382496Z: + . /tmp/build/test/cases/_lib/lib.sh
+[STDERR  ] 2017-05-15T16:02:13.598454982Z: + [ -f src/github.com/linuxkit/rtf/lib/lib.sh ]
+[STDERR  ] 2017-05-15T16:02:13.598497656Z: + LINUXKIT_TMPDIR=/tmp/build/test/cases/_tmp
+[STDERR  ] 2017-05-15T16:02:13.598539034Z: + LINUXKIT_ARTIFACTS_DIR=/tmp/build/test/cases/../../artifacts
+[STDERR  ] 2017-05-15T16:02:13.598605489Z: + [ -f /tmp/build/test/cases/_tmp/env.sh ]
+[STDERR  ] 2017-05-15T16:02:13.598646712Z: + . /tmp/build/test/cases/_tmp/env.sh
+[STDERR  ] 2017-05-15T16:02:13.598695469Z: + export LINUXKIT_EXAMPLES_DIR=/tmp/build/test/cases/../../examples
+[STDERR  ] 2017-05-15T16:02:13.598732781Z: + RT_CANCEL=253
+[STDERR  ] 2017-05-15T16:02:13.598770909Z: + IMAGE_NAME=redis-os
+[STDERR  ] 2017-05-15T16:02:13.598807907Z: + trap clean_up EXIT
+[STDERR  ] 2017-05-15T16:02:13.598851076Z: + moby build /tmp/build/test/cases/../../examples/redis-os.yml
+[STDERR  ] 2017-05-15T16:02:13.60896245Z: Extract kernel image: linuxkit/kernel:4.9.x
+[STDERR  ] 2017-05-15T16:02:14.158039546Z: Add init containers:
+[STDERR  ] 2017-05-15T16:02:14.158223369Z: Process init image: linuxkit/init:b3740303f3d1e5689a84c87b7dfb48fd2a40a192
+[STDERR  ] 2017-05-15T16:02:14.287066131Z: Process init image: linuxkit/runc:47b1c38d63468c0f3078f8b1b055d07965a1895d
+[STDERR  ] 2017-05-15T16:02:14.427257591Z: Process init image: linuxkit/containerd:cf2614f5a96c569a0bd4bd54e054a65ba17d167f
+[STDERR  ] 2017-05-15T16:02:14.90606475Z: Add service containers:
+[STDERR  ] 2017-05-15T16:02:14.906300109Z:   Create OCI config for linuxkit/dhcpcd:2def74ab3f9233b4c09ebb196ba47c27c08b0ed8
+[STDERR  ] 2017-05-15T16:02:15.033508808Z:   Create OCI config for redis:3.0.7-alpine
+[STDERR  ] 2017-05-15T16:02:18.14452535Z: Create outputs:
+[STDERR  ] 2017-05-15T16:02:24.162335323Z:   redis-os-kernel redis-os-initrd.img redis-os-cmdline
+[STDERR  ] 2017-05-15T16:02:24.215291435Z: + exit 0
+[STDERR  ] 2017-05-15T16:02:24.215313609Z: + clean_up
+[STDERR  ] 2017-05-15T16:02:24.215328563Z: + rm -rf redis-os-cmdline redis-os-initrd.img redis-os-kernel
+[PASS    ] linuxkit.build.examples.redis 10.62s
+[INFO    ] 2017-05-15T16:02:24.221554747Z: Running Test linuxkit.build.examples.swap in /tmp/build/test/cases/000_build/100_examples/040_swap
+[INFO    ] 2017-05-15T16:02:24.221647762Z: Running command: [/bin/sh -x /tmp/build/test/cases/000_build/100_examples/040_swap/test.sh]
+[STDERR  ] 2017-05-15T16:02:24.222718089Z: + set -e
+[STDERR  ] 2017-05-15T16:02:24.222817839Z: + . /tmp/build/test/cases/_lib/lib.sh
+[STDERR  ] 2017-05-15T16:02:24.222907093Z: + [ -f src/github.com/linuxkit/rtf/lib/lib.sh ]
+[STDERR  ] 2017-05-15T16:02:24.222974873Z: + LINUXKIT_TMPDIR=/tmp/build/test/cases/_tmp
+[STDERR  ] 2017-05-15T16:02:24.22304441Z: + LINUXKIT_ARTIFACTS_DIR=/tmp/build/test/cases/../../artifacts
+[STDERR  ] 2017-05-15T16:02:24.223113229Z: + [ -f /tmp/build/test/cases/_tmp/env.sh ]
+[STDERR  ] 2017-05-15T16:02:24.223163489Z: + . /tmp/build/test/cases/_tmp/env.sh
+[STDERR  ] 2017-05-15T16:02:24.223237074Z: + export LINUXKIT_EXAMPLES_DIR=/tmp/build/test/cases/../../examples
+[STDERR  ] 2017-05-15T16:02:24.223302673Z: + RT_CANCEL=253
+[STDERR  ] 2017-05-15T16:02:24.223343765Z: + IMAGE_NAME=swap
+[STDERR  ] 2017-05-15T16:02:24.22340779Z: + trap clean_up EXIT
+[STDERR  ] 2017-05-15T16:02:24.223466732Z: + moby build /tmp/build/test/cases/../../examples/swap.yml
+[STDERR  ] 2017-05-15T16:02:24.236685062Z: Extract kernel image: linuxkit/kernel:4.9.x
+[STDERR  ] 2017-05-15T16:02:24.727354798Z: Add init containers:
+[STDERR  ] 2017-05-15T16:02:24.727524081Z: Process init image: linuxkit/init:42fe8cb1508b3afed39eb89821906e3cc7a70551
+[STDERR  ] 2017-05-15T16:02:24.729021689Z: Pull image: linuxkit/init:42fe8cb1508b3afed39eb89821906e3cc7a70551
+[STDERR  ] 2017-05-15T16:02:26.956041675Z: Process init image: linuxkit/runc:47b1c38d63468c0f3078f8b1b055d07965a1895d
+[STDERR  ] 2017-05-15T16:02:27.074959491Z: Process init image: linuxkit/containerd:cf2614f5a96c569a0bd4bd54e054a65ba17d167f
+[STDERR  ] 2017-05-15T16:02:27.600291647Z: Process init image: linuxkit/ca-certificates:eabc5a6e59f05aa91529d80e9a595b85b046f935
+[STDERR  ] 2017-05-15T16:02:27.608965078Z: Pull image: linuxkit/ca-certificates:eabc5a6e59f05aa91529d80e9a595b85b046f935
+[STDERR  ] 2017-05-15T16:02:29.46347559Z: Add onboot containers:
+[STDERR  ] 2017-05-15T16:02:29.463678125Z:   Create OCI config for linuxkit/sysctl:2cf2f9d5b4d314ba1bfc22b2fe931924af666d8c
+[STDERR  ] 2017-05-15T16:02:29.552787372Z:   Create OCI config for linuxkit/binfmt:131026c0cf6084467316395fed3b358f64bda00c
+[STDERR  ] 2017-05-15T16:02:29.695885699Z:   Create OCI config for linuxkit/dhcpcd:2def74ab3f9233b4c09ebb196ba47c27c08b0ed8
+[STDERR  ] 2017-05-15T16:02:29.828046701Z:   Create OCI config for linuxkit/format:d78093e943f9c88386e30c00353f9476d34fb551
+[STDERR  ] 2017-05-15T16:02:29.968738255Z:   Create OCI config for linuxkit/mount:fc7164d7c4e1fe5d1da395c7f949fb332cffe752
+[STDERR  ] 2017-05-15T16:02:30.128805166Z:   Create OCI config for linuxkit/swap:a881d50445ea27624be67dcda39313e7a2051982
+[STDERR  ] 2017-05-15T16:02:33.007244217Z: Add service containers:
+[STDERR  ] 2017-05-15T16:02:33.007421613Z:   Create OCI config for linuxkit/rngd:3dad6dd43270fa632ac031e99d1947f20b22eec9
+[STDERR  ] 2017-05-15T16:02:34.261522161Z:   Create OCI config for nginx:alpine
+[STDERR  ] 2017-05-15T16:02:37.33752403Z: Create outputs:
+[STDERR  ] 2017-05-15T16:02:46.586208027Z:   swap-kernel swap-initrd.img swap-cmdline
+[STDERR  ] 2017-05-15T16:02:56.846477776Z:   swap.iso
+[STDERR  ] 2017-05-15T16:03:14.23587219Z:   swap-efi.iso
+[STDERR  ] 2017-05-15T16:03:21.190932537Z: + exit 0
+[STDERR  ] 2017-05-15T16:03:21.19095372Z: + clean_up
+[STDERR  ] 2017-05-15T16:03:21.190964504Z: + rm -rf swap-cmdline swap-efi.iso swap-initrd.img swap-kernel swap.iso
+[PASS    ] linuxkit.build.examples.swap 56.99s
+[INFO    ] 2017-05-15T16:03:21.207817839Z: Running Test linuxkit.build.examples.node_exporter in /tmp/build/test/cases/000_build/100_examples/050_node_exporter
+[INFO    ] 2017-05-15T16:03:21.207902031Z: Running command: [/bin/sh -x /tmp/build/test/cases/000_build/100_examples/050_node_exporter/test.sh]
+[STDERR  ] 2017-05-15T16:03:21.209087765Z: + set -e
+[STDERR  ] 2017-05-15T16:03:21.209223669Z: + . /tmp/build/test/cases/_lib/lib.sh
+[STDERR  ] 2017-05-15T16:03:21.209299322Z: + [ -f src/github.com/linuxkit/rtf/lib/lib.sh ]
+[STDERR  ] 2017-05-15T16:03:21.209349142Z: + LINUXKIT_TMPDIR=/tmp/build/test/cases/_tmp
+[STDERR  ] 2017-05-15T16:03:21.209391875Z: + LINUXKIT_ARTIFACTS_DIR=/tmp/build/test/cases/../../artifacts
+[STDERR  ] 2017-05-15T16:03:21.209448213Z: + [ -f /tmp/build/test/cases/_tmp/env.sh ]
+[STDERR  ] 2017-05-15T16:03:21.209486704Z: + . /tmp/build/test/cases/_tmp/env.sh
+[STDERR  ] 2017-05-15T16:03:21.209538652Z: + export LINUXKIT_EXAMPLES_DIR=/tmp/build/test/cases/../../examples
+[STDERR  ] 2017-05-15T16:03:21.209577203Z: + RT_CANCEL=253
+[STDERR  ] 2017-05-15T16:03:21.209618506Z: + IMAGE_NAME=node_exporter
+[STDERR  ] 2017-05-15T16:03:21.209656116Z: + trap clean_up EXIT
+[STDERR  ] 2017-05-15T16:03:21.209700778Z: + moby build /tmp/build/test/cases/../../examples/node_exporter.yml
+[STDERR  ] 2017-05-15T16:03:21.219644462Z: Extract kernel image: linuxkit/kernel:4.9.x
+[STDERR  ] 2017-05-15T16:03:21.754852645Z: Add init containers:
+[STDERR  ] 2017-05-15T16:03:21.755028095Z: Process init image: linuxkit/init:b3740303f3d1e5689a84c87b7dfb48fd2a40a192
+[STDERR  ] 2017-05-15T16:03:21.880078747Z: Process init image: linuxkit/runc:47b1c38d63468c0f3078f8b1b055d07965a1895d
+[STDERR  ] 2017-05-15T16:03:22.013697105Z: Process init image: linuxkit/containerd:fe1b7f438a234cb6481c6538295115eac2a0596d
+[STDERR  ] 2017-05-15T16:03:22.015285384Z: Pull image: linuxkit/containerd:fe1b7f438a234cb6481c6538295115eac2a0596d
+[STDERR  ] 2017-05-15T16:03:26.82471611Z: Add service containers:
+[STDERR  ] 2017-05-15T16:03:26.824956854Z:   Create OCI config for linuxkit/rngd:61a07ced77a9747708223ca16a4aec621eacf518
+[STDERR  ] 2017-05-15T16:03:26.932980907Z:   Create OCI config for linuxkit/dhcpcd:2def74ab3f9233b4c09ebb196ba47c27c08b0ed8
+[STDERR  ] 2017-05-15T16:03:27.092918502Z:   Create OCI config for linuxkit/node_exporter:0c7c1588e4cbce9cc946c1a84d3902b38b4b7ada
+[STDERR  ] 2017-05-15T16:03:30.815204781Z: Create outputs:
+[STDERR  ] 2017-05-15T16:03:37.508628338Z:   node_exporter-kernel node_exporter-initrd.img node_exporter-cmdline
+[STDERR  ] 2017-05-15T16:03:37.562054186Z: + exit 0
+[STDERR  ] 2017-05-15T16:03:37.5620827Z: + clean_up
+[STDERR  ] 2017-05-15T16:03:37.562089867Z: + rm -rf node_exporter-cmdline node_exporter-initrd.img node_exporter-kernel
+[PASS    ] linuxkit.build.examples.node_exporter 16.36s
+[INFO    ] 2017-05-15T16:03:37.567625332Z: linuxkit.build.examples::gdeinit()
+[INFO    ] 2017-05-15T16:03:37.567717385Z: Running command: [/bin/sh -x /tmp/build/test/cases/000_build/100_examples/group.sh deinit]
+[STDERR  ] 2017-05-15T16:03:37.568685346Z: + CMD=deinit
+[STDERR  ] 2017-05-15T16:03:37.56875859Z: + group_deinit
+[STDERR  ] 2017-05-15T16:03:37.568787372Z: + return 0
+[STDERR  ] 2017-05-15T16:03:37.568829659Z: + res=0
+[STDERR  ] 2017-05-15T16:03:37.56886242Z: + exit 0
+[INFO    ] 2017-05-15T16:03:37.569022037Z: Running Test linuxkit.build.outputs in /tmp/build/test/cases/000_build/000_outputs
+[INFO    ] 2017-05-15T16:03:37.569078819Z: Running command: [/bin/sh -x /tmp/build/test/cases/000_build/000_outputs/test.sh]
+[STDERR  ] 2017-05-15T16:03:37.569724888Z: + set -e
+[STDERR  ] 2017-05-15T16:03:37.569819176Z: + . /tmp/build/test/cases/_lib/lib.sh
+[STDERR  ] 2017-05-15T16:03:37.569880167Z: + [ -f src/github.com/linuxkit/rtf/lib/lib.sh ]
+[STDERR  ] 2017-05-15T16:03:37.569925607Z: + LINUXKIT_TMPDIR=/tmp/build/test/cases/_tmp
+[STDERR  ] 2017-05-15T16:03:37.569967543Z: + LINUXKIT_ARTIFACTS_DIR=/tmp/build/test/cases/../../artifacts
+[STDERR  ] 2017-05-15T16:03:37.570006677Z: + [ -f /tmp/build/test/cases/_tmp/env.sh ]
+[STDERR  ] 2017-05-15T16:03:37.570047006Z: + . /tmp/build/test/cases/_tmp/env.sh
+[STDERR  ] 2017-05-15T16:03:37.570085077Z: + export LINUXKIT_EXAMPLES_DIR=/tmp/build/test/cases/../../examples
+[STDERR  ] 2017-05-15T16:03:37.570130185Z: + RT_CANCEL=253
+[STDERR  ] 2017-05-15T16:03:37.570158243Z: + NAME=check
+[STDERR  ] 2017-05-15T16:03:37.570208049Z: + trap clean_up EXIT
+[STDERR  ] 2017-05-15T16:03:37.570247371Z: + moby build -name check test.yml
+[STDERR  ] 2017-05-15T16:03:37.580225395Z: Extract kernel image: linuxkit/kernel:4.9.x
+[STDERR  ] 2017-05-15T16:03:38.130441306Z: Add init containers:
+[STDERR  ] 2017-05-15T16:03:38.130646369Z: Process init image: linuxkit/init:b3740303f3d1e5689a84c87b7dfb48fd2a40a192
+[STDERR  ] 2017-05-15T16:03:38.260761785Z: Process init image: linuxkit/runc:47b1c38d63468c0f3078f8b1b055d07965a1895d
+[STDERR  ] 2017-05-15T16:03:38.400284455Z: Process init image: linuxkit/containerd:cf2614f5a96c569a0bd4bd54e054a65ba17d167f
+[STDERR  ] 2017-05-15T16:03:38.83047529Z: Add onboot containers:
+[STDERR  ] 2017-05-15T16:03:38.830628064Z:   Create OCI config for linuxkit/dhcpcd:2def74ab3f9233b4c09ebb196ba47c27c08b0ed8
+[STDERR  ] 2017-05-15T16:03:38.967579401Z: Create outputs:
+[STDERR  ] 2017-05-15T16:03:38.96777573Z:   check.tar
+[STDERR  ] 2017-05-15T16:03:43.284158451Z:   check-kernel check-initrd.img check-cmdline
+[STDERR  ] 2017-05-15T16:03:47.491505883Z:   check.iso
+[STDERR  ] 2017-05-15T16:03:55.577829399Z:   check-efi.iso
+[STDERR  ] 2017-05-15T16:04:03.502988875Z:   check.img.gz
+[STDERR  ] 2017-05-15T16:05:41.80449605Z:   check.img.tar.gz
+[STDERR  ] 2017-05-15T16:06:42.33603756Z:   check.qcow2
+[STDERR  ] 2017-05-15T16:07:25.87192309Z:   check.vhd
+[STDERR  ] 2017-05-15T16:09:26.698981489Z: fatal error: runtime: out of memory
+[STDERR  ] 2017-05-15T16:09:26.699033194Z: 
+[STDERR  ] 2017-05-15T16:09:26.699048342Z: runtime stack:
+[STDERR  ] 2017-05-15T16:09:26.699064139Z: runtime.throw(0x7f5b61d99805, 0x16)
+[STDERR  ] 2017-05-15T16:09:26.699076847Z: 	/usr/lib/go/src/runtime/panic.go:566 +0x97
+[STDERR  ] 2017-05-15T16:09:26.699086324Z: runtime.sysMap(0xc4bcd00000, 0x80000000, 0x0, 0x7f5b62389938)
+panic: write /tmp/build/test/_results/33afd986-2354-4ef5-8fb0-4f12ac816c68/TESTS.log: no space left on device
+
+goroutine 29 [running]:
+panic(0x7fa2dcbe8ec0, 0xc420203d10)
+	/usr/lib/go/src/runtime/panic.go:500 +0x1a5
+github.com/linuxkit/rtf/logger.ioLogWriter.Write(0x7fa2dcde5de0, 0xc420022440, 0xc420238d80, 0x5b)
+	/go/src/github.com/linuxkit/rtf/logger/logger.go:136 +0xea
+github.com/linuxkit/rtf/logger.(*ioLogWriter).Write(0xc4201da000, 0xc420238d80, 0x5b)
+	<autogenerated>:14 +0x71
+github.com/linuxkit/rtf/logger.(*logger).Log(0xc4201c2e10, 0xed0abc9b6, 0x7fa229ab4f86, 0x7fa2dce00fe0, 0x132, 0xc420203ce0, 0x30)
+	/go/src/github.com/linuxkit/rtf/logger/logger.go:119 +0xb7
+github.com/linuxkit/rtf/logger.(*logDispatcher).Log(0xc420022448, 0x132, 0xc420203ce0, 0x30)
+	/go/src/github.com/linuxkit/rtf/logger/logger.go:82 +0xf9
+github.com/linuxkit/rtf/local.executeScript.func2(0x7fa2dcde8ba0, 0xc420022678, 0xc4201b1360)
+	/go/src/github.com/linuxkit/rtf/local/script.go:78 +0x118
+created by github.com/linuxkit/rtf/local.executeScript
+	/go/src/github.com/linuxkit/rtf/local/script.go:80 +0xf83
+Makefile:44: recipe for target 'test-pr' failed
+make[1]: Leaving directory '/tmp/build/test'
+make[1]: *** [test-pr] Error 2
+Makefile:70: recipe for target 'ci-pr' failed
+make: *** [ci-pr] Error 2
+[2017-05-15 16:09.27] Removing test VM...
+[2017-05-15 16:09.27] Running "/gcloud/destroy.py" "linuxkit-ci-3"
+INFO:root:Destroying VM
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+[2017-05-15 16:10.53] Failed: recipe for target 'ci-pr' failed
