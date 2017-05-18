@@ -1,0 +1,180 @@
+=== Build LinuxKit
+[2017-05-18 18:28.25] Starting...
+Cloning into '/tmp/with_clone31a9bfb0'...
+done.
+HEAD is now at d80e880f projects: add IMA namespacing project
+[2017-05-18 18:28.25] Running "cp" "-p" "--" "/gcloud/ci-setup.sh" "/tmp/with_clone31a9bfb0/ci-setup.sh"
+[2017-05-18 18:28.25] Running "/gcloud/create.py" "linuxkit-ci-0"
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Using source disk image https://www.googleapis.com/compute/v1/projects/moby-datakit-ci/global/images/linuxkit-ci-builder-3
+INFO:root:Creating VM
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Getting VM details
+[2017-05-18 18:28.55] Created new VM linuxkit-ci-0
+[2017-05-18 18:28.55] Running "ssh" "-i" "/run/secrets/builder-ssh" "-o" "StrictHostKeyChecking=no" "root@35.187.113.224" "/usr/local/bin/test.sh"
+Warning: Permanently added '35.187.113.224' (ECDSA) to the list of known hosts.
++ rm -rf /tmp/build
++ mkdir /tmp/build
++ cd /tmp/build
++ tar xf -
++ '[' -x ci-setup.sh ']'
++ ./ci-setup.sh
++ sysctl vm.overcommit_memory=1
+vm.overcommit_memory = 1
++ make ci-pr
+make clean
+make[1]: Entering directory '/tmp/build'
+rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar 
+make[1]: Leaving directory '/tmp/build'
+make
+make[1]: Entering directory '/tmp/build'
+mkdir -p bin
+docker run --rm --log-driver=none  linuxkit/go-compile:5bf17af781df44f07906099402680b9a661f999b --clone-path github.com/moby/tool --clone https://github.com/moby/tool.git --commit a9a00fae6204a89baeed6903c7e2901412c1ede0 --package github.com/moby/tool/cmd/moby --ldflags "-X main.GitCommit=d80e880f28833d7d50507388e3b491c1ab77eb91 -X main.Version="0.0" " -o bin/moby > tmp_moby_bin.tar
+Unable to find image 'linuxkit/go-compile:5bf17af781df44f07906099402680b9a661f999b' locally
+5bf17af781df44f07906099402680b9a661f999b: Pulling from linuxkit/go-compile
+627beaf3eaaf: Already exists
+98e502457679: Pulling fs layer
+ecae82f11762: Pulling fs layer
+cc422136b77c: Pulling fs layer
+cc422136b77c: Verifying Checksum
+cc422136b77c: Download complete
+ecae82f11762: Verifying Checksum
+ecae82f11762: Download complete
+98e502457679: Verifying Checksum
+98e502457679: Download complete
+98e502457679: Pull complete
+ecae82f11762: Pull complete
+cc422136b77c: Pull complete
+Digest: sha256:0bf523bcebb96ccc525f983a118f1fd8cb5e17dbf90e83044ca71bb983000e70
+Status: Downloaded newer image for linuxkit/go-compile:5bf17af781df44f07906099402680b9a661f999b
+Cloning into '.'...
+Note: checking out 'a9a00fae6204a89baeed6903c7e2901412c1ede0'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at a9a00fa... Merge pull request #33 from justincormack/img-gz
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_moby_bin.tar > bin/moby
+rm tmp_moby_bin.tar
+touch bin/moby
+tar cf - vendor -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i  linuxkit/go-compile:5bf17af781df44f07906099402680b9a661f999b --package github.com/linuxkit/linuxkit --ldflags "-X main.GitCommit=d80e880f28833d7d50507388e3b491c1ab77eb91 -X main.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_linuxkit_bin.tar > bin/linuxkit
+rm tmp_linuxkit_bin.tar
+touch bin/linuxkit
+docker run --rm --log-driver=none  linuxkit/go-compile:5bf17af781df44f07906099402680b9a661f999b --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 3ced00340aacfc1932e8c03281bf3bfc586c147c --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=3ced00340aacfc1932e8c03281bf3bfc586c147c -X github.com/linuxkit/rtf/cmd.Version="0.0" " -o bin/rtf > tmp_rtf_bin.tar
+Cloning into '.'...
+Note: checking out '3ced00340aacfc1932e8c03281bf3bfc586c147c'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at 3ced003... Merge pull request #12 from dave-tucker/exit-1-fail
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_rtf_bin.tar > bin/rtf
+rm tmp_rtf_bin.tar
+touch bin/rtf
+make[1]: Leaving directory '/tmp/build'
+make install
+make[1]: Entering directory '/tmp/build'
+cp -R ./bin/* /usr/local//bin
+make[1]: Leaving directory '/tmp/build'
+make -C test pr
+make[1]: Entering directory '/tmp/build/test'
+rm -rf ../artifacts
+mkdir -p ../artifacts
+/usr/local/bin/moby build --pull -name ../artifacts/test hack/test.yml
+Pull kernel image: linuxkit/kernel:4.9.x
+Extract kernel image: linuxkit/kernel:4.9.x
+Pull image: linuxkit/kernel:4.9.x
+Add init containers:
+Process init image: linuxkit/init:deea956a9ab07bf262083e93a86930bdc610cc2f
+Pull image: linuxkit/init:deea956a9ab07bf262083e93a86930bdc610cc2f
+Process init image: linuxkit/runc:2649198589ef0020d99f613adaeda45ce0093a38
+Pull image: linuxkit/runc:2649198589ef0020d99f613adaeda45ce0093a38
+Process init image: linuxkit/containerd:cf2614f5a96c569a0bd4bd54e054a65ba17d167f
+Pull image: linuxkit/containerd:cf2614f5a96c569a0bd4bd54e054a65ba17d167f
+Process init image: linuxkit/ca-certificates:3344cdca1bc59fdfa17bd7f0fcbf491b9dbaa288
+Pull image: linuxkit/ca-certificates:3344cdca1bc59fdfa17bd7f0fcbf491b9dbaa288
+Add onboot containers:
+  Create OCI config for linuxkit/dhcpcd:2def74ab3f9233b4c09ebb196ba47c27c08b0ed8
+Pull image: linuxkit/dhcpcd:2def74ab3f9233b4c09ebb196ba47c27c08b0ed8
+  Create OCI config for linuxkit/test-kernel-config:ecff41279ccbc408079a3996a956432651c6eb9c
+Pull image: linuxkit/test-kernel-config:ecff41279ccbc408079a3996a956432651c6eb9c
+  Create OCI config for linuxkit/poweroff:961412b8ef5c5285de0d40ec076701d955eaa084
+Pull image: linuxkit/poweroff:961412b8ef5c5285de0d40ec076701d955eaa084
+Create outputs:
+  ../artifacts/test.img.tar.gz
+LABELS: linux, Debian, 8.7, amd64, build
+ID: 1fedce1d-21e3-4add-ad31-59e4119ff09c
+[PASS    ] linuxkit.build.examples.minimal 10.35s
+[PASS    ] linuxkit.build.examples.docker 34.29s
+[PASS    ] linuxkit.build.examples.sshd 33.50s
+[PASS    ] linuxkit.build.examples.redis 9.43s
+[PASS    ] linuxkit.build.examples.swap 54.60s
+[PASS    ] linuxkit.build.examples.node_exporter 15.50s
+[PASS    ] linuxkit.build.outputs 208.58s
+[PASS    ] linuxkit.platforms.qemu.run_kernel 37.73s
+[PASS    ] linuxkit.platforms.qemu.run_iso 48.90s
+[PASS    ] linuxkit.platforms.qemu.run_efi 33.18s
+[PASS    ] linuxkit.kernel.config 78.48s
+[PASS    ] linuxkit.kernel.kmod 46.86s
+[SKIP    ] linuxkit.security.docker-bench 0.00s
+[SUMMARY ] LogDir: 1fedce1d-21e3-4add-ad31-59e4119ff09c
+[SUMMARY ] Version: 8.7
+[SUMMARY ] Passed: 12
+[SUMMARY ] Failed: 0
+[SUMMARY ] Cancelled: 0
+[SUMMARY ] Skipped: 3
+[SUMMARY ] Duration: 611.57s
+make[1]: Leaving directory '/tmp/build/test'
+[2017-05-18 18:42.40] Fetching results
+[2017-05-18 18:42.40] Running "scp" "-r" "-i" "/run/secrets/builder-ssh" "-o" "StrictHostKeyChecking=no" "root@35.187.113.224:/tmp/build/test/_results" "root@35.187.113.224:/tmp/build/artifacts" "."
+[2017-05-18 18:42.44] Removing test VM...
+[2017-05-18 18:42.44] Running "/gcloud/destroy.py" "linuxkit-ci-0"
+INFO:root:Destroying VM
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+[2017-05-18 18:43.34] Saved build result test.img.tar.gz (31ea4b4eb8e5b03adaba39b358ac47010ddaab1cb23d2749ae113f77086e1d1e)
+[2017-05-18 18:43.34] Success
