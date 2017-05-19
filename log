@@ -1,10 +1,10 @@
 === Build LinuxKit
-[2017-05-19 11:38.43] Starting...
-Cloning into '/tmp/with_clone6bbee45'...
+[2017-05-19 12:26.36] Starting...
+Cloning into '/tmp/with_clone3e8f81b6'...
 done.
 HEAD is now at 94368c14 Added linux push functionality to VMware vCenter
-[2017-05-19 11:38.43] Running "cp" "-p" "--" "/gcloud/ci-setup.sh" "/tmp/with_clone6bbee45/ci-setup.sh"
-[2017-05-19 11:38.43] Running "/gcloud/create.py" "linuxkit-ci-3"
+[2017-05-19 12:26.36] Running "cp" "-p" "--" "/gcloud/ci-setup.sh" "/tmp/with_clone3e8f81b6/ci-setup.sh"
+[2017-05-19 12:26.36] Running "/gcloud/create.py" "linuxkit-ci-3"
 INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
 INFO:oauth2client.client:Refreshing access_token
 INFO:root:Using source disk image https://www.googleapis.com/compute/v1/projects/moby-datakit-ci/global/images/linuxkit-ci-builder-3
@@ -16,11 +16,102 @@ INFO:root:Operation in progress... waiting...
 INFO:root:Operation in progress... waiting...
 INFO:root:Operation in progress... waiting...
 INFO:root:Getting VM details
-[2017-05-19 11:39.13] Created new VM linuxkit-ci-3
-[2017-05-19 11:39.13] Running "ssh" "-i" "/run/secrets/builder-ssh" "-o" "StrictHostKeyChecking=no" "root@35.187.113.54" "/usr/local/bin/test.sh"
-ssh: connect to host 35.187.113.54 port 22: Operation timed out
-[2017-05-19 11:41.25] Removing test VM...
-[2017-05-19 11:41.25] Running "/gcloud/destroy.py" "linuxkit-ci-3"
+[2017-05-19 12:27.06] Created new VM linuxkit-ci-3
+[2017-05-19 12:27.06] Running "ssh" "-i" "/run/secrets/builder-ssh" "-o" "StrictHostKeyChecking=no" "root@104.199.6.220" "/usr/local/bin/test.sh"
+Warning: Permanently added '104.199.6.220' (ECDSA) to the list of known hosts.
++ rm -rf /tmp/build
++ mkdir /tmp/build
++ cd /tmp/build
++ tar xf -
++ '[' -x ci-setup.sh ']'
++ ./ci-setup.sh
++ sysctl vm.overcommit_memory=1
+vm.overcommit_memory = 1
++ make ci-pr
+make clean
+make[1]: Entering directory '/tmp/build'
+rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar 
+make[1]: Leaving directory '/tmp/build'
+make
+make[1]: Entering directory '/tmp/build'
+mkdir -p bin
+docker run --rm --log-driver=none  linuxkit/go-compile:5bf17af781df44f07906099402680b9a661f999b --clone-path github.com/moby/tool --clone https://github.com/moby/tool.git --commit a9a00fae6204a89baeed6903c7e2901412c1ede0 --package github.com/moby/tool/cmd/moby --ldflags "-X main.GitCommit=94368c14c832bbdab3888e01f820517b6e356b6c -X main.Version="0.0" " -o bin/moby > tmp_moby_bin.tar
+Unable to find image 'linuxkit/go-compile:5bf17af781df44f07906099402680b9a661f999b' locally
+5bf17af781df44f07906099402680b9a661f999b: Pulling from linuxkit/go-compile
+627beaf3eaaf: Already exists
+98e502457679: Pulling fs layer
+ecae82f11762: Pulling fs layer
+cc422136b77c: Pulling fs layer
+cc422136b77c: Verifying Checksum
+cc422136b77c: Download complete
+ecae82f11762: Verifying Checksum
+ecae82f11762: Download complete
+98e502457679: Verifying Checksum
+98e502457679: Download complete
+98e502457679: Pull complete
+ecae82f11762: Pull complete
+cc422136b77c: Pull complete
+Digest: sha256:0bf523bcebb96ccc525f983a118f1fd8cb5e17dbf90e83044ca71bb983000e70
+Status: Downloaded newer image for linuxkit/go-compile:5bf17af781df44f07906099402680b9a661f999b
+Cloning into '.'...
+Note: checking out 'a9a00fae6204a89baeed6903c7e2901412c1ede0'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at a9a00fa... Merge pull request #33 from justincormack/img-gz
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_moby_bin.tar > bin/moby
+rm tmp_moby_bin.tar
+touch bin/moby
+tar cf - vendor -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i  linuxkit/go-compile:5bf17af781df44f07906099402680b9a661f999b --package github.com/linuxkit/linuxkit --ldflags "-X main.GitCommit=94368c14c832bbdab3888e01f820517b6e356b6c -X main.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+push_vcenter.go:12:2: cannot find package "github.com/vmware/govmomi" in any of:
+	/go/src/github.com/linuxkit/linuxkit/vendor/github.com/vmware/govmomi (vendor tree)
+	/usr/lib/go/src/github.com/vmware/govmomi (from $GOROOT)
+	/go/src/github.com/vmware/govmomi (from $GOPATH)
+push_vcenter.go:13:2: cannot find package "github.com/vmware/govmomi/find" in any of:
+	/go/src/github.com/linuxkit/linuxkit/vendor/github.com/vmware/govmomi/find (vendor tree)
+	/usr/lib/go/src/github.com/vmware/govmomi/find (from $GOROOT)
+	/go/src/github.com/vmware/govmomi/find (from $GOPATH)
+push_vcenter.go:14:2: cannot find package "github.com/vmware/govmomi/object" in any of:
+	/go/src/github.com/linuxkit/linuxkit/vendor/github.com/vmware/govmomi/object (vendor tree)
+	/usr/lib/go/src/github.com/vmware/govmomi/object (from $GOROOT)
+	/go/src/github.com/vmware/govmomi/object (from $GOPATH)
+push_vcenter.go:15:2: cannot find package "github.com/vmware/govmomi/vim25/soap" in any of:
+	/go/src/github.com/linuxkit/linuxkit/vendor/github.com/vmware/govmomi/vim25/soap (vendor tree)
+	/usr/lib/go/src/github.com/vmware/govmomi/vim25/soap (from $GOROOT)
+	/go/src/github.com/vmware/govmomi/vim25/soap (from $GOPATH)
+push_vcenter.go:16:2: cannot find package "github.com/vmware/govmomi/vim25/types" in any of:
+	/go/src/github.com/linuxkit/linuxkit/vendor/github.com/vmware/govmomi/vim25/types (vendor tree)
+	/usr/lib/go/src/github.com/vmware/govmomi/vim25/types (from $GOROOT)
+	/go/src/github.com/vmware/govmomi/vim25/types (from $GOPATH)
+Makefile:38: recipe for target 'bin/linuxkit' failed
+make[1]: Leaving directory '/tmp/build'
+make[1]: *** [bin/linuxkit] Error 1
+Makefile:70: recipe for target 'ci-pr' failed
+make: *** [ci-pr] Error 2
+[2017-05-19 12:28.58] Fetching results
+[2017-05-19 12:28.58] Running "scp" "-r" "-i" "/run/secrets/builder-ssh" "-o" "StrictHostKeyChecking=no" "root@104.199.6.220:/tmp/build/test/_results" "."
+scp: /tmp/build/test/_results: No such file or directory
+[2017-05-19 12:28.58] Error fetching results: (Failure
+  "Command \"scp\" \"-r\" \"-i\" \"/run/secrets/builder-ssh\" \"-o\" \"StrictHostKeyChecking=no\" \"root@104.199.6.220:/tmp/build/test/_results\" \".\" exited with status 1")
+[2017-05-19 12:28.58] Removing test VM...
+[2017-05-19 12:28.58] Running "/gcloud/destroy.py" "linuxkit-ci-3"
 INFO:root:Destroying VM
 INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
 INFO:oauth2client.client:Refreshing access_token
@@ -33,5 +124,5 @@ INFO:root:Operation in progress... waiting...
 INFO:root:Operation in progress... waiting...
 INFO:root:Operation in progress... waiting...
 INFO:root:Operation in progress... waiting...
-[2017-05-19 11:42.09] Results directory "/tmp/linuxkit-137b7883/_results" not found, so not saving
-[2017-05-19 11:42.09] Failed: Command "tar" "cf" "-" "." failed with signal -7
+[2017-05-19 12:29.42] Results directory "/tmp/linuxkit-2ba0bf11/_results" not found, so not saving
+[2017-05-19 12:29.42] Failed: recipe for target 'ci-pr' failed
