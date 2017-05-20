@@ -1,0 +1,221 @@
+=== Build LinuxKit
+[2017-05-20 10:19.15] Starting...
+Cloning into '/tmp/with_clone18227ad'...
+done.
+HEAD is now at e52bf2f7 Update sysctl and sysfs in yaml files
+[2017-05-20 10:19.16] Running "cp" "-p" "--" "/gcloud/ci-setup.sh" "/tmp/with_clone18227ad/ci-setup.sh"
+[2017-05-20 10:19.16] Running "/gcloud/create.py" "linuxkit-ci-0"
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Using source disk image https://www.googleapis.com/compute/v1/projects/moby-datakit-ci/global/images/linuxkit-ci-builder-3
+INFO:root:Creating VM
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Getting VM details
+[2017-05-20 10:19.40] Created new VM linuxkit-ci-0
+[2017-05-20 10:19.40] Running "ssh" "-i" "/run/secrets/builder-ssh" "-o" "StrictHostKeyChecking=no" "root@104.155.81.40" "/usr/local/bin/test.sh"
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!
+Someone could be eavesdropping on you right now (man-in-the-middle attack)!
+It is also possible that a host key has just been changed.
+The fingerprint for the ECDSA key sent by the remote host is
+SHA256:Nw0mjp+0SFYWx+7mUeAhJZGzHrzVWsvoFCCTa7vB32w.
+Please contact your system administrator.
+Add correct host key in /root/.ssh/known_hosts to get rid of this message.
+Offending ECDSA key in /root/.ssh/known_hosts:10
+Password authentication is disabled to avoid man-in-the-middle attacks.
+Keyboard-interactive authentication is disabled to avoid man-in-the-middle attacks.
++ rm -rf /tmp/build
++ mkdir /tmp/build
++ cd /tmp/build
++ tar xf -
++ '[' -x ci-setup.sh ']'
++ ./ci-setup.sh
++ sysctl vm.overcommit_memory=1
+vm.overcommit_memory = 1
++ make ci-pr
+make clean
+make[1]: Entering directory '/tmp/build'
+rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar 
+make[1]: Leaving directory '/tmp/build'
+make
+make[1]: Entering directory '/tmp/build'
+mkdir -p bin
+docker run --rm --log-driver=none  linuxkit/go-compile:3ba94f14de51b73551417e769d122815ec917ee7 --clone-path github.com/moby/tool --clone https://github.com/moby/tool.git --commit 339aa5ec863c0cdabbe8331c7f530f6459a8fe92 --package github.com/moby/tool/cmd/moby --ldflags "-X main.GitCommit=e52bf2f7451b9a378ca70d4328dea9f622b8973e -X main.Version="0.0" " -o bin/moby > tmp_moby_bin.tar
+Unable to find image 'linuxkit/go-compile:3ba94f14de51b73551417e769d122815ec917ee7' locally
+3ba94f14de51b73551417e769d122815ec917ee7: Pulling from linuxkit/go-compile
+cfc728c1c558: Pulling fs layer
+faacc1176d6c: Pulling fs layer
+4cf0edf1fde5: Pulling fs layer
+09116519dab2: Pulling fs layer
+09116519dab2: Waiting
+cfc728c1c558: Verifying Checksum
+cfc728c1c558: Download complete
+cfc728c1c558: Pull complete
+09116519dab2: Verifying Checksum
+09116519dab2: Download complete
+4cf0edf1fde5: Verifying Checksum
+4cf0edf1fde5: Download complete
+faacc1176d6c: Verifying Checksum
+faacc1176d6c: Download complete
+faacc1176d6c: Pull complete
+4cf0edf1fde5: Pull complete
+09116519dab2: Pull complete
+Digest: sha256:6e9948a49aa6eebaa347cc107fdb0265e86f6179447b1bd670500593bbd0525f
+Status: Downloaded newer image for linuxkit/go-compile:3ba94f14de51b73551417e769d122815ec917ee7
+Cloning into '.'...
+Note: checking out '339aa5ec863c0cdabbe8331c7f530f6459a8fe92'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at 339aa5e... Merge pull request #39 from justincormack/nullable
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_moby_bin.tar > bin/moby
+rm tmp_moby_bin.tar
+touch bin/moby
+tar cf - vendor -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i  linuxkit/go-compile:3ba94f14de51b73551417e769d122815ec917ee7 --package github.com/linuxkit/linuxkit --ldflags "-X main.GitCommit=e52bf2f7451b9a378ca70d4328dea9f622b8973e -X main.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_linuxkit_bin.tar > bin/linuxkit
+rm tmp_linuxkit_bin.tar
+touch bin/linuxkit
+docker run --rm --log-driver=none  linuxkit/go-compile:3ba94f14de51b73551417e769d122815ec917ee7 --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 3ced00340aacfc1932e8c03281bf3bfc586c147c --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=3ced00340aacfc1932e8c03281bf3bfc586c147c -X github.com/linuxkit/rtf/cmd.Version="0.0" " -o bin/rtf > tmp_rtf_bin.tar
+Cloning into '.'...
+Note: checking out '3ced00340aacfc1932e8c03281bf3bfc586c147c'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at 3ced003... Merge pull request #12 from dave-tucker/exit-1-fail
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_rtf_bin.tar > bin/rtf
+rm tmp_rtf_bin.tar
+touch bin/rtf
+make[1]: Leaving directory '/tmp/build'
+make install
+make[1]: Entering directory '/tmp/build'
+cp -R ./bin/* /usr/local//bin
+make[1]: Leaving directory '/tmp/build'
+make -C test pr
+make[1]: Entering directory '/tmp/build/test'
+rm -rf ../artifacts
+mkdir -p ../artifacts
+/usr/local/bin/moby build --pull -name ../artifacts/test hack/test.yml
+Pull kernel image: linuxkit/kernel:4.9.x
+Extract kernel image: linuxkit/kernel:4.9.x
+Pull image: linuxkit/kernel:4.9.x
+Add init containers:
+Process init image: linuxkit/init:deea956a9ab07bf262083e93a86930bdc610cc2f
+Pull image: linuxkit/init:deea956a9ab07bf262083e93a86930bdc610cc2f
+Process init image: linuxkit/runc:2649198589ef0020d99f613adaeda45ce0093a38
+Pull image: linuxkit/runc:2649198589ef0020d99f613adaeda45ce0093a38
+Process init image: linuxkit/containerd:1c71f95fa36040ea7e987deb98a7a2a363853f01
+Pull image: linuxkit/containerd:1c71f95fa36040ea7e987deb98a7a2a363853f01
+Process init image: linuxkit/ca-certificates:4e9a83e890e6477dcd25029fc4f1ced61d0642f4
+Pull image: linuxkit/ca-certificates:4e9a83e890e6477dcd25029fc4f1ced61d0642f4
+Add onboot containers:
+  Create OCI config for linuxkit/dhcpcd:cb96c09a33c166eca6530f166f0f79927c3e83b0
+Pull image: linuxkit/dhcpcd:cb96c09a33c166eca6530f166f0f79927c3e83b0
+  Create OCI config for linuxkit/test-kernel-config:ecff41279ccbc408079a3996a956432651c6eb9c
+Pull image: linuxkit/test-kernel-config:ecff41279ccbc408079a3996a956432651c6eb9c
+  Create OCI config for linuxkit/poweroff:a8f1e4ad8d459f1fdaad9e4b007512cb3b504ae8
+Pull image: linuxkit/poweroff:a8f1e4ad8d459f1fdaad9e4b007512cb3b504ae8
+Create outputs:
+  ../artifacts/test.img.tar.gz
+LABELS: build, linux, Debian, 8.7, amd64
+ID: b4c9ee07-08ea-468a-8b43-e49ba31fcaa7
+[PASS    ] linuxkit.build.examples.minimal 10.60s
+[PASS    ] linuxkit.build.examples.docker 39.64s
+[PASS    ] linuxkit.build.examples.sshd 34.83s
+[PASS    ] linuxkit.build.examples.redis 10.29s
+[PASS    ] linuxkit.build.examples.swap 57.65s
+[PASS    ] linuxkit.build.examples.node_exporter 11.07s
+[PASS    ] linuxkit.build.outputs 216.29s
+[PASS    ] linuxkit.platforms.qemu.run_kernel 37.87s
+[PASS    ] linuxkit.platforms.qemu.run_iso 32.34s
+[PASS    ] linuxkit.platforms.qemu.run_efi 33.76s
+[PASS    ] linuxkit.kernel.config 78.60s
+[PASS    ] linuxkit.kernel.kmod 47.92s
+[SKIP    ] linuxkit.security.docker-bench 0.00s
+[PASS    ] linuxkit.packages.sysctl 64.53s
+[SUMMARY ] LogDir: b4c9ee07-08ea-468a-8b43-e49ba31fcaa7
+[SUMMARY ] Version: 8.7
+[SUMMARY ] Passed: 13
+[SUMMARY ] Failed: 0
+[SUMMARY ] Cancelled: 0
+[SUMMARY ] Skipped: 3
+[SUMMARY ] Duration: 675.65s
+make[1]: Leaving directory '/tmp/build/test'
+[2017-05-20 10:34.52] Fetching results
+[2017-05-20 10:34.52] Running "scp" "-r" "-i" "/run/secrets/builder-ssh" "-o" "StrictHostKeyChecking=no" "root@104.155.81.40:/tmp/build/test/_results" "root@104.155.81.40:/tmp/build/artifacts" "."
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!
+Someone could be eavesdropping on you right now (man-in-the-middle attack)!
+It is also possible that a host key has just been changed.
+The fingerprint for the ECDSA key sent by the remote host is
+SHA256:Nw0mjp+0SFYWx+7mUeAhJZGzHrzVWsvoFCCTa7vB32w.
+Please contact your system administrator.
+Add correct host key in /root/.ssh/known_hosts to get rid of this message.
+Offending ECDSA key in /root/.ssh/known_hosts:10
+Password authentication is disabled to avoid man-in-the-middle attacks.
+Keyboard-interactive authentication is disabled to avoid man-in-the-middle attacks.
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!
+Someone could be eavesdropping on you right now (man-in-the-middle attack)!
+It is also possible that a host key has just been changed.
+The fingerprint for the ECDSA key sent by the remote host is
+SHA256:Nw0mjp+0SFYWx+7mUeAhJZGzHrzVWsvoFCCTa7vB32w.
+Please contact your system administrator.
+Add correct host key in /root/.ssh/known_hosts to get rid of this message.
+Offending ECDSA key in /root/.ssh/known_hosts:10
+Password authentication is disabled to avoid man-in-the-middle attacks.
+Keyboard-interactive authentication is disabled to avoid man-in-the-middle attacks.
+[2017-05-20 10:34.55] Removing test VM...
+[2017-05-20 10:34.55] Running "/gcloud/destroy.py" "linuxkit-ci-0"
+INFO:root:Destroying VM
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+[2017-05-20 10:35.39] Saved build result test.img.tar.gz (3bcdfd68fda22aac543a7a70033e18e0a2be77bb6ec61451c3784091d30e8543)
+[2017-05-20 10:35.40] Success
