@@ -1,0 +1,155 @@
+=== Build LinuxKit
+[2017-05-21 10:18.48] Starting...
+Cloning into '/tmp/with_clone2ff8adba'...
+done.
+HEAD is now at a6d834dd Merge pull request #1865 from justincormack/go-compile
+[2017-05-21 10:18.49] Running "cp" "-p" "--" "/gcloud/ci-setup.sh" "/tmp/with_clone2ff8adba/ci-setup.sh"
+[2017-05-21 10:18.49] Running "make" "ci" "CLOUDSDK_IMAGE_NAME=linuxkit-ci-3"
+make clean
+make[1]: Entering directory '/tmp/with_clone2ff8adba'
+rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar 
+make[1]: Leaving directory '/tmp/with_clone2ff8adba'
+make
+make[1]: Entering directory '/tmp/with_clone2ff8adba'
+mkdir -p bin
+docker run --rm --log-driver=none  linuxkit/go-compile:3ba94f14de51b73551417e769d122815ec917ee7 --clone-path github.com/moby/tool --clone https://github.com/moby/tool.git --commit 339aa5ec863c0cdabbe8331c7f530f6459a8fe92 --package github.com/moby/tool/cmd/moby --ldflags "-X main.GitCommit=a6d834ddf0ea8ba2fbdd79220368e8cb38d91a4b -X main.Version="0.0" " -o bin/moby > tmp_moby_bin.tar
+Unable to find image 'linuxkit/go-compile:3ba94f14de51b73551417e769d122815ec917ee7' locally
+3ba94f14de51b73551417e769d122815ec917ee7: Pulling from linuxkit/go-compile
+cfc728c1c558: Already exists
+faacc1176d6c: Pulling fs layer
+4cf0edf1fde5: Pulling fs layer
+09116519dab2: Pulling fs layer
+09116519dab2: Download complete
+faacc1176d6c: Verifying Checksum
+faacc1176d6c: Download complete
+4cf0edf1fde5: Verifying Checksum
+4cf0edf1fde5: Download complete
+faacc1176d6c: Pull complete
+4cf0edf1fde5: Pull complete
+09116519dab2: Pull complete
+Digest: sha256:6e9948a49aa6eebaa347cc107fdb0265e86f6179447b1bd670500593bbd0525f
+Status: Downloaded newer image for linuxkit/go-compile:3ba94f14de51b73551417e769d122815ec917ee7
+Cloning into '.'...
+Note: checking out '339aa5ec863c0cdabbe8331c7f530f6459a8fe92'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at 339aa5e... Merge pull request #39 from justincormack/nullable
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_moby_bin.tar > bin/moby
+rm tmp_moby_bin.tar
+touch bin/moby
+tar cf - vendor -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i  linuxkit/go-compile:3ba94f14de51b73551417e769d122815ec917ee7 --package github.com/linuxkit/linuxkit --ldflags "-X main.GitCommit=a6d834ddf0ea8ba2fbdd79220368e8cb38d91a4b -X main.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_linuxkit_bin.tar > bin/linuxkit
+rm tmp_linuxkit_bin.tar
+touch bin/linuxkit
+docker run --rm --log-driver=none  linuxkit/go-compile:3ba94f14de51b73551417e769d122815ec917ee7 --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 3ced00340aacfc1932e8c03281bf3bfc586c147c --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=3ced00340aacfc1932e8c03281bf3bfc586c147c -X github.com/linuxkit/rtf/cmd.Version="0.0" " -o bin/rtf > tmp_rtf_bin.tar
+Cloning into '.'...
+Note: checking out '3ced00340aacfc1932e8c03281bf3bfc586c147c'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at 3ced003... Merge pull request #12 from dave-tucker/exit-1-fail
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_rtf_bin.tar > bin/rtf
+rm tmp_rtf_bin.tar
+touch bin/rtf
+make[1]: Leaving directory '/tmp/with_clone2ff8adba'
+make install
+make[1]: Entering directory '/tmp/with_clone2ff8adba'
+cp -R ./bin/* /usr/local//bin
+make[1]: Leaving directory '/tmp/with_clone2ff8adba'
+make -C test all
+make[1]: Entering directory '/tmp/with_clone2ff8adba/test'
+rm -rf ../artifacts
+mkdir -p ../artifacts
+/usr/local/bin/moby build --pull -name ../artifacts/test hack/test.yml
+Pull kernel image: linuxkit/kernel:4.9.x
+Extract kernel image: linuxkit/kernel:4.9.x
+Pull image: linuxkit/kernel:4.9.x
+Add init containers:
+Process init image: linuxkit/init:deea956a9ab07bf262083e93a86930bdc610cc2f
+Pull image: linuxkit/init:deea956a9ab07bf262083e93a86930bdc610cc2f
+Process init image: linuxkit/runc:2649198589ef0020d99f613adaeda45ce0093a38
+Pull image: linuxkit/runc:2649198589ef0020d99f613adaeda45ce0093a38
+Process init image: linuxkit/containerd:f1130450206d4f64f0ddc13d15bb68435aa1ff61
+Pull image: linuxkit/containerd:f1130450206d4f64f0ddc13d15bb68435aa1ff61
+Process init image: linuxkit/ca-certificates:4e9a83e890e6477dcd25029fc4f1ced61d0642f4
+Pull image: linuxkit/ca-certificates:4e9a83e890e6477dcd25029fc4f1ced61d0642f4
+Add onboot containers:
+  Create OCI config for linuxkit/dhcpcd:cb96c09a33c166eca6530f166f0f79927c3e83b0
+Pull image: linuxkit/dhcpcd:cb96c09a33c166eca6530f166f0f79927c3e83b0
+  Create OCI config for linuxkit/test-kernel-config:ecff41279ccbc408079a3996a956432651c6eb9c
+Pull image: linuxkit/test-kernel-config:ecff41279ccbc408079a3996a956432651c6eb9c
+  Create OCI config for linuxkit/poweroff:a8f1e4ad8d459f1fdaad9e4b007512cb3b504ae8
+Pull image: linuxkit/poweroff:a8f1e4ad8d459f1fdaad9e4b007512cb3b504ae8
+Create outputs:
+  ../artifacts/test.img.tar.gz
+LABELS: linux, Alpine, 3.5.2, amd64, build
+ID: 654ddfb9-c6b6-4713-97d7-124a2e5086b6
+[PASS    ] linuxkit.build.examples.minimal 14.73s
+[PASS    ] linuxkit.build.examples.docker 38.96s
+[PASS    ] linuxkit.build.examples.sshd 49.24s
+[PASS    ] linuxkit.build.examples.redis 19.21s
+[PASS    ] linuxkit.build.examples.swap 91.92s
+[PASS    ] linuxkit.build.examples.node_exporter 21.83s
+[PASS    ] linuxkit.build.outputs 242.49s
+[PASS    ] linuxkit.platforms.qemu.run_kernel 43.57s
+[PASS    ] linuxkit.platforms.qemu.run_iso 51.88s
+[FAIL    ] linuxkit.platforms.qemu.run_efi 22.38s
+[PASS    ] linuxkit.kernel.config 65.52s
+[PASS    ] linuxkit.kernel.kmod 43.87s
+[SKIP    ] linuxkit.security.docker-bench 0.00s
+[PASS    ] linuxkit.packages.sysctl 64.29s
+[SUMMARY ] LogDir: 654ddfb9-c6b6-4713-97d7-124a2e5086b6
+[SUMMARY ] Version: 3.5.2
+[SUMMARY ] Passed: 12
+[SUMMARY ] Failed: 1
+[SUMMARY ] Cancelled: 0
+[SUMMARY ] Skipped: 3
+[SUMMARY ] Duration: 769.91s
+Some tests failed
+make[1]: *** [Makefile:53: test-pr] Error 1
+make[1]: Leaving directory '/tmp/with_clone2ff8adba/test'
+make: *** [Makefile:61: ci] Error 2
+[2017-05-21 10:33.33] Removing test VM...
+[2017-05-21 10:33.33] Running "/gcloud/destroy.py" "linuxkit-ci-3"
+INFO:root:Destroying VM
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+Traceback (most recent call last):
+  File "/gcloud/destroy.py", line 12, in <module>
+    resp = common.compute.instances().delete(instance=name, project=common.project, zone=common.zone).execute()
+  File "/usr/lib/python2.7/site-packages/oauth2client/_helpers.py", line 133, in positional_wrapper
+    return wrapped(*args, **kwargs)
+  File "/usr/lib/python2.7/site-packages/googleapiclient/http.py", line 840, in execute
+    raise HttpError(resp, content, uri=self.uri)
+googleapiclient.errors.HttpError: <HttpError 404 when requesting https://www.googleapis.com/compute/v1/projects/moby-datakit-ci/zones/europe-west1-b/instances/linuxkit-ci-3?alt=json returned "The resource 'projects/moby-datakit-ci/zones/europe-west1-b/instances/linuxkit-ci-3' was not found">
+[2017-05-21 10:33.35] Failed: Command "make" "ci" "CLOUDSDK_IMAGE_NAME=linuxkit-ci-3" exited with status 2
