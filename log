@@ -1,0 +1,70 @@
+=== Build LinuxKit
+[2017-06-02 13:55.00] Starting...
+Cloning into '/tmp/with_clone3450d4f2'...
+done.
+HEAD is now at a6c1053c readme: another note
+[2017-06-02 13:55.01] Running "cp" "-p" "--" "/gcloud/ci-setup.sh" "/tmp/with_clone3450d4f2/ci-setup.sh"
+[2017-06-02 13:55.01] Running "/gcloud/create.py" "linuxkit-ci-3"
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Using source disk image https://www.googleapis.com/compute/v1/projects/moby-datakit-ci/global/images/linuxkit-ci-builder-3
+INFO:root:Creating VM
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Getting VM details
+[2017-06-02 13:55.31] Created new VM linuxkit-ci-3
+[2017-06-02 13:55.31] Running "ssh" "-i" "/run/secrets/builder-ssh" "-o" "StrictHostKeyChecking=no" "root@35.187.70.191" "/usr/local/bin/test.sh"
+Warning: Permanently added '35.187.70.191' (ECDSA) to the list of known hosts.
++ rm -rf /tmp/build
++ mkdir /tmp/build
++ cd /tmp/build
++ tar xf -
++ '[' -x ci-setup.sh ']'
++ ./ci-setup.sh
++ mkdir -p /tmp/build/test/_results /tmp/build/artifacts
++ sysctl vm.overcommit_memory=1
+vm.overcommit_memory = 1
++ make ci-pr
+make clean
+make[1]: Entering directory '/tmp/build'
+rm -rf bin *.log *-kernel *-cmdline *.img *.iso *.tar.gz *.qcow2 *.vhd *.vmx *.vmdk
+make -C test clean
+make[2]: Entering directory '/tmp/build/test'
+rm -rf bin *.log *-kernel *-cmdline *.img *.iso *.tar.gz *.qcow2 *.vhd *.vmx *.vmdk
+make[2]: Leaving directory '/tmp/build/test'
+make[1]: Leaving directory '/tmp/build'
+make
+make[1]: Entering directory '/tmp/build'
+mkdir -p bin
+docker run --rm --log-driver=none  mor1/go-compile:021f2dca9228cdd27cffc304aafae1b1f900bfc2 --clone-path github.com/moby/tool --clone https://github.com/moby/tool.git --commit d504afe4795528920ef06af611efd27b74098d5e --package github.com/moby/tool/cmd/moby --ldflags "-X main.GitCommit=a6c1053c39e3560c8d597ccf5db6049abb49e8fa -X main.Version="0.0" " -o bin/moby > tmp_moby_bin.tar
+Unable to find image 'mor1/go-compile:021f2dca9228cdd27cffc304aafae1b1f900bfc2' locally
+docker: Error response from daemon: manifest for mor1/go-compile:021f2dca9228cdd27cffc304aafae1b1f900bfc2 not found.
+See 'docker run --help'.
+Makefile:22: recipe for target 'bin/moby' failed
+make[1]: Leaving directory '/tmp/build'
+Makefile:61: recipe for target 'ci-pr' failed
+make[1]: *** [bin/moby] Error 125
+make: *** [ci-pr] Error 2
+[2017-06-02 13:56.16] Fetching results
+[2017-06-02 13:56.16] Running "scp" "-r" "-i" "/run/secrets/builder-ssh" "-o" "StrictHostKeyChecking=no" "root@35.187.70.191:/tmp/build/test/_results" "."
+[2017-06-02 13:56.16] Removing test VM...
+[2017-06-02 13:56.16] Running "/gcloud/destroy.py" "linuxkit-ci-3"
+INFO:root:Destroying VM
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+[2017-06-02 13:57.11] Failed: recipe for target 'ci-pr' failed
