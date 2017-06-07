@@ -1,0 +1,112 @@
+=== Build LinuxKit
+[2017-06-07 15:31.28] Starting...
+Cloning into '/tmp/with_clone3b831f99'...
+done.
+HEAD is now at c4e0c29a tests: Run the package tests on HyperKit when running on OSX
+[2017-06-07 15:31.29] Running "cp" "-p" "--" "/gcloud/ci-setup.sh" "/tmp/with_clone3b831f99/ci-setup.sh"
+[2017-06-07 15:31.29] Running "/gcloud/create.py" "linuxkit-ci-0"
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Using source disk image https://www.googleapis.com/compute/v1/projects/moby-datakit-ci/global/images/linuxkit-ci-builder-3
+INFO:root:Creating VM
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Getting VM details
+[2017-06-07 15:31.47] Created new VM linuxkit-ci-0
+[2017-06-07 15:31.47] Running "ssh" "-i" "/run/secrets/builder-ssh" "-o" "StrictHostKeyChecking=no" "root@35.187.182.86" "/usr/local/bin/test.sh"
+Warning: Permanently added '35.187.182.86' (ECDSA) to the list of known hosts.
++ rm -rf /tmp/build
++ mkdir /tmp/build
++ cd /tmp/build
++ tar xf -
++ '[' -x ci-setup.sh ']'
++ ./ci-setup.sh
++ mkdir -p /tmp/build/test/_results /tmp/build/artifacts
++ sysctl vm.overcommit_memory=1
+vm.overcommit_memory = 1
++ make ci-pr
+make clean
+make[1]: Entering directory '/tmp/build'
+rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar 
+make[1]: Leaving directory '/tmp/build'
+make
+make[1]: Entering directory '/tmp/build'
+mkdir -p bin
+docker run --rm --log-driver=none  linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --clone-path github.com/moby/tool --clone https://github.com/moby/tool.git --commit 3a16c02f100d1e01ea405a33d21a02de2a85904f --package github.com/moby/tool/cmd/moby --ldflags "-X main.GitCommit=c4e0c29a0f2ae5fd258682db54ee1fbc0ede8bd0 -X main.Version="0.0" " -o bin/moby > tmp_moby_bin.tar
+Unable to find image 'linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df' locally
+6579a00b44686d0e504d513fc4860094769fe7df: Pulling from linuxkit/go-compile
+7bee6021d73b: Pulling fs layer
+bc2351846d69: Pulling fs layer
+f445d9c10f23: Pulling fs layer
+f445d9c10f23: Verifying Checksum
+f445d9c10f23: Download complete
+bc2351846d69: Verifying Checksum
+bc2351846d69: Download complete
+7bee6021d73b: Verifying Checksum
+7bee6021d73b: Download complete
+7bee6021d73b: Pull complete
+bc2351846d69: Pull complete
+f445d9c10f23: Pull complete
+Digest: sha256:65aa61308f71f509fd003bac05d60644243c863def805992948a0e5a02b95c09
+Status: Downloaded newer image for linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df
+Cloning into '.'...
+Note: checking out '3a16c02f100d1e01ea405a33d21a02de2a85904f'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at 3a16c02... Merge pull request #69 from justincormack/gcp-fix
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_moby_bin.tar > bin/moby
+rm tmp_moby_bin.tar
+touch bin/moby
+tar cf - vendor -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i  linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --package github.com/linuxkit/linuxkit --ldflags "-X main.GitCommit=c4e0c29a0f2ae5fd258682db54ee1fbc0ede8bd0 -X main.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+# github.com/linuxkit/linuxkit/vendor/github.com/moby/hyperkit/go
+vendor/github.com/moby/hyperkit/go/pty_util.go:16: undefined: unix.TIOCGETA
+vendor/github.com/moby/hyperkit/go/pty_util.go:20: undefined: unix.TIOCSETA
+vendor/github.com/moby/hyperkit/go/pty_util.go:61: cannot use uint64(uint32(t.Iflag) & ^uint32(unix.IGNBRK | unix.BRKINT | unix.PARMRK | unix.ISTRIP | unix.INLCR | unix.IGNCR | unix.ICRNL | unix.IXON)) (type uint64) as type uint32 in assignment
+vendor/github.com/moby/hyperkit/go/pty_util.go:62: cannot use uint64(uint32(t.Oflag) & ^uint32(unix.OPOST)) (type uint64) as type uint32 in assignment
+vendor/github.com/moby/hyperkit/go/pty_util.go:63: cannot use uint64(uint32(t.Lflag) & ^uint32(unix.ECHO | unix.ECHONL | unix.ICANON | unix.ISIG | unix.IEXTEN)) (type uint64) as type uint32 in assignment
+vendor/github.com/moby/hyperkit/go/pty_util.go:64: cannot use uint64(uint32(t.Cflag) & ^uint32(unix.CSIZE | unix.PARENB)) (type uint64) as type uint32 in assignment
+Makefile:38: recipe for target 'bin/linuxkit' failed
+make[1]: Leaving directory '/tmp/build'
+make[1]: *** [bin/linuxkit] Error 2
+Makefile:70: recipe for target 'ci-pr' failed
+make: *** [ci-pr] Error 2
+[2017-06-07 15:34.36] Fetching results
+[2017-06-07 15:34.36] Running "scp" "-r" "-i" "/run/secrets/builder-ssh" "-o" "StrictHostKeyChecking=no" "root@35.187.182.86:/tmp/build/test/_results" "."
+[2017-06-07 15:34.37] Removing test VM...
+[2017-06-07 15:34.37] Running "/gcloud/destroy.py" "linuxkit-ci-0"
+INFO:root:Destroying VM
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+[2017-06-07 15:35.36] Failed: recipe for target 'ci-pr' failed
