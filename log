@@ -1,0 +1,175 @@
+=== Build LinuxKit
+[2017-06-08 10:46.26] Starting...
+Cloning into '/tmp/with_clone5097719'...
+done.
+HEAD is now at 907ebfe8 Merge pull request #1997 from justincormack/getty-cleanup
+[2017-06-08 10:46.27] Running "cp" "-p" "--" "/gcloud/ci-setup.sh" "/tmp/with_clone5097719/ci-setup.sh"
+[2017-06-08 10:54.30] Running "make" "ci" "CLOUDSDK_IMAGE_NAME=linuxkit-ci-0"
+make clean
+make[1]: Entering directory '/tmp/with_clone5097719'
+rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar 
+make[1]: Leaving directory '/tmp/with_clone5097719'
+make
+make[1]: Entering directory '/tmp/with_clone5097719'
+mkdir -p bin
+docker run --rm --log-driver=none  linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --clone-path github.com/moby/tool --clone https://github.com/moby/tool.git --commit e0aac90f4476c7dadfec9ab4116cf1363e51ce77 --package github.com/moby/tool/cmd/moby --ldflags "-X main.GitCommit=907ebfe8d8180791a145d0b58ac4223b29d2f1e6 -X main.Version="0.0" " -o bin/moby > tmp_moby_bin.tar
+Cloning into '.'...
+Note: checking out 'e0aac90f4476c7dadfec9ab4116cf1363e51ce77'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at e0aac90... Merge pull request #74 from justincormack/raw-name
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_moby_bin.tar > bin/moby
+rm tmp_moby_bin.tar
+touch bin/moby
+tar cf - vendor -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i  linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --package github.com/linuxkit/linuxkit --ldflags "-X main.GitCommit=907ebfe8d8180791a145d0b58ac4223b29d2f1e6 -X main.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_linuxkit_bin.tar > bin/linuxkit
+rm tmp_linuxkit_bin.tar
+touch bin/linuxkit
+docker run --rm --log-driver=none  linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 3ced00340aacfc1932e8c03281bf3bfc586c147c --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=3ced00340aacfc1932e8c03281bf3bfc586c147c -X github.com/linuxkit/rtf/cmd.Version="0.0" " -o bin/rtf > tmp_rtf_bin.tar
+Cloning into '.'...
+Note: checking out '3ced00340aacfc1932e8c03281bf3bfc586c147c'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at 3ced003... Merge pull request #12 from dave-tucker/exit-1-fail
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_rtf_bin.tar > bin/rtf
+rm tmp_rtf_bin.tar
+touch bin/rtf
+make[1]: Leaving directory '/tmp/with_clone5097719'
+make install
+make[1]: Entering directory '/tmp/with_clone5097719'
+cp -R ./bin/* /usr/local//bin
+make[1]: Leaving directory '/tmp/with_clone5097719'
+make -C test all
+make[1]: Entering directory '/tmp/with_clone5097719/test'
+rm -rf ../artifacts
+mkdir -p ../artifacts
+/usr/local/bin/moby build -output gcp -pull -name ../artifacts/test hack/test.yml
+Extract kernel image: linuxkit/kernel:4.9.x
+Pull image: docker.io/linuxkit/kernel:4.9.x@sha256:ae1b7926df08ea7451f1404e28bef8cf7ece2d342eeeecf007d6708e7abbbc16
+Add init containers:
+Process init image: linuxkit/init:1b8a7e394d2ec2f1fdb4d67645829d1b5bdca037
+Pull image: docker.io/linuxkit/init:1b8a7e394d2ec2f1fdb4d67645829d1b5bdca037@sha256:8e80db5f2ccd7214ccbee3ea1d2cf3b844d668676a2352c3739fa891942fe1df
+Process init image: linuxkit/runc:2649198589ef0020d99f613adaeda45ce0093a38
+Pull image: docker.io/linuxkit/runc:2649198589ef0020d99f613adaeda45ce0093a38@sha256:dd096c6ea03e6da232a0c6d01c1e0d2290c4031408f9c6000c89c9e6590a39da
+Process init image: linuxkit/containerd:b50181bc6e0084e5fcd6b6ad3cf433c4f66cae5a
+Pull image: docker.io/linuxkit/containerd:b50181bc6e0084e5fcd6b6ad3cf433c4f66cae5a@sha256:0b8aae12e6b85d89c12287977ef92107d91038e223ab3b738e8f0c46ca5ad707
+Add onboot containers:
+  Create OCI config for linuxkit/dhcpcd:7d2b8aaaf20c24ad7d11a5ea2ea5b4a80dc966f1
+Pull image: docker.io/linuxkit/dhcpcd:7d2b8aaaf20c24ad7d11a5ea2ea5b4a80dc966f1@sha256:b1bef35accd165a4235ad301f9bef6544922cb6eafdb60268b05d8c9d0b1566b
+  Create OCI config for linuxkit/test-kernel-config:ecff41279ccbc408079a3996a956432651c6eb9c
+Pull image: linuxkit/test-kernel-config:ecff41279ccbc408079a3996a956432651c6eb9c
+  Create OCI config for linuxkit/poweroff:7404cf2295df89ccfa2dda41997a28307a90cf28
+Pull image: linuxkit/poweroff:7404cf2295df89ccfa2dda41997a28307a90cf28
+Create outputs:
+  ../artifacts/test.img.tar.gz
+LABELS: build, linux, Alpine, 3.5.2, amd64
+ID: 211d738a-e976-4ac4-bd86-db178488a5dd
+[PASS    ] linuxkit.build.examples.minimal 33.39s
+[PASS    ] linuxkit.build.examples.docker 64.92s
+[PASS    ] linuxkit.build.examples.sshd 49.43s
+[PASS    ] linuxkit.build.examples.redis 33.80s
+[PASS    ] linuxkit.build.examples.swap 76.34s
+[PASS    ] linuxkit.build.examples.node_exporter 32.90s
+[PASS    ] linuxkit.build.outputs 377.68s
+[PASS    ] linuxkit.platforms.qemu.run_kernel 70.56s
+[PASS    ] linuxkit.platforms.qemu.run_iso 79.98s
+[CANCEL  ] linuxkit.platforms.qemu.run_efi 0.00s
+[PASS    ] linuxkit.platforms.qemu.run_qcow 207.48s
+[PASS    ] linuxkit.platforms.qemu.run_raw 191.79s
+[FAIL    ] linuxkit.platforms.qemu.container 31.03s
+[PASS    ] linuxkit.kernel.config_4.4.x 118.20s
+[PASS    ] linuxkit.kernel.config_4.9.x 105.65s
+[PASS    ] linuxkit.kernel.config_4.11.x 90.79s
+[PASS    ] linuxkit.kernel.kmod_4.9.x 67.65s
+[SKIP    ] linuxkit.security.docker-bench 0.00s
+[PASS    ] linuxkit.security.ports 67.21s
+[PASS    ] linuxkit.packages.binfmt 69.46s
+fatal error: concurrent map iteration and map write
+
+goroutine 89 [running]:
+runtime.throw(0x564e21aebdad, 0x26)
+	/usr/lib/go/src/runtime/panic.go:596 +0x97 fp=0xc420222da0 sp=0xc420222d80
+runtime.mapiternext(0xc420222e98)
+	/usr/lib/go/src/runtime/hashmap.go:737 +0x7f0 fp=0xc420222e50 sp=0xc420222da0
+github.com/linuxkit/rtf/logger.(*logDispatcher).Log(0xc42000e510, 0x132, 0xc420178000, 0x5c)
+	/go/src/github.com/linuxkit/rtf/logger/logger.go:80 +0x107 fp=0xc420222f08 sp=0xc420222e50
+github.com/linuxkit/rtf/local.executeScript.func2(0x564e21fd43e0, 0xc4202040b0, 0xc4200ce780)
+	/go/src/github.com/linuxkit/rtf/local/script.go:78 +0x118 fp=0xc420222fc8 sp=0xc420222f08
+runtime.goexit()
+	/usr/lib/go/src/runtime/asm_amd64.s:2197 +0x1 fp=0xc420222fd0 sp=0xc420222fc8
+created by github.com/linuxkit/rtf/local.executeScript
+	/go/src/github.com/linuxkit/rtf/local/script.go:80 +0xf24
+
+goroutine 1 [runnable]:
+os.Create(0xc4201bc380, 0x6f, 0x2, 0xc4201bc380, 0x6f)
+	/usr/lib/go/src/os/file.go:255 +0x75
+github.com/linuxkit/rtf/local.(*Test).Run(0xc4201a0700, 0x1, 0x564e21ad9a2e, 0x5, 0xc4201c5630, 0x49, 0x564e21fd5420, 0xc42000e510, 0x564e21ad9cbd, 0x5, ...)
+	/go/src/github.com/linuxkit/rtf/local/test.go:104 +0x295
+github.com/linuxkit/rtf/local.(*Group).Run(0xc4201046c0, 0x1, 0x564e21ad9a2e, 0x5, 0xc4201c5630, 0x49, 0x564e21fd5420, 0xc42000e510, 0x564e21ad9cbd, 0x5, ...)
+	/go/src/github.com/linuxkit/rtf/local/group.go:208 +0x475
+github.com/linuxkit/rtf/local.(*Group).Run(0xc420104000, 0x1, 0x564e21ad9a2e, 0x5, 0xc4201c5630, 0x49, 0x564e21fd5420, 0xc42000e510, 0x564e21ad9cbd, 0x5, ...)
+	/go/src/github.com/linuxkit/rtf/local/group.go:201 +0x208
+github.com/linuxkit/rtf/cmd.run(0x564e21fca500, 0xc420015a10, 0x0, 0x3, 0x0, 0x0)
+	/go/src/github.com/linuxkit/rtf/cmd/run.go:180 +0x12b8
+github.com/linuxkit/rtf/vendor/github.com/spf13/cobra.(*Command).execute(0x564e21fca500, 0xc420015920, 0x3, 0x3, 0x564e21fca500, 0xc420015920)
+	/go/src/github.com/linuxkit/rtf/vendor/github.com/spf13/cobra/command.go:621 +0x3fa
+github.com/linuxkit/rtf/vendor/github.com/spf13/cobra.(*Command).ExecuteC(0x564e21fca2c0, 0xc42005c058, 0x0, 0xc4200e1f48)
+	/go/src/github.com/linuxkit/rtf/vendor/github.com/spf13/cobra/command.go:700 +0x33b
+github.com/linuxkit/rtf/vendor/github.com/spf13/cobra.(*Command).Execute(0x564e21fca2c0, 0x1, 0x1)
+	/go/src/github.com/linuxkit/rtf/vendor/github.com/spf13/cobra/command.go:659 +0x2d
+github.com/linuxkit/rtf/cmd.Execute()
+	/go/src/github.com/linuxkit/rtf/cmd/root.go:46 +0x33
+main.main()
+	/go/src/github.com/linuxkit/rtf/main.go:20 +0x22
+
+goroutine 17 [syscall, 3 minutes, locked to thread]:
+runtime.goexit()
+	/usr/lib/go/src/runtime/asm_amd64.s:2197 +0x1
+make[1]: *** [Makefile:53: test-pr] Error 2
+make[1]: Leaving directory '/tmp/with_clone5097719/test'
+make: *** [Makefile:61: ci] Error 2
+[2017-06-08 11:26.24] Removing test VM...
+[2017-06-08 11:26.24] Running "/gcloud/destroy.py" "linuxkit-ci-0"
+INFO:root:Destroying VM
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+Traceback (most recent call last):
+  File "/gcloud/destroy.py", line 12, in <module>
+    resp = common.compute.instances().delete(instance=name, project=common.project, zone=common.zone).execute()
+  File "/usr/lib/python2.7/site-packages/oauth2client/_helpers.py", line 133, in positional_wrapper
+    return wrapped(*args, **kwargs)
+  File "/usr/lib/python2.7/site-packages/googleapiclient/http.py", line 840, in execute
+    raise HttpError(resp, content, uri=self.uri)
+googleapiclient.errors.HttpError: <HttpError 404 when requesting https://www.googleapis.com/compute/v1/projects/moby-datakit-ci/zones/europe-west1-b/instances/linuxkit-ci-0?alt=json returned "The resource 'projects/moby-datakit-ci/zones/europe-west1-b/instances/linuxkit-ci-0' was not found">
+[2017-06-08 11:26.25] Failed: +0x1
