@@ -1,0 +1,832 @@
+[INFO    ] 2017-06-26T16:06:50.51812615Z: Running Test linuxkit.kernel.kmod_4.9.x in /tmp/with_clone90d7ce6/test/cases/020_kernel/010_kmod_4.9.x
+[INFO    ] 2017-06-26T16:06:50.518237442Z: Running command: [/bin/sh -x /tmp/with_clone90d7ce6/test/cases/020_kernel/010_kmod_4.9.x/test.sh]
+[STDERR  ] 2017-06-26T16:06:50.531826468Z: + set -e
+[STDERR  ] 2017-06-26T16:06:50.531838224Z: + . /tmp/with_clone90d7ce6/test/cases/_lib/lib.sh
+[STDERR  ] 2017-06-26T16:06:50.531846931Z: + [ -f src/github.com/linuxkit/rtf/lib/lib.sh ]
+[STDERR  ] 2017-06-26T16:06:50.531858501Z: + LINUXKIT_TMPDIR=/tmp/with_clone90d7ce6/test/cases/_tmp
+[STDERR  ] 2017-06-26T16:06:50.531866296Z: + [ -f /tmp/with_clone90d7ce6/test/cases/_tmp/env.sh ]
+[STDERR  ] 2017-06-26T16:06:50.531876641Z: + . /tmp/with_clone90d7ce6/test/cases/_tmp/env.sh
+[STDERR  ] 2017-06-26T16:06:50.53188298Z: + export LINUXKIT_EXAMPLES_DIR=/tmp/with_clone90d7ce6/test/cases/../../examples
+[STDERR  ] 2017-06-26T16:06:50.531892594Z: + export LINUXKIT_BLUEPRINTS_DIR=/tmp/with_clone90d7ce6/test/cases/../../blueprints
+[STDERR  ] 2017-06-26T16:06:50.531905839Z: + RT_CANCEL=253
+[STDERR  ] 2017-06-26T16:06:50.531917813Z: + IMAGE_NAME=kmod-test
+[STDERR  ] 2017-06-26T16:06:50.531932225Z: + trap clean_up EXIT
+[STDERR  ] 2017-06-26T16:06:50.531943822Z: + docker pull linuxkit/kernel:4.9.x
+[STDOUT  ] 2017-06-26T16:06:51.863866305Z: 4.9.x: Pulling from linuxkit/kernel
+[STDOUT  ] 2017-06-26T16:06:51.924185295Z: Digest: sha256:14f5467dd92bc8955d46f4b4e108261922ad4c0c2e1abfce5b775d3c8fbb9610
+[STDOUT  ] 2017-06-26T16:06:51.924205796Z: Status: Image is up to date for linuxkit/kernel:4.9.x
+[STDERR  ] 2017-06-26T16:06:51.927553089Z: + docker build -t kmod-test .
+[STDOUT  ] 2017-06-26T16:06:51.939702825Z: Sending build context to Docker daemon 9.216 kB
+[STDOUT  ] 2017-06-26T16:06:52.087040551Z: Step 1/11 : FROM linuxkit/kernel:4.9.x AS ksrc
+[STDOUT  ] 2017-06-26T16:06:52.144294644Z:  ---> 80c9e5318257
+[STDOUT  ] 2017-06-26T16:06:52.144325742Z: Step 2/11 : FROM linuxkit/kernel-compile:1b396c221af673757703258159ddc8539843b02b@sha256:6b32d205bfc6407568324337b707d195d027328dbfec554428ea93e7b0a8299b AS build
+[STDOUT  ] 2017-06-26T16:06:52.14433716Z:  ---> 261c60c4eb02
+[STDOUT  ] 2017-06-26T16:06:52.144350169Z: Step 3/11 : COPY --from=ksrc /kernel-dev.tar /
+[STDOUT  ] 2017-06-26T16:06:52.588397519Z:  ---> Using cache
+[STDOUT  ] 2017-06-26T16:06:52.58841033Z:  ---> 2aa1f5b1aa51
+[STDOUT  ] 2017-06-26T16:06:52.588419726Z: Step 4/11 : RUN tar xf kernel-dev.tar
+[STDOUT  ] 2017-06-26T16:06:52.604931155Z:  ---> Using cache
+[STDOUT  ] 2017-06-26T16:06:52.604949067Z:  ---> ca97f81d33ce
+[STDOUT  ] 2017-06-26T16:06:52.604957181Z: Step 5/11 : WORKDIR /kmod
+[STDOUT  ] 2017-06-26T16:06:52.604961546Z:  ---> Using cache
+[STDOUT  ] 2017-06-26T16:06:52.604968699Z:  ---> e92a74e90d11
+[STDOUT  ] 2017-06-26T16:06:52.604980223Z: Step 6/11 : COPY ./src/* ./
+[STDOUT  ] 2017-06-26T16:06:52.604992467Z:  ---> Using cache
+[STDOUT  ] 2017-06-26T16:06:52.605005107Z:  ---> b31ce03f4662
+[STDOUT  ] 2017-06-26T16:06:52.605017223Z: Step 7/11 : RUN make all
+[STDOUT  ] 2017-06-26T16:06:52.60502372Z:  ---> Using cache
+[STDOUT  ] 2017-06-26T16:06:52.605042116Z:  ---> b1eb22f49670
+[STDOUT  ] 2017-06-26T16:06:52.60504612Z: Step 8/11 : FROM alpine:3.5
+[STDOUT  ] 2017-06-26T16:06:52.605057491Z:  ---> 8b613b705735
+[STDOUT  ] 2017-06-26T16:06:52.605062069Z: Step 9/11 : COPY --from=build /kmod/hello_world.ko /
+[STDOUT  ] 2017-06-26T16:06:53.09639826Z:  ---> 107e73ac4294
+[STDOUT  ] 2017-06-26T16:06:53.112927701Z: Removing intermediate container 8439e477acfc
+[STDOUT  ] 2017-06-26T16:06:53.112939229Z: Step 10/11 : COPY check.sh /check.sh
+[STDOUT  ] 2017-06-26T16:06:53.576149986Z:  ---> c82ba75e961f
+[STDOUT  ] 2017-06-26T16:06:53.592684784Z: Removing intermediate container aa9d893fd8d3
+[STDOUT  ] 2017-06-26T16:06:53.59272298Z: Step 11/11 : ENTRYPOINT /bin/sh /check.sh
+[STDOUT  ] 2017-06-26T16:06:53.717223559Z:  ---> Running in c7491c57b7c6
+[STDOUT  ] 2017-06-26T16:06:53.93691372Z:  ---> b48f9bbfb8ab
+[STDOUT  ] 2017-06-26T16:06:53.953312833Z: Removing intermediate container c7491c57b7c6
+[STDOUT  ] 2017-06-26T16:06:53.953367756Z: Successfully built b48f9bbfb8ab
+[STDOUT  ] 2017-06-26T16:06:53.953381525Z: Successfully tagged kmod-test:latest
+[STDERR  ] 2017-06-26T16:06:54.036879916Z: + moby build -output kernel+initrd kmod.yml
+[STDERR  ] 2017-06-26T16:06:54.046215762Z: Extract kernel image: linuxkit/kernel:4.9.x
+[STDERR  ] 2017-06-26T16:06:59.53928106Z: Add init containers:
+[STDERR  ] 2017-06-26T16:06:59.539326833Z: Process init image: linuxkit/init:17693d233dd009b2a3a8d23673cb85969e1dce80
+[STDERR  ] 2017-06-26T16:07:00.996739137Z: Process init image: linuxkit/runc:3a4e6cbf15470f62501b019b55e1caac5ee7689f
+[STDERR  ] 2017-06-26T16:07:02.719925446Z: Process init image: linuxkit/containerd:a33cdcf50b8107ffe14c92802c460fe7ada39acd
+[STDERR  ] 2017-06-26T16:07:08.169679848Z: Add onboot containers:
+[STDERR  ] 2017-06-26T16:07:08.169733577Z:   Create OCI config for kmod-test
+[STDERR  ] 2017-06-26T16:07:08.600641677Z:   Create OCI config for linuxkit/poweroff:7404cf2295df89ccfa2dda41997a28307a90cf28
+[STDERR  ] 2017-06-26T16:07:10.050950348Z: Create outputs:
+[STDERR  ] 2017-06-26T16:07:18.282627338Z:   kmod-kernel kmod-initrd.img kmod-cmdline
+[STDERR  ] 2017-06-26T16:07:18.542468954Z: + linuxkit run kmod
+[STDERR  ] 2017-06-26T16:07:45.009648043Z: + RESULT=[    0.000000] Linux version 4.9.33-linuxkit (root@b147ce67977e) (gcc version 6.3.0 (Alpine 6.3.0) ) #1 SMP Thu Jun 22 19:57:24 UTC 2017
+[STDERR  ] 2017-06-26T16:07:45.009673458Z: [    0.000000] Command line: console=ttyS0
+[STDERR  ] 2017-06-26T16:07:45.00968055Z: [    0.000000] x86/fpu: Legacy x87 FPU detected.
+[STDERR  ] 2017-06-26T16:07:45.009703884Z: [    0.000000] x86/fpu: Using 'eager' FPU context switches.
+[STDERR  ] 2017-06-26T16:07:45.009730822Z: [    0.000000] e820: BIOS-provided physical RAM map:
+[STDERR  ] 2017-06-26T16:07:45.009746197Z: [    0.000000] BIOS-e820: [mem 0x0000000000000000-0x000000000009fbff] usable
+[STDERR  ] 2017-06-26T16:07:45.009759794Z: [    0.000000] BIOS-e820: [mem 0x000000000009fc00-0x000000000009ffff] reserved
+[STDERR  ] 2017-06-26T16:07:45.009773009Z: [    0.000000] BIOS-e820: [mem 0x00000000000f0000-0x00000000000fffff] reserved
+[STDERR  ] 2017-06-26T16:07:45.009786112Z: [    0.000000] BIOS-e820: [mem 0x0000000000100000-0x000000003ffdefff] usable
+[STDERR  ] 2017-06-26T16:07:45.009798351Z: [    0.000000] BIOS-e820: [mem 0x000000003ffdf000-0x000000003fffffff] reserved
+[STDERR  ] 2017-06-26T16:07:45.00981276Z: [    0.000000] BIOS-e820: [mem 0x00000000b0000000-0x00000000bfffffff] reserved
+[STDERR  ] 2017-06-26T16:07:45.009825849Z: [    0.000000] BIOS-e820: [mem 0x00000000fed1c000-0x00000000fed1ffff] reserved
+[STDERR  ] 2017-06-26T16:07:45.00983854Z: [    0.000000] BIOS-e820: [mem 0x00000000fffc0000-0x00000000ffffffff] reserved
+[STDERR  ] 2017-06-26T16:07:45.009850917Z: [    0.000000] NX (Execute Disable) protection: active
+[STDERR  ] 2017-06-26T16:07:45.009858122Z: [    0.000000] SMBIOS 2.8 present.
+[STDERR  ] 2017-06-26T16:07:45.009876586Z: [    0.000000] e820: last_pfn = 0x3ffdf max_arch_pfn = 0x400000000
+[STDERR  ] 2017-06-26T16:07:45.009882937Z: [    0.000000] x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WC  UC- WT  
+[STDERR  ] 2017-06-26T16:07:45.009904824Z: [    0.000000] found SMP MP-table at [mem 0x000f6aa0-0x000f6aaf] mapped at [ffff8beac00f6aa0]
+[STDERR  ] 2017-06-26T16:07:45.00991794Z: [    0.000000] RAMDISK: [mem 0x3d6a4000-0x3ffcffff]
+[STDERR  ] 2017-06-26T16:07:45.009924791Z: [    0.000000] ACPI: Early table checksum verification disabled
+[STDERR  ] 2017-06-26T16:07:45.00994374Z: [    0.000000] ACPI: RSDP 0x00000000000F68C0 000014 (v00 BOCHS )
+[STDERR  ] 2017-06-26T16:07:45.009949819Z: [    0.000000] ACPI: RSDT 0x000000003FFE2404 000034 (v01 BOCHS  BXPCRSDT 00000001 BXPC 00000001)
+[STDERR  ] 2017-06-26T16:07:45.009969484Z: [    0.000000] ACPI: FACP 0x000000003FFE22A4 000074 (v01 BOCHS  BXPCFACP 00000001 BXPC 00000001)
+[STDERR  ] 2017-06-26T16:07:45.009981932Z: [    0.000000] ACPI: DSDT 0x000000003FFE0040 002264 (v01 BOCHS  BXPCDSDT 00000001 BXPC 00000001)
+[STDERR  ] 2017-06-26T16:07:45.009995155Z: [    0.000000] ACPI: FACS 0x000000003FFE0000 000040
+[STDERR  ] 2017-06-26T16:07:45.010015287Z: [    0.000000] ACPI: APIC 0x000000003FFE2318 000078 (v01 BOCHS  BXPCAPIC 00000001 BXPC 00000001)
+[STDERR  ] 2017-06-26T16:07:45.01002829Z: [    0.000000] ACPI: HPET 0x000000003FFE2390 000038 (v01 BOCHS  BXPCHPET 00000001 BXPC 00000001)
+[STDERR  ] 2017-06-26T16:07:45.010040167Z: [    0.000000] ACPI: MCFG 0x000000003FFE23C8 00003C (v01 BOCHS  BXPCMCFG 00000001 BXPC 00000001)
+[STDERR  ] 2017-06-26T16:07:45.010052463Z: [    0.000000] Zone ranges:
+[STDERR  ] 2017-06-26T16:07:45.010065576Z: [    0.000000]   DMA      [mem 0x0000000000001000-0x0000000000ffffff]
+[STDERR  ] 2017-06-26T16:07:45.010078015Z: [    0.000000]   DMA32    [mem 0x0000000001000000-0x000000003ffdefff]
+[STDERR  ] 2017-06-26T16:07:45.010090748Z: [    0.000000]   Normal   empty
+[STDERR  ] 2017-06-26T16:07:45.010104091Z: [    0.000000] Movable zone start for each node
+[STDERR  ] 2017-06-26T16:07:45.01011518Z: [    0.000000] Early memory node ranges
+[STDERR  ] 2017-06-26T16:07:45.010127093Z: [    0.000000]   node   0: [mem 0x0000000000001000-0x000000000009efff]
+[STDERR  ] 2017-06-26T16:07:45.010139433Z: [    0.000000]   node   0: [mem 0x0000000000100000-0x000000003ffdefff]
+[STDERR  ] 2017-06-26T16:07:45.010152223Z: [    0.000000] Initmem setup node 0 [mem 0x0000000000001000-0x000000003ffdefff]
+[STDERR  ] 2017-06-26T16:07:45.010176688Z: [    0.000000] ACPI: PM-Timer IO Port: 0x608
+[STDERR  ] 2017-06-26T16:07:45.010189551Z: [    0.000000] ACPI: LAPIC_NMI (acpi_id[0xff] dfl dfl lint[0x1])
+[STDERR  ] 2017-06-26T16:07:45.010196063Z: [    0.000000] IOAPIC[0]: apic_id 0, version 32, address 0xfec00000, GSI 0-23
+[STDERR  ] 2017-06-26T16:07:45.010217921Z: [    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 0 global_irq 2 dfl dfl)
+[STDERR  ] 2017-06-26T16:07:45.010227986Z: [    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 5 global_irq 5 high level)
+[STDERR  ] 2017-06-26T16:07:45.010246427Z: [    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 high level)
+[STDERR  ] 2017-06-26T16:07:45.01025833Z: [    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 10 global_irq 10 high level)
+[STDERR  ] 2017-06-26T16:07:45.010270729Z: [    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 11 global_irq 11 high level)
+[STDERR  ] 2017-06-26T16:07:45.010289957Z: [    0.000000] Using ACPI (MADT) for SMP configuration information
+[STDERR  ] 2017-06-26T16:07:45.010301766Z: [    0.000000] ACPI: HPET id: 0x8086a201 base: 0xfed00000
+[STDERR  ] 2017-06-26T16:07:45.010308346Z: [    0.000000] smpboot: Allowing 1 CPUs, 0 hotplug CPUs
+[STDERR  ] 2017-06-26T16:07:45.010329049Z: [    0.000000] e820: [mem 0x40000000-0xafffffff] available for PCI devices
+[STDERR  ] 2017-06-26T16:07:45.010340903Z: [    0.000000] Booting paravirtualized kernel on bare hardware
+[STDERR  ] 2017-06-26T16:07:45.010346741Z: [    0.000000] clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+[STDERR  ] 2017-06-26T16:07:45.010372839Z: [    0.000000] setup_percpu: NR_CPUS:128 nr_cpumask_bits:128 nr_cpu_ids:1 nr_node_ids:1
+[STDERR  ] 2017-06-26T16:07:45.010387236Z: [    0.000000] percpu: Embedded 35 pages/cpu @ffff8beafd400000 s105112 r8192 d30056 u2097152
+[STDERR  ] 2017-06-26T16:07:45.010399592Z: [    0.000000] Built 1 zonelists in Zone order, mobility grouping on.  Total pages: 257896
+[STDERR  ] 2017-06-26T16:07:45.010411888Z: [    0.000000] Kernel command line: console=ttyS0
+[STDERR  ] 2017-06-26T16:07:45.010425044Z: [    0.000000] PID hash table entries: 4096 (order: 3, 32768 bytes)
+[STDERR  ] 2017-06-26T16:07:45.010437521Z: [    0.000000] Dentry cache hash table entries: 131072 (order: 8, 1048576 bytes)
+[STDERR  ] 2017-06-26T16:07:45.01045002Z: [    0.000000] Inode-cache hash table entries: 65536 (order: 7, 524288 bytes)
+[STDERR  ] 2017-06-26T16:07:45.010463245Z: [    0.000000] Memory: 972052K/1048052K available (8023K kernel code, 1336K rwdata, 2692K rodata, 1372K init, 564K bss, 76000K reserved, 0K cma-reserved)
+[STDERR  ] 2017-06-26T16:07:45.010471693Z: [    0.000000] Hierarchical RCU implementation.
+[STDERR  ] 2017-06-26T16:07:45.010500751Z: [    0.000000] 	Build-time adjustment of leaf fanout to 64.
+[STDERR  ] 2017-06-26T16:07:45.010513387Z: [    0.000000] 	RCU restricting CPUs from NR_CPUS=128 to nr_cpu_ids=1.
+[STDERR  ] 2017-06-26T16:07:45.010519232Z: [    0.000000] RCU: Adjusting geometry for rcu_fanout_leaf=64, nr_cpu_ids=1
+[STDERR  ] 2017-06-26T16:07:45.010537757Z: [    0.000000] NR_IRQS:8448 nr_irqs:256 16
+[STDERR  ] 2017-06-26T16:07:45.010544454Z: [    0.000000] Console: colour VGA+ 80x25
+[STDERR  ] 2017-06-26T16:07:45.010555806Z: [    0.000000] console [ttyS0] enabled
+[STDERR  ] 2017-06-26T16:07:45.010574774Z: [    0.000000] clocksource: hpet: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604467 ns
+[STDERR  ] 2017-06-26T16:07:45.010583809Z: [    0.000000] tsc: Fast TSC calibration using PIT
+[STDERR  ] 2017-06-26T16:07:45.010601433Z: [    0.000000] tsc: Detected 2300.130 MHz processor
+[STDERR  ] 2017-06-26T16:07:45.010607208Z: [    0.020460] Calibrating delay loop (skipped), value calculated using timer frequency.. 4600.26 BogoMIPS (lpj=23001300)
+[STDERR  ] 2017-06-26T16:07:45.010628065Z: [    0.030436] pid_max: default: 32768 minimum: 301
+[STDERR  ] 2017-06-26T16:07:45.010640223Z: [    0.031269] ACPI: Core revision 20160831
+[STDERR  ] 2017-06-26T16:07:45.010652785Z: [    0.075357] ACPI: 1 ACPI AML tables successfully acquired and loaded
+[STDERR  ] 2017-06-26T16:07:45.010659491Z: [    0.078603] Security Framework initialized
+[STDERR  ] 2017-06-26T16:07:45.0106708Z: [    0.079044] Yama: becoming mindful.
+[STDERR  ] 2017-06-26T16:07:45.010689977Z: [    0.081085] Mount-cache hash table entries: 2048 (order: 2, 16384 bytes)
+[STDERR  ] 2017-06-26T16:07:45.010706414Z: [    0.081647] Mountpoint-cache hash table entries: 2048 (order: 2, 16384 bytes)
+[STDERR  ] 2017-06-26T16:07:45.010719256Z: [    0.100279] Last level iTLB entries: 4KB 0, 2MB 0, 4MB 0
+[STDERR  ] 2017-06-26T16:07:45.010726272Z: [    0.100728] Last level dTLB entries: 4KB 0, 2MB 0, 4MB 0, 1GB 0
+[STDERR  ] 2017-06-26T16:07:45.010744285Z: [    0.405254] Freeing SMP alternatives memory: 20K (ffffffff89ea7000 - ffffffff89eac000)
+[STDERR  ] 2017-06-26T16:07:45.010750159Z: [    0.414244] ftrace: allocating 35395 entries in 139 pages
+[STDERR  ] 2017-06-26T16:07:45.010768731Z: [    0.574532] smpboot: Max logical packages: 1
+[STDERR  ] 2017-06-26T16:07:45.01078088Z: [    0.579734] ..TIMER: vector=0x30 apic1=0 pin1=2 apic2=-1 pin2=-1
+[STDERR  ] 2017-06-26T16:07:45.010793744Z: [    0.680000] smpboot: CPU0: AMD QEMU Virtual CPU version 2.5+ (family: 0x6, model: 0x6, stepping: 0x3)
+[STDERR  ] 2017-06-26T16:07:45.0108076Z: [    0.680000] Performance Events: PMU not available due to virtualization, using software events only.
+[STDERR  ] 2017-06-26T16:07:45.010814291Z: [    0.687446] NMI watchdog: disabled (cpu0): hardware events not enabled
+[STDERR  ] 2017-06-26T16:07:45.010825508Z: [    0.687932] NMI watchdog: Shutting down hard lockup detector on all cpus
+[STDERR  ] 2017-06-26T16:07:45.010848289Z: [    0.690794] x86: Booted up 1 node, 1 CPUs
+[STDERR  ] 2017-06-26T16:07:45.010860458Z: [    0.691170] smpboot: Total of 1 processors activated (4600.26 BogoMIPS)
+[STDERR  ] 2017-06-26T16:07:45.010872855Z: [    0.704762] devtmpfs: initialized
+[STDERR  ] 2017-06-26T16:07:45.01087969Z: [    0.709285] x86/mm: Memory block size: 128MB
+[STDERR  ] 2017-06-26T16:07:45.010891271Z: [    0.773391] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+[STDERR  ] 2017-06-26T16:07:45.0109101Z: [    0.774269] futex hash table entries: 256 (order: 2, 16384 bytes)
+[STDERR  ] 2017-06-26T16:07:45.010917301Z: [    0.782958] NET: Registered protocol family 16
+[STDERR  ] 2017-06-26T16:07:45.010928705Z: [    0.792324] cpuidle: using governor ladder
+[STDERR  ] 2017-06-26T16:07:45.010947071Z: [    0.792773] cpuidle: using governor menu
+[STDERR  ] 2017-06-26T16:07:45.010965452Z: [    0.793861] ACPI: bus type PCI registered
+[STDERR  ] 2017-06-26T16:07:45.01097814Z: [    0.796573] PCI: MMCONFIG for domain 0000 [bus 00-ff] at [mem 0xb0000000-0xbfffffff] (base 0xb0000000)
+[STDERR  ] 2017-06-26T16:07:45.01099846Z: [    0.797370] PCI: MMCONFIG at [mem 0xb0000000-0xbfffffff] reserved in E820
+[STDERR  ] 2017-06-26T16:07:45.011010851Z: [    0.798649] PCI: Using configuration type 1 for base access
+[STDERR  ] 2017-06-26T16:07:45.011023213Z: [    0.855085] HugeTLB registered 2 MB page size, pre-allocated 0 pages
+[STDERR  ] 2017-06-26T16:07:45.011029844Z: [    0.864828] ACPI: Added _OSI(Module Device)
+[STDERR  ] 2017-06-26T16:07:45.011047524Z: [    0.865171] ACPI: Added _OSI(Processor Device)
+[STDERR  ] 2017-06-26T16:07:45.011053502Z: [    0.865488] ACPI: Added _OSI(3.0 _SCP Extensions)
+[STDERR  ] 2017-06-26T16:07:45.011072123Z: [    0.865858] ACPI: Added _OSI(Processor Aggregator Device)
+[STDERR  ] 2017-06-26T16:07:45.011084567Z: [    0.938967] ACPI: Interpreter enabled
+[STDERR  ] 2017-06-26T16:07:45.011096938Z: [    0.939724] ACPI: (supports S0 S5)
+[STDERR  ] 2017-06-26T16:07:45.011109079Z: [    0.940092] ACPI: Using IOAPIC for interrupt routing
+[STDERR  ] 2017-06-26T16:07:45.011121563Z: [    0.941800] PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
+[STDERR  ] 2017-06-26T16:07:45.011128281Z: [    1.006130] ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
+[STDERR  ] 2017-06-26T16:07:45.011145775Z: [    1.007042] acpi PNP0A08:00: _OSC: OS supports [ExtendedConfig ASPM ClockPM Segments MSI]
+[STDERR  ] 2017-06-26T16:07:45.011162811Z: [    1.012761] acpi PNP0A08:00: _OSC: OS now controls [PCIeHotplug PME PCIeCapability]
+[STDERR  ] 2017-06-26T16:07:45.011168704Z: [    1.016294] PCI host bridge to bus 0000:00
+[STDERR  ] 2017-06-26T16:07:45.01119096Z: [    1.016727] pci_bus 0000:00: root bus resource [io  0x0000-0x0cf7 window]
+[STDERR  ] 2017-06-26T16:07:45.011203122Z: [    1.017215] pci_bus 0000:00: root bus resource [io  0x0d00-0xffff window]
+[STDERR  ] 2017-06-26T16:07:45.011215313Z: [    1.017699] pci_bus 0000:00: root bus resource [mem 0x000a0000-0x000bffff window]
+[STDERR  ] 2017-06-26T16:07:45.011229395Z: [    1.018212] pci_bus 0000:00: root bus resource [mem 0xc0000000-0xfebfffff window]
+[STDERR  ] 2017-06-26T16:07:45.011241472Z: [    1.018825] pci_bus 0000:00: root bus resource [bus 00-ff]
+[STDERR  ] 2017-06-26T16:07:45.011253554Z: [    1.105824] pci 0000:00:1f.0: quirk: [io  0x0600-0x067f] claimed by ICH6 ACPI/GPIO/TCO
+[STDERR  ] 2017-06-26T16:07:45.011265773Z: [    1.159167] ACPI: PCI Interrupt Link [LNKA] (IRQs 5 *10 11)
+[STDERR  ] 2017-06-26T16:07:45.011272779Z: [    1.161278] ACPI: PCI Interrupt Link [LNKB] (IRQs 5 *10 11)
+[STDERR  ] 2017-06-26T16:07:45.011290883Z: [    1.163033] ACPI: PCI Interrupt Link [LNKC] (IRQs 5 10 *11)
+[STDERR  ] 2017-06-26T16:07:45.011296775Z: [    1.164749] ACPI: PCI Interrupt Link [LNKD] (IRQs 5 10 *11)
+[STDERR  ] 2017-06-26T16:07:45.011319513Z: [    1.166458] ACPI: PCI Interrupt Link [LNKE] (IRQs 5 *10 11)
+[STDERR  ] 2017-06-26T16:07:45.011325832Z: [    1.168176] ACPI: PCI Interrupt Link [LNKF] (IRQs 5 *10 11)
+[STDERR  ] 2017-06-26T16:07:45.011342043Z: [    1.170335] ACPI: PCI Interrupt Link [LNKG] (IRQs 5 10 *11)
+[STDERR  ] 2017-06-26T16:07:45.011353152Z: [    1.172169] ACPI: PCI Interrupt Link [LNKH] (IRQs 5 10 *11)
+[STDERR  ] 2017-06-26T16:07:45.011359103Z: [    1.173008] ACPI: PCI Interrupt Link [GSIA] (IRQs *16)
+[STDERR  ] 2017-06-26T16:07:45.011376386Z: [    1.173684] ACPI: PCI Interrupt Link [GSIB] (IRQs *17)
+[STDERR  ] 2017-06-26T16:07:45.011382438Z: [    1.174302] ACPI: PCI Interrupt Link [GSIC] (IRQs *18)
+[STDERR  ] 2017-06-26T16:07:45.011392782Z: [    1.174921] ACPI: PCI Interrupt Link [GSID] (IRQs *19)
+[STDERR  ] 2017-06-26T16:07:45.011410429Z: [    1.175537] ACPI: PCI Interrupt Link [GSIE] (IRQs *20)
+[STDERR  ] 2017-06-26T16:07:45.01142169Z: [    1.176153] ACPI: PCI Interrupt Link [GSIF] (IRQs *21)
+[STDERR  ] 2017-06-26T16:07:45.011428079Z: [    1.176767] ACPI: PCI Interrupt Link [GSIG] (IRQs *22)
+[STDERR  ] 2017-06-26T16:07:45.011445081Z: [    1.177384] ACPI: PCI Interrupt Link [GSIH] (IRQs *23)
+[STDERR  ] 2017-06-26T16:07:45.01145622Z: [    1.180989] ACPI: Enabled 2 GPEs in block 00 to 3F
+[STDERR  ] 2017-06-26T16:07:45.011473689Z: [    1.185135] SCSI subsystem initialized
+[STDERR  ] 2017-06-26T16:07:45.011485298Z: [    1.186837] ACPI: bus type USB registered
+[STDERR  ] 2017-06-26T16:07:45.01149694Z: [    1.187915] usbcore: registered new interface driver usbfs
+[STDERR  ] 2017-06-26T16:07:45.011502565Z: [    1.188917] usbcore: registered new interface driver hub
+[STDERR  ] 2017-06-26T16:07:45.011520344Z: [    1.189703] usbcore: registered new device driver usb
+[STDERR  ] 2017-06-26T16:07:45.01153202Z: [    1.190801] pps_core: LinuxPPS API ver. 1 registered
+[STDERR  ] 2017-06-26T16:07:45.011543738Z: [    1.191162] pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+[STDERR  ] 2017-06-26T16:07:45.011557103Z: [    1.191884] PTP clock support registered
+[STDERR  ] 2017-06-26T16:07:45.011568581Z: [    1.193003] wmi: Mapper loaded
+[STDERR  ] 2017-06-26T16:07:45.011580602Z: [    1.194045] PCI: Using ACPI for IRQ routing
+[STDERR  ] 2017-06-26T16:07:45.011592121Z: [    1.200000] NetLabel: Initializing
+[STDERR  ] 2017-06-26T16:07:45.011608671Z: [    1.200000] NetLabel:  domain hash size = 128
+[STDERR  ] 2017-06-26T16:07:45.011621171Z: [    1.200000] NetLabel:  protocols = UNLABELED CIPSOv4
+[STDERR  ] 2017-06-26T16:07:45.011638163Z: [    1.200000] NetLabel:  unlabeled traffic allowed by default
+[STDERR  ] 2017-06-26T16:07:45.011650377Z: [    1.200000] HPET: 3 timers in total, 0 timers will be used for per-cpu timer
+[STDERR  ] 2017-06-26T16:07:45.011662312Z: [    1.200000] hpet0: at MMIO 0xfed00000, IRQs 2, 8, 0
+[STDERR  ] 2017-06-26T16:07:45.01166907Z: [    1.200000] hpet0: 3 comparators, 64-bit 100.000000 MHz counter
+[STDERR  ] 2017-06-26T16:07:45.011684282Z: [    1.212514] clocksource: Switched to clocksource hpet
+[STDERR  ] 2017-06-26T16:07:45.011703352Z: [    1.538956] VFS: Disk quotas dquot_6.6.0
+[STDERR  ] 2017-06-26T16:07:45.011715691Z: [    1.539722] VFS: Dquot-cache hash table entries: 512 (order 0, 4096 bytes)
+[STDERR  ] 2017-06-26T16:07:45.011727857Z: [    1.542656] FS-Cache: Loaded
+[STDERR  ] 2017-06-26T16:07:45.011739952Z: [    1.547339] CacheFiles: Loaded
+[STDERR  ] 2017-06-26T16:07:45.011756583Z: [    1.548886] pnp: PnP ACPI init
+[STDERR  ] 2017-06-26T16:07:45.011769831Z: [    1.560641] pnp: PnP ACPI: found 5 devices
+[STDERR  ] 2017-06-26T16:07:45.011782025Z: [    1.609313] clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xffffff, max_idle_ns: 2085701024 ns
+[STDERR  ] 2017-06-26T16:07:45.011788331Z: [    1.612399] NET: Registered protocol family 2
+[STDERR  ] 2017-06-26T16:07:45.011799971Z: [    1.619158] TCP established hash table entries: 8192 (order: 4, 65536 bytes)
+[STDERR  ] 2017-06-26T16:07:45.011821141Z: [    1.619906] TCP bind hash table entries: 8192 (order: 5, 131072 bytes)
+[STDERR  ] 2017-06-26T16:07:45.01183362Z: [    1.620859] TCP: Hash tables configured (established 8192 bind 8192)
+[STDERR  ] 2017-06-26T16:07:45.011846022Z: [    1.622797] UDP hash table entries: 512 (order: 2, 16384 bytes)
+[STDERR  ] 2017-06-26T16:07:45.011858485Z: [    1.623359] UDP-Lite hash table entries: 512 (order: 2, 16384 bytes)
+[STDERR  ] 2017-06-26T16:07:45.011870685Z: [    1.625599] NET: Registered protocol family 1
+[STDERR  ] 2017-06-26T16:07:45.011883022Z: [    1.626517] pci 0000:00:01.0: Video device with shadowed ROM at [mem 0x000c0000-0x000dffff]
+[STDERR  ] 2017-06-26T16:07:45.011895334Z: [    1.633632] Unpacking initramfs...
+[STDERR  ] 2017-06-26T16:07:45.011907548Z: [   10.205922] Freeing initrd memory: 42160K (ffff8beafd6a4000 - ffff8beafffd0000)
+[STDERR  ] 2017-06-26T16:07:45.011922077Z: [   10.228288] PCLMULQDQ-NI instructions are not detected.
+[STDERR  ] 2017-06-26T16:07:45.011928777Z: [   10.229340] AVX or AES-NI instructions are not detected.
+[STDERR  ] 2017-06-26T16:07:45.011947051Z: [   10.229752] CPU feature 'AVX registers' is not supported.
+[STDERR  ] 2017-06-26T16:07:45.011952881Z: [   10.230362] CPU feature 'AVX registers' is not supported.
+[STDERR  ] 2017-06-26T16:07:45.011971662Z: [   10.230749] CPU feature 'AVX registers' is not supported.
+[STDERR  ] 2017-06-26T16:07:45.011985703Z: [   10.231211] CPU feature 'AVX registers' is not supported.
+[STDERR  ] 2017-06-26T16:07:45.012004064Z: [   10.231588] AVX2 or AES-NI instructions are not detected.
+[STDERR  ] 2017-06-26T16:07:45.012010025Z: [   10.231967] AVX2 instructions are not detected.
+[STDERR  ] 2017-06-26T16:07:45.012030129Z: [   10.237126] audit: initializing netlink subsys (disabled)
+[STDERR  ] 2017-06-26T16:07:45.012036751Z: [   10.238624] audit: type=2000 audit(1498493249.230:1): initialized
+[STDERR  ] 2017-06-26T16:07:45.012048323Z: [   10.246413] workingset: timestamp_bits=46 max_order=18 bucket_order=0
+[STDERR  ] 2017-06-26T16:07:45.012072846Z: [   10.252961] FS-Cache: Netfs 'cifs' registered for caching
+[STDERR  ] 2017-06-26T16:07:45.012084973Z: [   10.253856] fuse init (API version 7.26)
+[STDERR  ] 2017-06-26T16:07:45.012091833Z: [   10.255899] SGI XFS with ACLs, security attributes, no debug enabled
+[STDERR  ] 2017-06-26T16:07:45.012109817Z: [   10.259309] 9p: Installing v9fs 9p2000 file system support
+[STDERR  ] 2017-06-26T16:07:45.012115603Z: [   10.259771] FS-Cache: Netfs '9p' registered for caching
+[STDERR  ] 2017-06-26T16:07:45.012134376Z: [   10.294104] NET: Registered protocol family 38
+[STDERR  ] 2017-06-26T16:07:45.012141087Z: [   10.294614] Key type asymmetric registered
+[STDERR  ] 2017-06-26T16:07:45.012159187Z: [   10.294937] Asymmetric key parser 'x509' registered
+[STDERR  ] 2017-06-26T16:07:45.012171737Z: [   10.295615] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 251)
+[STDERR  ] 2017-06-26T16:07:45.012190682Z: [   10.296768] io scheduler noop registered
+[STDERR  ] 2017-06-26T16:07:45.012197544Z: [   10.297085] io scheduler deadline registered (default)
+[STDERR  ] 2017-06-26T16:07:45.012213855Z: [   10.297642] io scheduler cfq registered
+[STDERR  ] 2017-06-26T16:07:45.012232758Z: [   10.300046] pci_hotplug: PCI Hot Plug PCI Core version: 0.5
+[STDERR  ] 2017-06-26T16:07:45.012245144Z: [   10.301430] pciehp: PCI Express Hot Plug Controller Driver version: 0.4
+[STDERR  ] 2017-06-26T16:07:45.012257674Z: [   10.302209] shpchp: Standard Hot Plug PCI Controller Driver version: 0.4
+[STDERR  ] 2017-06-26T16:07:45.012264277Z: [   10.303003] hv_vmbus: registering driver hyperv_fb
+[STDERR  ] 2017-06-26T16:07:45.012275607Z: [   10.306064] input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input0
+[STDERR  ] 2017-06-26T16:07:45.012299151Z: [   10.307076] ACPI: Power Button [PWRF]
+[STDERR  ] 2017-06-26T16:07:45.012315434Z: [   10.312029] GHES: HEST is not enabled!
+[STDERR  ] 2017-06-26T16:07:45.0123277Z: [   10.322923] ACPI: PCI Interrupt Link [GSIH] enabled at IRQ 23
+[STDERR  ] 2017-06-26T16:07:45.012334451Z: [   10.328543] xenfs: not registering filesystem on non-xen platform
+[STDERR  ] 2017-06-26T16:07:45.012345986Z: [   10.330577] Serial: 8250/16550 driver, 4 ports, IRQ sharing disabled
+[STDERR  ] 2017-06-26T16:07:45.012365103Z: [   10.356919] 00:04: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+[STDERR  ] 2017-06-26T16:07:45.012377417Z: [   10.367125] Non-volatile memory driver v1.3
+[STDERR  ] 2017-06-26T16:07:45.012389947Z: [   10.373133] Hangcheck: starting hangcheck timer 0.9.1 (tick is 180 seconds, margin is 60 seconds).
+[STDERR  ] 2017-06-26T16:07:45.0124026Z: [   10.378377] random: fast init done
+[STDERR  ] 2017-06-26T16:07:45.012409527Z: [   10.379566] random: crng init done
+[STDERR  ] 2017-06-26T16:07:45.01242782Z: [   10.413889] loop: module loaded
+[STDERR  ] 2017-06-26T16:07:45.012434044Z: [   10.427616] nbd: registered device at major 43
+[STDERR  ] 2017-06-26T16:07:45.012453268Z: [   10.469233] lpc_ich 0000:00:1f.0: I/O space for GPIO uninitialized
+[STDERR  ] 2017-06-26T16:07:45.01246575Z: [   10.471034] VMware PVSCSI driver - version 1.0.7.0-k
+[STDERR  ] 2017-06-26T16:07:45.012477998Z: [   10.471761] hv_vmbus: registering driver hv_storvsc
+[STDERR  ] 2017-06-26T16:07:45.012490377Z: [   10.481647] ACPI: PCI Interrupt Link [GSIA] enabled at IRQ 16
+[STDERR  ] 2017-06-26T16:07:45.012502862Z: [   10.487495] ahci 0000:00:1f.2: AHCI 0001.0000 32 slots 6 ports 1.5 Gbps 0x3f impl SATA mode
+[STDERR  ] 2017-06-26T16:07:45.012520265Z: [   10.488135] ahci 0000:00:1f.2: flags: 64bit ncq only 
+[STDERR  ] 2017-06-26T16:07:45.012533101Z: [   10.508574] scsi host0: ahci
+[STDERR  ] 2017-06-26T16:07:45.012545591Z: [   10.512426] scsi host1: ahci
+[STDERR  ] 2017-06-26T16:07:45.012558269Z: [   10.514568] scsi host2: ahci
+[STDERR  ] 2017-06-26T16:07:45.012570859Z: [   10.516682] scsi host3: ahci
+[STDERR  ] 2017-06-26T16:07:45.012583039Z: [   10.518824] scsi host4: ahci
+[STDERR  ] 2017-06-26T16:07:45.012589677Z: [   10.521068] scsi host5: ahci
+[STDERR  ] 2017-06-26T16:07:45.012602579Z: [   10.522793] ata1: SATA max UDMA/133 abar m4096@0xfebf1000 port 0xfebf1100 irq 24
+[STDERR  ] 2017-06-26T16:07:45.012621667Z: [   10.523201] ata2: SATA max UDMA/133 abar m4096@0xfebf1000 port 0xfebf1180 irq 24
+[STDERR  ] 2017-06-26T16:07:45.012634062Z: [   10.523674] ata3: SATA max UDMA/133 abar m4096@0xfebf1000 port 0xfebf1200 irq 24
+[STDERR  ] 2017-06-26T16:07:45.012646232Z: [   10.524145] ata4: SATA max UDMA/133 abar m4096@0xfebf1000 port 0xfebf1280 irq 24
+[STDERR  ] 2017-06-26T16:07:45.01265875Z: [   10.524606] ata5: SATA max UDMA/133 abar m4096@0xfebf1000 port 0xfebf1300 irq 24
+[STDERR  ] 2017-06-26T16:07:45.012673809Z: [   10.525057] ata6: SATA max UDMA/133 abar m4096@0xfebf1000 port 0xfebf1380 irq 24
+[STDERR  ] 2017-06-26T16:07:45.012686109Z: [   10.537021] tun: Universal TUN/TAP device driver, 1.6
+[STDERR  ] 2017-06-26T16:07:45.012698509Z: [   10.537489] tun: (C) 1999-2004 Max Krasnyansky <maxk@qualcomm.com>
+[STDERR  ] 2017-06-26T16:07:45.0127108Z: [   10.539303] VMware vmxnet3 virtual NIC driver - version 1.4.a.0-k-NAPI
+[STDERR  ] 2017-06-26T16:07:45.012722478Z: [   10.540551] hv_vmbus: registering driver hv_netvsc
+[STDERR  ] 2017-06-26T16:07:45.012745525Z: [   10.540898] Fusion MPT base driver 3.04.20
+[STDERR  ] 2017-06-26T16:07:45.012751416Z: [   10.541191] Copyright (c) 1999-2008 LSI Corporation
+[STDERR  ] 2017-06-26T16:07:45.01277045Z: [   10.541726] Fusion MPT SPI Host driver 3.04.20
+[STDERR  ] 2017-06-26T16:07:45.012782847Z: [   10.543656] i8042: PNP: PS/2 Controller [PNP0303:KBD,PNP0f13:MOU] at 0x60,0x64 irq 1,12
+[STDERR  ] 2017-06-26T16:07:45.012795379Z: [   10.547546] serio: i8042 KBD port at 0x60,0x64 irq 1
+[STDERR  ] 2017-06-26T16:07:45.012807698Z: [   10.548126] serio: i8042 AUX port at 0x60,0x64 irq 12
+[STDERR  ] 2017-06-26T16:07:45.012821922Z: [   10.551309] hv_vmbus: registering driver hyperv_keyboard
+[STDERR  ] 2017-06-26T16:07:45.012828772Z: [   10.553286] mousedev: PS/2 mouse device common for all mice
+[STDERR  ] 2017-06-26T16:07:45.012840207Z: [   10.558024] input: AT Translated Set 2 keyboard as /devices/platform/i8042/serio0/input/input1
+[STDERR  ] 2017-06-26T16:07:45.012859247Z: [   10.561092] input: PC Speaker as /devices/platform/pcspkr/input/input2
+[STDERR  ] 2017-06-26T16:07:45.012865901Z: [   10.564489] rtc_cmos 00:00: RTC can wake from S4
+[STDERR  ] 2017-06-26T16:07:45.012884002Z: [   10.567538] rtc_cmos 00:00: rtc core: registered rtc_cmos as rtc0
+[STDERR  ] 2017-06-26T16:07:45.012896246Z: [   10.568666] rtc_cmos 00:00: alarms up to one day, y3k, 114 bytes nvram, hpet irqs
+[STDERR  ] 2017-06-26T16:07:45.012902057Z: [   10.569332] i2c /dev entries driver
+[STDERR  ] 2017-06-26T16:07:45.012920902Z: [   10.571390] device-mapper: ioctl: 4.35.0-ioctl (2016-06-23) initialised: dm-devel@redhat.com
+[STDERR  ] 2017-06-26T16:07:45.012939139Z: [   10.575773] usbcore: registered new interface driver usbhid
+[STDERR  ] 2017-06-26T16:07:45.012951374Z: [   10.576165] usbhid: USB HID core driver
+[STDERR  ] 2017-06-26T16:07:45.012970755Z: [   10.576699] hv_utils: Registering HyperV Utility Driver
+[STDERR  ] 2017-06-26T16:07:45.012983676Z: [   10.577044] hv_vmbus: registering driver hv_util
+[STDERR  ] 2017-06-26T16:07:45.012995798Z: [   10.577353] hv_vmbus: registering driver hv_balloon
+[STDERR  ] 2017-06-26T16:07:45.013002572Z: [   10.577812] oprofile: using NMI interrupt.
+[STDERR  ] 2017-06-26T16:07:45.013019602Z: [   10.578807] GACT probability on
+[STDERR  ] 2017-06-26T16:07:45.013031674Z: [   10.579211] Mirror/redirect action on
+[STDERR  ] 2017-06-26T16:07:45.013048694Z: [   10.579985] Simple TC action Loaded
+[STDERR  ] 2017-06-26T16:07:45.013061605Z: [   10.580767] u32 classifier
+[STDERR  ] 2017-06-26T16:07:45.013067325Z: [   10.580965]     Performance counters on
+[STDERR  ] 2017-06-26T16:07:45.013085315Z: [   10.581241]     input device check on
+[STDERR  ] 2017-06-26T16:07:45.013091701Z: [   10.581472]     Actions configured
+[STDERR  ] 2017-06-26T16:07:45.013109485Z: [   10.581967] Netfilter messages via NETLINK v0.30.
+[STDERR  ] 2017-06-26T16:07:45.013121702Z: [   10.582436] nfnl_acct: registering with nfnetlink.
+[STDERR  ] 2017-06-26T16:07:45.013127507Z: [   10.583857] nf_conntrack version 0.5.0 (8192 buckets, 32768 max)
+[STDERR  ] 2017-06-26T16:07:45.013146259Z: [   10.586940] ctnetlink v0.93: registering with nfnetlink.
+[STDERR  ] 2017-06-26T16:07:45.013158311Z: [   10.589933] nf_tables: (c) 2007-2009 Patrick McHardy <kaber@trash.net>
+[STDERR  ] 2017-06-26T16:07:45.013164617Z: [   10.590933] nf_tables_compat: (c) 2012 Pablo Neira Ayuso <pablo@netfilter.org>
+[STDERR  ] 2017-06-26T16:07:45.013176296Z: [   10.593179] xt_time: kernel timezone is -0000
+[STDERR  ] 2017-06-26T16:07:45.013203869Z: [   10.593659] ip_set: protocol 6
+[STDERR  ] 2017-06-26T16:07:45.013216518Z: [   10.594233] IPVS: Registered protocols (TCP, UDP, SCTP, AH, ESP)
+[STDERR  ] 2017-06-26T16:07:45.01322824Z: [   10.594810] IPVS: Connection hash table configured (size=4096, memory=64Kbytes)
+[STDERR  ] 2017-06-26T16:07:45.013240677Z: [   10.596403] IPVS: Creating netns size=2104 id=0
+[STDERR  ] 2017-06-26T16:07:45.013252901Z: [   10.597244] IPVS: ipvs loaded.
+[STDERR  ] 2017-06-26T16:07:45.013271546Z: [   10.597544] IPVS: [rr] scheduler registered.
+[STDERR  ] 2017-06-26T16:07:45.013283737Z: [   10.597852] IPVS: [wrr] scheduler registered.
+[STDERR  ] 2017-06-26T16:07:45.013295576Z: [   10.598139] IPVS: [lc] scheduler registered.
+[STDERR  ] 2017-06-26T16:07:45.013307791Z: [   10.598414] IPVS: [wlc] scheduler registered.
+[STDERR  ] 2017-06-26T16:07:45.013319428Z: [   10.598694] IPVS: [fo] scheduler registered.
+[STDERR  ] 2017-06-26T16:07:45.013331098Z: [   10.598968] IPVS: [ovf] scheduler registered.
+[STDERR  ] 2017-06-26T16:07:45.013342783Z: [   10.599353] IPVS: [lblc] scheduler registered.
+[STDERR  ] 2017-06-26T16:07:45.013354321Z: [   10.599799] IPVS: [lblcr] scheduler registered.
+[STDERR  ] 2017-06-26T16:07:45.013360873Z: [   10.600381] IPVS: [dh] scheduler registered.
+[STDERR  ] 2017-06-26T16:07:45.013378302Z: [   10.600668] IPVS: [sh] scheduler registered.
+[STDERR  ] 2017-06-26T16:07:45.013390473Z: [   10.600958] IPVS: [sed] scheduler registered.
+[STDERR  ] 2017-06-26T16:07:45.013402574Z: [   10.601237] IPVS: [nq] scheduler registered.
+[STDERR  ] 2017-06-26T16:07:45.013414589Z: [   10.601867] IPVS: ftp: loaded support on port[0] = 21
+[STDERR  ] 2017-06-26T16:07:45.013426262Z: [   10.602712] ipip: IPv4 and MPLS over IPv4 tunneling driver
+[STDERR  ] 2017-06-26T16:07:45.013438705Z: [   10.606877] gre: GRE over IPv4 demultiplexor driver
+[STDERR  ] 2017-06-26T16:07:45.01344473Z: [   10.608848] ip_tables: (C) 2000-2006 Netfilter Core Team
+[STDERR  ] 2017-06-26T16:07:45.013463505Z: [   10.612059] ipt_CLUSTERIP: ClusterIP Version 0.8 loaded successfully
+[STDERR  ] 2017-06-26T16:07:45.013470411Z: [   10.612667] arp_tables: arp_tables: (C) 2002 David S. Miller
+[STDERR  ] 2017-06-26T16:07:45.013482375Z: [   10.614599] NET: Registered protocol family 10
+[STDERR  ] 2017-06-26T16:07:45.01350038Z: [   10.623958] ip6_tables: (C) 2000-2006 Netfilter Core Team
+[STDERR  ] 2017-06-26T16:07:45.013506869Z: [   10.631013] NET: Registered protocol family 17
+[STDERR  ] 2017-06-26T16:07:45.013518297Z: [   10.632037] Bridge firewalling registered
+[STDERR  ] 2017-06-26T16:07:45.013536183Z: [   10.632515] Ebtables v2.0 registered
+[STDERR  ] 2017-06-26T16:07:45.01354266Z: [   10.633865] 8021q: 802.1Q VLAN Support v1.8
+[STDERR  ] 2017-06-26T16:07:45.013560414Z: [   10.635200] 9pnet: Installing 9P2000 support
+[STDERR  ] 2017-06-26T16:07:45.013565929Z: [   10.636570] Key type dns_resolver registered
+[STDERR  ] 2017-06-26T16:07:45.013596972Z: [   10.637351] microcode: AMD CPU family 0x6 not supported
+[STDERR  ] 2017-06-26T16:07:45.01360366Z: [   10.641216] registered taskstats version 1
+[STDERR  ] 2017-06-26T16:07:45.013634448Z: [   10.786509] Key type big_key registered
+[STDERR  ] 2017-06-26T16:07:45.013641398Z: [   10.842068] Key type encrypted registered
+[STDERR  ] 2017-06-26T16:07:45.013662782Z: [   10.845895] rtc_cmos 00:00: setting system clock to 2017-06-26 16:07:30 UTC (1498493250)
+[STDERR  ] 2017-06-26T16:07:45.013675369Z: [   10.863887] ata1: SATA link down (SStatus 0 SControl 300)
+[STDERR  ] 2017-06-26T16:07:45.013682912Z: [   10.865990] ata3: SATA link up 1.5 Gbps (SStatus 113 SControl 300)
+[STDERR  ] 2017-06-26T16:07:45.013701777Z: [   10.869295] ata3.00: ATAPI: QEMU DVD-ROM, 2.5+, max UDMA/100
+[STDERR  ] 2017-06-26T16:07:45.013708284Z: [   10.869762] ata3.00: applying bridge limits
+[STDERR  ] 2017-06-26T16:07:45.013727809Z: [   10.871206] ata4: SATA link down (SStatus 0 SControl 300)
+[STDERR  ] 2017-06-26T16:07:45.013740402Z: [   10.871758] ata2: SATA link down (SStatus 0 SControl 300)
+[STDERR  ] 2017-06-26T16:07:45.013747117Z: [   10.872281] ata6: SATA link down (SStatus 0 SControl 300)
+[STDERR  ] 2017-06-26T16:07:45.013771092Z: [   10.872801] ata5: SATA link down (SStatus 0 SControl 300)
+[STDERR  ] 2017-06-26T16:07:45.013783689Z: [   10.873838] ata3.00: configured for UDMA/100
+[STDERR  ] 2017-06-26T16:07:45.013789966Z: [   10.888106] scsi 2:0:0:0: CD-ROM            QEMU     QEMU DVD-ROM     2.5+ PQ: 0 ANSI: 5
+[STDERR  ] 2017-06-26T16:07:45.013822359Z: [   10.913723] sr 2:0:0:0: [sr0] scsi3-mmc drive: 4x/4x cd/rw xa/form2 tray
+[STDERR  ] 2017-06-26T16:07:45.013837308Z: [   10.914326] cdrom: Uniform CD-ROM driver Revision: 3.20
+[STDERR  ] 2017-06-26T16:07:45.013850108Z: [   10.920632] sr 2:0:0:0: Attached scsi generic sg0 type 5
+[STDERR  ] 2017-06-26T16:07:45.013863121Z: [   11.054166] Freeing unused kernel memory: 1372K (ffffffff89d50000 - ffffffff89ea7000)
+[STDERR  ] 2017-06-26T16:07:45.013870057Z: [   11.054738] Write protecting the kernel read-only data: 12288k
+[STDERR  ] 2017-06-26T16:07:45.013888465Z: [   11.059830] Freeing unused kernel memory: 156K (ffff8beadb7d9000 - ffff8beadb800000)
+[STDERR  ] 2017-06-26T16:07:45.013901311Z: [   11.151917] Freeing unused kernel memory: 1404K (ffff8beadbaa1000 - ffff8beadbc00000)
+[STDERR  ] 2017-06-26T16:07:45.013907166Z: [   11.280768] tsc: Refined TSC clocksource calibration: 2300.043 MHz
+[STDERR  ] 2017-06-26T16:07:45.013926566Z: [   11.281438] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x21275dec2d7, max_idle_ns: 440795269413 ns
+[STDERR  ] 2017-06-26T16:07:45.013939708Z: [   12.300614] clocksource: Switched to clocksource tsc
+[STDERR  ] 2017-06-26T16:07:45.013953073Z: [   16.895583] e1000: Intel(R) PRO/1000 Network Driver - version 7.3.21-k8-NAPI
+[STDERR  ] 2017-06-26T16:07:45.013965491Z: [   16.896120] e1000: Copyright (c) 1999-2006 Intel Corporation.
+[STDERR  ] 2017-06-26T16:07:45.013978125Z: [   16.914031] ACPI: PCI Interrupt Link [GSIG] enabled at IRQ 22
+[STDERR  ] 2017-06-26T16:07:45.013990383Z: [   17.275576] e1000 0000:00:02.0 eth0: (PCI:33MHz:32-bit) 52:54:00:12:34:56
+[STDERR  ] 2017-06-26T16:07:45.014003523Z: [   17.276328] e1000 0000:00:02.0 eth0: Intel(R) PRO/1000 Network Connection
+[STDERR  ] 2017-06-26T16:07:45.014010409Z: 
+[STDERR  ] 2017-06-26T16:07:45.014029483Z: Starting containerd
+[STDERR  ] 2017-06-26T16:07:45.014035642Z: 
+[STDERR  ] 2017-06-26T16:07:45.01405575Z: Welcome to LinuxKit
+[STDERR  ] 2017-06-26T16:07:45.014068717Z: 
+[STDERR  ] 2017-06-26T16:07:45.014081737Z:                         ##         .
+[STDERR  ] 2017-06-26T16:07:45.014094396Z:                   ## ## ##        ==
+[STDERR  ] 2017-06-26T16:07:45.014101613Z:                ## ## ## ## ##    ===
+[STDERR  ] 2017-06-26T16:07:45.014123699Z:            /"""""""""""""""""\___/ ===
+[STDERR  ] 2017-06-26T16:07:45.014129939Z:       ~~~ {~~ ~~~~ ~~~ ~~~~ ~~~ ~ /  ===- ~~~
+[STDERR  ] 2017-06-26T16:07:45.014150752Z:            \______ o           __/
+[STDERR  ] 2017-06-26T16:07:45.014163153Z:              \    \         __/
+[STDERR  ] 2017-06-26T16:07:45.014182677Z:               \____\_______/
+[STDERR  ] 2017-06-26T16:07:45.014188689Z: 
+[STDERR  ] 2017-06-26T16:07:45.014209775Z: [34mINFO[0m[0000] starting containerd boot...                   [34mmodule[0m=containerd
+[STDERR  ] 2017-06-26T16:07:45.014216878Z: [34mINFO[0m[0000] loading plugin "io.containerd.content.v1.content"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.content.v1
+[STDERR  ] 2017-06-26T16:07:45.014238176Z: [34mINFO[0m[0000] skip loading plugin "io.containerd.snapshotter.v1.btrfs"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.snapshotter.v1
+[STDERR  ] 2017-06-26T16:07:45.014244661Z: [34mINFO[0m[0000] loading plugin "io.containerd.snapshotter.v1.overlayfs"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.snapshotter.v1
+[STDERR  ] 2017-06-26T16:07:45.014265391Z: [34mINFO[0m[0000] loading plugin "io.containerd.differ.v1.base-diff"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.differ.v1
+[STDERR  ] 2017-06-26T16:07:45.014278582Z: [34mINFO[0m[0000] loading plugin "io.containerd.metadata.v1.bolt"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.metadata.v1
+[STDERR  ] 2017-06-26T16:07:45.014292134Z: [34mINFO[0m[0000] loading plugin "io.containerd.grpc.v1.containers"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.grpc.v1
+[STDERR  ] 2017-06-26T16:07:45.014299592Z: [34mINFO[0m[0000] loading plugin "io.containerd.grpc.v1.content"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.grpc.v1
+[STDERR  ] 2017-06-26T16:07:45.014312727Z: [34mINFO[0m[0000] loading plugin "io.containerd.grpc.v1.diff"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.grpc.v1
+[STDERR  ] 2017-06-26T16:07:45.014346526Z: [34mINFO[0m[0000] loading plugin "io.containerd.grpc.v1.events"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.grpc.v1
+[STDERR  ] 2017-06-26T16:07:45.014360337Z: [34mINFO[0m[0000] loading plugin "io.containerd.grpc.v1.healthcheck"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.grpc.v1
+[STDERR  ] 2017-06-26T16:07:45.01437397Z: [34mINFO[0m[0000] loading plugin "io.containerd.grpc.v1.images"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.grpc.v1
+[STDERR  ] 2017-06-26T16:07:45.014396979Z: [34mINFO[0m[0000] loading plugin "io.containerd.grpc.v1.namespaces"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.grpc.v1
+[STDERR  ] 2017-06-26T16:07:45.014410449Z: [34mINFO[0m[0000] loading plugin "io.containerd.grpc.v1.snapshots"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.grpc.v1
+[STDERR  ] 2017-06-26T16:07:45.014422581Z: [34mINFO[0m[0000] loading plugin "io.containerd.monitor.v1.cgroups"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.monitor.v1
+[STDERR  ] 2017-06-26T16:07:45.014435657Z: [34mINFO[0m[0000] loading plugin "io.containerd.runtime.v1.linux"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.runtime.v1
+[STDERR  ] 2017-06-26T16:07:45.01444274Z: [34mINFO[0m[0000] loading plugin "io.containerd.grpc.v1.tasks"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.grpc.v1
+[STDERR  ] 2017-06-26T16:07:45.014455669Z: [34mINFO[0m[0000] loading plugin "io.containerd.grpc.v1.version"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.grpc.v1
+[STDERR  ] 2017-06-26T16:07:45.014474741Z: [34mINFO[0m[0000] serving...                                    [34maddress[0m="/run/containerd/debug.sock" [34mmodule[0m="containerd/debug"
+[STDERR  ] 2017-06-26T16:07:45.014488044Z: [34mINFO[0m[0000] serving...                                    [34maddress[0m="/run/containerd/containerd.sock" [34mmodule[0m="containerd/grpc"
+[STDERR  ] 2017-06-26T16:07:45.014501667Z: [34mINFO[0m[0000] containerd successfully booted in 0.183188s   [34mmodule[0m=containerd
+[STDERR  ] 2017-06-26T16:07:45.014517758Z: Linux linuxkit-525400123456 4.9.33-linuxkit #1 SMP Thu Jun 22 19:57:24 UTC 2017 x86_64 Linux
+[STDERR  ] 2017-06-26T16:07:45.014536896Z: filename:       hello_world.ko
+[STDERR  ] 2017-06-26T16:07:45.014549551Z: author:         Rolf Neugebauer <rolf.neugebauer@docker.com>
+[STDERR  ] 2017-06-26T16:07:45.014562059Z: description:    A simple Hello World kernel module for testing
+[STDERR  ] 2017-06-26T16:07:45.014575222Z: license:        GPL
+[STDERR  ] 2017-06-26T16:07:45.01458764Z: depends:        
+[STDERR  ] 2017-06-26T16:07:45.014594557Z: vermagic:       4.9.33-linuxkit SMP mod_unload 
+[STDERR  ] 2017-06-26T16:07:45.01460638Z: [   19.878608] hello_world: loading out-of-tree module taints kernel.
+[STDERR  ] 2017-06-26T16:07:45.014625814Z: [   19.881147] Hello LinuxKit
+[STDERR  ] 2017-06-26T16:07:45.014638975Z: [   19.971647] Goodbye LinuxKit.
+[STDERR  ] 2017-06-26T16:07:45.014652128Z: Kernel module test suite PASSED
+[STDERR  ] 2017-06-26T16:07:45.014665527Z:  - 000-check
+[STDERR  ] 2017-06-26T16:07:45.014678416Z: [   24.420553] ACPI: Preparing to enter system sleep state S5
+[STDERR  ] 2017-06-26T16:07:45.014690545Z: [   24.421707] reboot: Power down
+[STDERR  ] 2017-06-26T16:07:45.014703808Z: + grep -q Hello LinuxKit
+[STDERR  ] 2017-06-26T16:07:45.014710487Z: + echo [    0.000000] Linux version 4.9.33-linuxkit (root@b147ce67977e) (gcc version 6.3.0 (Alpine 6.3.0) ) #1 SMP Thu Jun 22 19:57:24 UTC 2017
+[STDERR  ] 2017-06-26T16:07:45.014722224Z: [    0.000000] Command line: console=ttyS0
+[STDERR  ] 2017-06-26T16:07:45.014741327Z: [    0.000000] x86/fpu: Legacy x87 FPU detected.
+[STDERR  ] 2017-06-26T16:07:45.014753432Z: [    0.000000] x86/fpu: Using 'eager' FPU context switches.
+[STDERR  ] 2017-06-26T16:07:45.014765572Z: [    0.000000] e820: BIOS-provided physical RAM map:
+[STDERR  ] 2017-06-26T16:07:45.014783159Z: [    0.000000] BIOS-e820: [mem 0x0000000000000000-0x000000000009fbff] usable
+[STDERR  ] 2017-06-26T16:07:45.014796644Z: [    0.000000] BIOS-e820: [mem 0x000000000009fc00-0x000000000009ffff] reserved
+[STDERR  ] 2017-06-26T16:07:45.014809301Z: [    0.000000] BIOS-e820: [mem 0x00000000000f0000-0x00000000000fffff] reserved
+[STDERR  ] 2017-06-26T16:07:45.014827261Z: [    0.000000] BIOS-e820: [mem 0x0000000000100000-0x000000003ffdefff] usable
+[STDERR  ] 2017-06-26T16:07:45.014840219Z: [    0.000000] BIOS-e820: [mem 0x000000003ffdf000-0x000000003fffffff] reserved
+[STDERR  ] 2017-06-26T16:07:45.014853366Z: [    0.000000] BIOS-e820: [mem 0x00000000b0000000-0x00000000bfffffff] reserved
+[STDERR  ] 2017-06-26T16:07:45.014866198Z: [    0.000000] BIOS-e820: [mem 0x00000000fed1c000-0x00000000fed1ffff] reserved
+[STDERR  ] 2017-06-26T16:07:45.014878649Z: [    0.000000] BIOS-e820: [mem 0x00000000fffc0000-0x00000000ffffffff] reserved
+[STDERR  ] 2017-06-26T16:07:45.014890683Z: [    0.000000] NX (Execute Disable) protection: active
+[STDERR  ] 2017-06-26T16:07:45.014903606Z: [    0.000000] SMBIOS 2.8 present.
+[STDERR  ] 2017-06-26T16:07:45.014918613Z: [    0.000000] e820: last_pfn = 0x3ffdf max_arch_pfn = 0x400000000
+[STDERR  ] 2017-06-26T16:07:45.014932023Z: [    0.000000] x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WC  UC- WT  
+[STDERR  ] 2017-06-26T16:07:45.014944618Z: [    0.000000] found SMP MP-table at [mem 0x000f6aa0-0x000f6aaf] mapped at [ffff8beac00f6aa0]
+[STDERR  ] 2017-06-26T16:07:45.014957539Z: [    0.000000] RAMDISK: [mem 0x3d6a4000-0x3ffcffff]
+[STDERR  ] 2017-06-26T16:07:45.014970136Z: [    0.000000] ACPI: Early table checksum verification disabled
+[STDERR  ] 2017-06-26T16:07:45.014976894Z: [    0.000000] ACPI: RSDP 0x00000000000F68C0 000014 (v00 BOCHS )
+[STDERR  ] 2017-06-26T16:07:45.014995912Z: [    0.000000] ACPI: RSDT 0x000000003FFE2404 000034 (v01 BOCHS  BXPCRSDT 00000001 BXPC 00000001)
+[STDERR  ] 2017-06-26T16:07:45.015008785Z: [    0.000000] ACPI: FACP 0x000000003FFE22A4 000074 (v01 BOCHS  BXPCFACP 00000001 BXPC 00000001)
+[STDERR  ] 2017-06-26T16:07:45.01502729Z: [    0.000000] ACPI: DSDT 0x000000003FFE0040 002264 (v01 BOCHS  BXPCDSDT 00000001 BXPC 00000001)
+[STDERR  ] 2017-06-26T16:07:45.015033562Z: [    0.000000] ACPI: FACS 0x000000003FFE0000 000040
+[STDERR  ] 2017-06-26T16:07:45.015058132Z: [    0.000000] ACPI: APIC 0x000000003FFE2318 000078 (v01 BOCHS  BXPCAPIC 00000001 BXPC 00000001)
+[STDERR  ] 2017-06-26T16:07:45.015070787Z: [    0.000000] ACPI: HPET 0x000000003FFE2390 000038 (v01 BOCHS  BXPCHPET 00000001 BXPC 00000001)
+[STDERR  ] 2017-06-26T16:07:45.015083646Z: [    0.000000] ACPI: MCFG 0x000000003FFE23C8 00003C (v01 BOCHS  BXPCMCFG 00000001 BXPC 00000001)
+[STDERR  ] 2017-06-26T16:07:45.015102493Z: [    0.000000] Zone ranges:
+[STDERR  ] 2017-06-26T16:07:45.015118786Z: [    0.000000]   DMA      [mem 0x0000000000001000-0x0000000000ffffff]
+[STDERR  ] 2017-06-26T16:07:45.015131789Z: [    0.000000]   DMA32    [mem 0x0000000001000000-0x000000003ffdefff]
+[STDERR  ] 2017-06-26T16:07:45.015144744Z: [    0.000000]   Normal   empty
+[STDERR  ] 2017-06-26T16:07:45.015157705Z: [    0.000000] Movable zone start for each node
+[STDERR  ] 2017-06-26T16:07:45.015164588Z: [    0.000000] Early memory node ranges
+[STDERR  ] 2017-06-26T16:07:45.015176281Z: [    0.000000]   node   0: [mem 0x0000000000001000-0x000000000009efff]
+[STDERR  ] 2017-06-26T16:07:45.01519569Z: [    0.000000]   node   0: [mem 0x0000000000100000-0x000000003ffdefff]
+[STDERR  ] 2017-06-26T16:07:45.015208465Z: [    0.000000] Initmem setup node 0 [mem 0x0000000000001000-0x000000003ffdefff]
+[STDERR  ] 2017-06-26T16:07:45.015221282Z: [    0.000000] ACPI: PM-Timer IO Port: 0x608
+[STDERR  ] 2017-06-26T16:07:45.01523419Z: [    0.000000] ACPI: LAPIC_NMI (acpi_id[0xff] dfl dfl lint[0x1])
+[STDERR  ] 2017-06-26T16:07:45.015246591Z: [    0.000000] IOAPIC[0]: apic_id 0, version 32, address 0xfec00000, GSI 0-23
+[STDERR  ] 2017-06-26T16:07:45.015259146Z: [    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 0 global_irq 2 dfl dfl)
+[STDERR  ] 2017-06-26T16:07:45.015277028Z: [    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 5 global_irq 5 high level)
+[STDERR  ] 2017-06-26T16:07:45.015284243Z: [    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 high level)
+[STDERR  ] 2017-06-26T16:07:45.015303059Z: [    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 10 global_irq 10 high level)
+[STDERR  ] 2017-06-26T16:07:45.015309298Z: [    0.000000] ACPI: INT_SRC_OVR (bus 0 bus_irq 11 global_irq 11 high level)
+[STDERR  ] 2017-06-26T16:07:45.015336959Z: [    0.000000] Using ACPI (MADT) for SMP configuration information
+[STDERR  ] 2017-06-26T16:07:45.015354049Z: [    0.000000] ACPI: HPET id: 0x8086a201 base: 0xfed00000
+[STDERR  ] 2017-06-26T16:07:45.015366643Z: [    0.000000] smpboot: Allowing 1 CPUs, 0 hotplug CPUs
+[STDERR  ] 2017-06-26T16:07:45.015379215Z: [    0.000000] e820: [mem 0x40000000-0xafffffff] available for PCI devices
+[STDERR  ] 2017-06-26T16:07:45.015391979Z: [    0.000000] Booting paravirtualized kernel on bare hardware
+[STDERR  ] 2017-06-26T16:07:45.015405406Z: [    0.000000] clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+[STDERR  ] 2017-06-26T16:07:45.015418821Z: [    0.000000] setup_percpu: NR_CPUS:128 nr_cpumask_bits:128 nr_cpu_ids:1 nr_node_ids:1
+[STDERR  ] 2017-06-26T16:07:45.015431685Z: [    0.000000] percpu: Embedded 35 pages/cpu @ffff8beafd400000 s105112 r8192 d30056 u2097152
+[STDERR  ] 2017-06-26T16:07:45.015438601Z: [    0.000000] Built 1 zonelists in Zone order, mobility grouping on.  Total pages: 257896
+[STDERR  ] 2017-06-26T16:07:45.015456409Z: [    0.000000] Kernel command line: console=ttyS0
+[STDERR  ] 2017-06-26T16:07:45.015469085Z: [    0.000000] PID hash table entries: 4096 (order: 3, 32768 bytes)
+[STDERR  ] 2017-06-26T16:07:45.015481872Z: [    0.000000] Dentry cache hash table entries: 131072 (order: 8, 1048576 bytes)
+[STDERR  ] 2017-06-26T16:07:45.015494226Z: [    0.000000] Inode-cache hash table entries: 65536 (order: 7, 524288 bytes)
+[STDERR  ] 2017-06-26T16:07:45.015508088Z: [    0.000000] Memory: 972052K/1048052K available (8023K kernel code, 1336K rwdata, 2692K rodata, 1372K init, 564K bss, 76000K reserved, 0K cma-reserved)
+[STDERR  ] 2017-06-26T16:07:45.015527653Z: [    0.000000] Hierarchical RCU implementation.
+[STDERR  ] 2017-06-26T16:07:45.015540937Z: [    0.000000] 	Build-time adjustment of leaf fanout to 64.
+[STDERR  ] 2017-06-26T16:07:45.01555229Z: [    0.000000] 	RCU restricting CPUs from NR_CPUS=128 to nr_cpu_ids=1.
+[STDERR  ] 2017-06-26T16:07:45.015572165Z: [    0.000000] RCU: Adjusting geometry for rcu_fanout_leaf=64, nr_cpu_ids=1
+[STDERR  ] 2017-06-26T16:07:45.015584621Z: [    0.000000] NR_IRQS:8448 nr_irqs:256 16
+[STDERR  ] 2017-06-26T16:07:45.015597162Z: [    0.000000] Console: colour VGA+ 80x25
+[STDERR  ] 2017-06-26T16:07:45.015609932Z: [    0.000000] console [ttyS0] enabled
+[STDERR  ] 2017-06-26T16:07:45.015616753Z: [    0.000000] clocksource: hpet: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604467 ns
+[STDERR  ] 2017-06-26T16:07:45.015629606Z: [    0.000000] tsc: Fast TSC calibration using PIT
+[STDERR  ] 2017-06-26T16:07:45.015648794Z: [    0.000000] tsc: Detected 2300.130 MHz processor
+[STDERR  ] 2017-06-26T16:07:45.015667436Z: [    0.020460] Calibrating delay loop (skipped), value calculated using timer frequency.. 4600.26 BogoMIPS (lpj=23001300)
+[STDERR  ] 2017-06-26T16:07:45.015680689Z: [    0.030436] pid_max: default: 32768 minimum: 301
+[STDERR  ] 2017-06-26T16:07:45.015693287Z: [    0.031269] ACPI: Core revision 20160831
+[STDERR  ] 2017-06-26T16:07:45.015705192Z: [    0.075357] ACPI: 1 ACPI AML tables successfully acquired and loaded
+[STDERR  ] 2017-06-26T16:07:45.015719017Z: [    0.078603] Security Framework initialized
+[STDERR  ] 2017-06-26T16:07:45.015725948Z: [    0.079044] Yama: becoming mindful.
+[STDERR  ] 2017-06-26T16:07:45.015751587Z: [    0.081085] Mount-cache hash table entries: 2048 (order: 2, 16384 bytes)
+[STDERR  ] 2017-06-26T16:07:45.015765238Z: [    0.081647] Mountpoint-cache hash table entries: 2048 (order: 2, 16384 bytes)
+[STDERR  ] 2017-06-26T16:07:45.015783543Z: [    0.100279] Last level iTLB entries: 4KB 0, 2MB 0, 4MB 0
+[STDERR  ] 2017-06-26T16:07:45.015790259Z: [    0.100728] Last level dTLB entries: 4KB 0, 2MB 0, 4MB 0, 1GB 0
+[STDERR  ] 2017-06-26T16:07:45.015809746Z: [    0.405254] Freeing SMP alternatives memory: 20K (ffffffff89ea7000 - ffffffff89eac000)
+[STDERR  ] 2017-06-26T16:07:45.015821855Z: [    0.414244] ftrace: allocating 35395 entries in 139 pages
+[STDERR  ] 2017-06-26T16:07:45.015834321Z: [    0.574532] smpboot: Max logical packages: 1
+[STDERR  ] 2017-06-26T16:07:45.015840578Z: [    0.579734] ..TIMER: vector=0x30 apic1=0 pin1=2 apic2=-1 pin2=-1
+[STDERR  ] 2017-06-26T16:07:45.015860419Z: [    0.680000] smpboot: CPU0: AMD QEMU Virtual CPU version 2.5+ (family: 0x6, model: 0x6, stepping: 0x3)
+[STDERR  ] 2017-06-26T16:07:45.015874058Z: [    0.680000] Performance Events: PMU not available due to virtualization, using software events only.
+[STDERR  ] 2017-06-26T16:07:45.015880174Z: [    0.687446] NMI watchdog: disabled (cpu0): hardware events not enabled
+[STDERR  ] 2017-06-26T16:07:45.015903555Z: [    0.687932] NMI watchdog: Shutting down hard lockup detector on all cpus
+[STDERR  ] 2017-06-26T16:07:45.015910426Z: [    0.690794] x86: Booted up 1 node, 1 CPUs
+[STDERR  ] 2017-06-26T16:07:45.015922606Z: [    0.691170] smpboot: Total of 1 processors activated (4600.26 BogoMIPS)
+[STDERR  ] 2017-06-26T16:07:45.015941527Z: [    0.704762] devtmpfs: initialized
+[STDERR  ] 2017-06-26T16:07:45.015954468Z: [    0.709285] x86/mm: Memory block size: 128MB
+[STDERR  ] 2017-06-26T16:07:45.01597263Z: [    0.773391] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns
+[STDERR  ] 2017-06-26T16:07:45.015979952Z: [    0.774269] futex hash table entries: 256 (order: 2, 16384 bytes)
+[STDERR  ] 2017-06-26T16:07:45.015992203Z: [    0.782958] NET: Registered protocol family 16
+[STDERR  ] 2017-06-26T16:07:45.016011963Z: [    0.792324] cpuidle: using governor ladder
+[STDERR  ] 2017-06-26T16:07:45.016019257Z: [    0.792773] cpuidle: using governor menu
+[STDERR  ] 2017-06-26T16:07:45.016038099Z: [    0.793861] ACPI: bus type PCI registered
+[STDERR  ] 2017-06-26T16:07:45.016044287Z: [    0.796573] PCI: MMCONFIG for domain 0000 [bus 00-ff] at [mem 0xb0000000-0xbfffffff] (base 0xb0000000)
+[STDERR  ] 2017-06-26T16:07:45.016063167Z: [    0.797370] PCI: MMCONFIG at [mem 0xb0000000-0xbfffffff] reserved in E820
+[STDERR  ] 2017-06-26T16:07:45.016081523Z: [    0.798649] PCI: Using configuration type 1 for base access
+[STDERR  ] 2017-06-26T16:07:45.016094501Z: [    0.855085] HugeTLB registered 2 MB page size, pre-allocated 0 pages
+[STDERR  ] 2017-06-26T16:07:45.016106975Z: [    0.864828] ACPI: Added _OSI(Module Device)
+[STDERR  ] 2017-06-26T16:07:45.016120185Z: [    0.865171] ACPI: Added _OSI(Processor Device)
+[STDERR  ] 2017-06-26T16:07:45.016133248Z: [    0.865488] ACPI: Added _OSI(3.0 _SCP Extensions)
+[STDERR  ] 2017-06-26T16:07:45.016145885Z: [    0.865858] ACPI: Added _OSI(Processor Aggregator Device)
+[STDERR  ] 2017-06-26T16:07:45.016158658Z: [    0.938967] ACPI: Interpreter enabled
+[STDERR  ] 2017-06-26T16:07:45.016165713Z: [    0.939724] ACPI: (supports S0 S5)
+[STDERR  ] 2017-06-26T16:07:45.016191679Z: [    0.940092] ACPI: Using IOAPIC for interrupt routing
+[STDERR  ] 2017-06-26T16:07:45.016206839Z: [    0.941800] PCI: Using host bridge windows from ACPI; if necessary, use "pci=nocrs" and report a bug
+[STDERR  ] 2017-06-26T16:07:45.016219716Z: [    1.006130] ACPI: PCI Root Bridge [PCI0] (domain 0000 [bus 00-ff])
+[STDERR  ] 2017-06-26T16:07:45.016233111Z: [    1.007042] acpi PNP0A08:00: _OSC: OS supports [ExtendedConfig ASPM ClockPM Segments MSI]
+[STDERR  ] 2017-06-26T16:07:45.016239302Z: [    1.012761] acpi PNP0A08:00: _OSC: OS now controls [PCIeHotplug PME PCIeCapability]
+[STDERR  ] 2017-06-26T16:07:45.016258009Z: [    1.016294] PCI host bridge to bus 0000:00
+[STDERR  ] 2017-06-26T16:07:45.016271005Z: [    1.016727] pci_bus 0000:00: root bus resource [io  0x0000-0x0cf7 window]
+[STDERR  ] 2017-06-26T16:07:45.016301115Z: [    1.017215] pci_bus 0000:00: root bus resource [io  0x0d00-0xffff window]
+[STDERR  ] 2017-06-26T16:07:45.01631485Z: [    1.017699] pci_bus 0000:00: root bus resource [mem 0x000a0000-0x000bffff window]
+[STDERR  ] 2017-06-26T16:07:45.016327993Z: [    1.018212] pci_bus 0000:00: root bus resource [mem 0xc0000000-0xfebfffff window]
+[STDERR  ] 2017-06-26T16:07:45.016341017Z: [    1.018825] pci_bus 0000:00: root bus resource [bus 00-ff]
+[STDERR  ] 2017-06-26T16:07:45.016354113Z: [    1.105824] pci 0000:00:1f.0: quirk: [io  0x0600-0x067f] claimed by ICH6 ACPI/GPIO/TCO
+[STDERR  ] 2017-06-26T16:07:45.016362064Z: [    1.159167] ACPI: PCI Interrupt Link [LNKA] (IRQs 5 *10 11)
+[STDERR  ] 2017-06-26T16:07:45.016374194Z: [    1.161278] ACPI: PCI Interrupt Link [LNKB] (IRQs 5 *10 11)
+[STDERR  ] 2017-06-26T16:07:45.016401238Z: [    1.163033] ACPI: PCI Interrupt Link [LNKC] (IRQs 5 10 *11)
+[STDERR  ] 2017-06-26T16:07:45.01640905Z: [    1.164749] ACPI: PCI Interrupt Link [LNKD] (IRQs 5 10 *11)
+[STDERR  ] 2017-06-26T16:07:45.016426732Z: [    1.166458] ACPI: PCI Interrupt Link [LNKE] (IRQs 5 *10 11)
+[STDERR  ] 2017-06-26T16:07:45.016439277Z: [    1.168176] ACPI: PCI Interrupt Link [LNKF] (IRQs 5 *10 11)
+[STDERR  ] 2017-06-26T16:07:45.016452112Z: [    1.170335] ACPI: PCI Interrupt Link [LNKG] (IRQs 5 10 *11)
+[STDERR  ] 2017-06-26T16:07:45.0164703Z: [    1.172169] ACPI: PCI Interrupt Link [LNKH] (IRQs 5 10 *11)
+[STDERR  ] 2017-06-26T16:07:45.016476558Z: [    1.173008] ACPI: PCI Interrupt Link [GSIA] (IRQs *16)
+[STDERR  ] 2017-06-26T16:07:45.016496402Z: [    1.173684] ACPI: PCI Interrupt Link [GSIB] (IRQs *17)
+[STDERR  ] 2017-06-26T16:07:45.016503205Z: [    1.174302] ACPI: PCI Interrupt Link [GSIC] (IRQs *18)
+[STDERR  ] 2017-06-26T16:07:45.016515363Z: [    1.174921] ACPI: PCI Interrupt Link [GSID] (IRQs *19)
+[STDERR  ] 2017-06-26T16:07:45.016533742Z: [    1.175537] ACPI: PCI Interrupt Link [GSIE] (IRQs *20)
+[STDERR  ] 2017-06-26T16:07:45.016546309Z: [    1.176153] ACPI: PCI Interrupt Link [GSIF] (IRQs *21)
+[STDERR  ] 2017-06-26T16:07:45.016558983Z: [    1.176767] ACPI: PCI Interrupt Link [GSIG] (IRQs *22)
+[STDERR  ] 2017-06-26T16:07:45.016565843Z: [    1.177384] ACPI: PCI Interrupt Link [GSIH] (IRQs *23)
+[STDERR  ] 2017-06-26T16:07:45.016578071Z: [    1.180989] ACPI: Enabled 2 GPEs in block 00 to 3F
+[STDERR  ] 2017-06-26T16:07:45.016597346Z: [    1.185135] SCSI subsystem initialized
+[STDERR  ] 2017-06-26T16:07:45.016615886Z: [    1.186837] ACPI: bus type USB registered
+[STDERR  ] 2017-06-26T16:07:45.016628655Z: [    1.187915] usbcore: registered new interface driver usbfs
+[STDERR  ] 2017-06-26T16:07:45.01663529Z: [    1.188917] usbcore: registered new interface driver hub
+[STDERR  ] 2017-06-26T16:07:45.016653313Z: [    1.189703] usbcore: registered new device driver usb
+[STDERR  ] 2017-06-26T16:07:45.016659316Z: [    1.190801] pps_core: LinuxPPS API ver. 1 registered
+[STDERR  ] 2017-06-26T16:07:45.01668595Z: [    1.191162] pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+[STDERR  ] 2017-06-26T16:07:45.016699296Z: [    1.191884] PTP clock support registered
+[STDERR  ] 2017-06-26T16:07:45.016714305Z: [    1.193003] wmi: Mapper loaded
+[STDERR  ] 2017-06-26T16:07:45.016727487Z: [    1.194045] PCI: Using ACPI for IRQ routing
+[STDERR  ] 2017-06-26T16:07:45.016740263Z: [    1.200000] NetLabel: Initializing
+[STDERR  ] 2017-06-26T16:07:45.016753342Z: [    1.200000] NetLabel:  domain hash size = 128
+[STDERR  ] 2017-06-26T16:07:45.016764956Z: [    1.200000] NetLabel:  protocols = UNLABELED CIPSOv4
+[STDERR  ] 2017-06-26T16:07:45.016777727Z: [    1.200000] NetLabel:  unlabeled traffic allowed by default
+[STDERR  ] 2017-06-26T16:07:45.016788017Z: [    1.200000] HPET: 3 timers in total, 0 timers will be used for per-cpu timer
+[STDERR  ] 2017-06-26T16:07:45.016807569Z: [    1.200000] hpet0: at MMIO 0xfed00000, IRQs 2, 8, 0
+[STDERR  ] 2017-06-26T16:07:45.016820702Z: [    1.200000] hpet0: 3 comparators, 64-bit 100.000000 MHz counter
+[STDERR  ] 2017-06-26T16:07:45.016826604Z: [    1.212514] clocksource: Switched to clocksource hpet
+[STDERR  ] 2017-06-26T16:07:45.01685232Z: [    1.538956] VFS: Disk quotas dquot_6.6.0
+[STDERR  ] 2017-06-26T16:07:45.016864866Z: [    1.539722] VFS: Dquot-cache hash table entries: 512 (order 0, 4096 bytes)
+[STDERR  ] 2017-06-26T16:07:45.016877218Z: [    1.542656] FS-Cache: Loaded
+[STDERR  ] 2017-06-26T16:07:45.016889606Z: [    1.547339] CacheFiles: Loaded
+[STDERR  ] 2017-06-26T16:07:45.016903563Z: [    1.548886] pnp: PnP ACPI init
+[STDERR  ] 2017-06-26T16:07:45.016910878Z: [    1.560641] pnp: PnP ACPI: found 5 devices
+[STDERR  ] 2017-06-26T16:07:45.016922886Z: [    1.609313] clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xffffff, max_idle_ns: 2085701024 ns
+[STDERR  ] 2017-06-26T16:07:45.016942629Z: [    1.612399] NET: Registered protocol family 2
+[STDERR  ] 2017-06-26T16:07:45.016949894Z: [    1.619158] TCP established hash table entries: 8192 (order: 4, 65536 bytes)
+[STDERR  ] 2017-06-26T16:07:45.016969142Z: [    1.619906] TCP bind hash table entries: 8192 (order: 5, 131072 bytes)
+[STDERR  ] 2017-06-26T16:07:45.01698194Z: [    1.620859] TCP: Hash tables configured (established 8192 bind 8192)
+[STDERR  ] 2017-06-26T16:07:45.016994625Z: [    1.622797] UDP hash table entries: 512 (order: 2, 16384 bytes)
+[STDERR  ] 2017-06-26T16:07:45.017007076Z: [    1.623359] UDP-Lite hash table entries: 512 (order: 2, 16384 bytes)
+[STDERR  ] 2017-06-26T16:07:45.017019462Z: [    1.625599] NET: Registered protocol family 1
+[STDERR  ] 2017-06-26T16:07:45.017032595Z: [    1.626517] pci 0000:00:01.0: Video device with shadowed ROM at [mem 0x000c0000-0x000dffff]
+[STDERR  ] 2017-06-26T16:07:45.017045861Z: [    1.633632] Unpacking initramfs...
+[STDERR  ] 2017-06-26T16:07:45.017052167Z: [   10.205922] Freeing initrd memory: 42160K (ffff8beafd6a4000 - ffff8beafffd0000)
+[STDERR  ] 2017-06-26T16:07:45.017073992Z: [   10.228288] PCLMULQDQ-NI instructions are not detected.
+[STDERR  ] 2017-06-26T16:07:45.017086991Z: [   10.229340] AVX or AES-NI instructions are not detected.
+[STDERR  ] 2017-06-26T16:07:45.017099689Z: [   10.229752] CPU feature 'AVX registers' is not supported.
+[STDERR  ] 2017-06-26T16:07:45.017112044Z: [   10.230362] CPU feature 'AVX registers' is not supported.
+[STDERR  ] 2017-06-26T16:07:45.017124766Z: [   10.230749] CPU feature 'AVX registers' is not supported.
+[STDERR  ] 2017-06-26T16:07:45.017137573Z: [   10.231211] CPU feature 'AVX registers' is not supported.
+[STDERR  ] 2017-06-26T16:07:45.017156817Z: [   10.231588] AVX2 or AES-NI instructions are not detected.
+[STDERR  ] 2017-06-26T16:07:45.017175718Z: [   10.231967] AVX2 instructions are not detected.
+[STDERR  ] 2017-06-26T16:07:45.017189233Z: [   10.237126] audit: initializing netlink subsys (disabled)
+[STDERR  ] 2017-06-26T16:07:45.017202361Z: [   10.238624] audit: type=2000 audit(1498493249.230:1): initialized
+[STDERR  ] 2017-06-26T16:07:45.017209391Z: [   10.246413] workingset: timestamp_bits=46 max_order=18 bucket_order=0
+[STDERR  ] 2017-06-26T16:07:45.017221599Z: [   10.252961] FS-Cache: Netfs 'cifs' registered for caching
+[STDERR  ] 2017-06-26T16:07:45.01724039Z: [   10.253856] fuse init (API version 7.26)
+[STDERR  ] 2017-06-26T16:07:45.017253515Z: [   10.255899] SGI XFS with ACLs, security attributes, no debug enabled
+[STDERR  ] 2017-06-26T16:07:45.017266401Z: [   10.259309] 9p: Installing v9fs 9p2000 file system support
+[STDERR  ] 2017-06-26T16:07:45.017284763Z: [   10.259771] FS-Cache: Netfs '9p' registered for caching
+[STDERR  ] 2017-06-26T16:07:45.017298006Z: [   10.294104] NET: Registered protocol family 38
+[STDERR  ] 2017-06-26T16:07:45.017310592Z: [   10.294614] Key type asymmetric registered
+[STDERR  ] 2017-06-26T16:07:45.017323104Z: [   10.294937] Asymmetric key parser 'x509' registered
+[STDERR  ] 2017-06-26T16:07:45.017336633Z: [   10.295615] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 251)
+[STDERR  ] 2017-06-26T16:07:45.017350245Z: [   10.296768] io scheduler noop registered
+[STDERR  ] 2017-06-26T16:07:45.017356686Z: [   10.297085] io scheduler deadline registered (default)
+[STDERR  ] 2017-06-26T16:07:45.017449082Z: [   10.297642] io scheduler cfq registered
+[STDERR  ] 2017-06-26T16:07:45.017463265Z: [   10.300046] pci_hotplug: PCI Hot Plug PCI Core version: 0.5
+[STDERR  ] 2017-06-26T16:07:45.017469621Z: [   10.301430] pciehp: PCI Express Hot Plug Controller Driver version: 0.4
+[STDERR  ] 2017-06-26T16:07:45.017488986Z: [   10.302209] shpchp: Standard Hot Plug PCI Controller Driver version: 0.4
+[STDERR  ] 2017-06-26T16:07:45.017501633Z: [   10.303003] hv_vmbus: registering driver hyperv_fb
+[STDERR  ] 2017-06-26T16:07:45.017514412Z: [   10.306064] input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input0
+[STDERR  ] 2017-06-26T16:07:45.017540138Z: [   10.307076] ACPI: Power Button [PWRF]
+[STDERR  ] 2017-06-26T16:07:45.017553061Z: [   10.312029] GHES: HEST is not enabled!
+[STDERR  ] 2017-06-26T16:07:45.017592258Z: [   10.322923] ACPI: PCI Interrupt Link [GSIH] enabled at IRQ 23
+[STDERR  ] 2017-06-26T16:07:45.017600274Z: [   10.328543] xenfs: not registering filesystem on non-xen platform
+[STDERR  ] 2017-06-26T16:07:45.017611985Z: [   10.330577] Serial: 8250/16550 driver, 4 ports, IRQ sharing disabled
+[STDERR  ] 2017-06-26T16:07:45.017630187Z: [   10.356919] 00:04: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+[STDERR  ] 2017-06-26T16:07:45.017641749Z: [   10.367125] Non-volatile memory driver v1.3
+[STDERR  ] 2017-06-26T16:07:45.017648196Z: [   10.373133] Hangcheck: starting hangcheck timer 0.9.1 (tick is 180 seconds, margin is 60 seconds).
+[STDERR  ] 2017-06-26T16:07:45.017665001Z: [   10.378377] random: fast init done
+[STDERR  ] 2017-06-26T16:07:45.017670818Z: [   10.379566] random: crng init done
+[STDERR  ] 2017-06-26T16:07:45.017688584Z: [   10.413889] loop: module loaded
+[STDERR  ] 2017-06-26T16:07:45.017695187Z: [   10.427616] nbd: registered device at major 43
+[STDERR  ] 2017-06-26T16:07:45.01771165Z: [   10.469233] lpc_ich 0000:00:1f.0: I/O space for GPIO uninitialized
+[STDERR  ] 2017-06-26T16:07:45.017717162Z: [   10.471034] VMware PVSCSI driver - version 1.0.7.0-k
+[STDERR  ] 2017-06-26T16:07:45.017759506Z: [   10.471761] hv_vmbus: registering driver hv_storvsc
+[STDERR  ] 2017-06-26T16:07:45.017771645Z: [   10.481647] ACPI: PCI Interrupt Link [GSIA] enabled at IRQ 16
+[STDERR  ] 2017-06-26T16:07:45.017788657Z: [   10.487495] ahci 0000:00:1f.2: AHCI 0001.0000 32 slots 6 ports 1.5 Gbps 0x3f impl SATA mode
+[STDERR  ] 2017-06-26T16:07:45.0178012Z: [   10.488135] ahci 0000:00:1f.2: flags: 64bit ncq only 
+[STDERR  ] 2017-06-26T16:07:45.017819842Z: [   10.508574] scsi host0: ahci
+[STDERR  ] 2017-06-26T16:07:45.017831197Z: [   10.512426] scsi host1: ahci
+[STDERR  ] 2017-06-26T16:07:45.017844758Z: [   10.514568] scsi host2: ahci
+[STDERR  ] 2017-06-26T16:07:45.01785696Z: [   10.516682] scsi host3: ahci
+[STDERR  ] 2017-06-26T16:07:45.017868485Z: [   10.518824] scsi host4: ahci
+[STDERR  ] 2017-06-26T16:07:45.017880724Z: [   10.521068] scsi host5: ahci
+[STDERR  ] 2017-06-26T16:07:45.01788721Z: [   10.522793] ata1: SATA max UDMA/133 abar m4096@0xfebf1000 port 0xfebf1100 irq 24
+[STDERR  ] 2017-06-26T16:07:45.017921461Z: [   10.523201] ata2: SATA max UDMA/133 abar m4096@0xfebf1000 port 0xfebf1180 irq 24
+[STDERR  ] 2017-06-26T16:07:45.01793933Z: [   10.523674] ata3: SATA max UDMA/133 abar m4096@0xfebf1000 port 0xfebf1200 irq 24
+[STDERR  ] 2017-06-26T16:07:45.017951193Z: [   10.524145] ata4: SATA max UDMA/133 abar m4096@0xfebf1000 port 0xfebf1280 irq 24
+[STDERR  ] 2017-06-26T16:07:45.017962896Z: [   10.524606] ata5: SATA max UDMA/133 abar m4096@0xfebf1000 port 0xfebf1300 irq 24
+[STDERR  ] 2017-06-26T16:07:45.017975448Z: [   10.525057] ata6: SATA max UDMA/133 abar m4096@0xfebf1000 port 0xfebf1380 irq 24
+[STDERR  ] 2017-06-26T16:07:45.017988114Z: [   10.537021] tun: Universal TUN/TAP device driver, 1.6
+[STDERR  ] 2017-06-26T16:07:45.017999334Z: [   10.537489] tun: (C) 1999-2004 Max Krasnyansky <maxk@qualcomm.com>
+[STDERR  ] 2017-06-26T16:07:45.018019608Z: [   10.539303] VMware vmxnet3 virtual NIC driver - version 1.4.a.0-k-NAPI
+[STDERR  ] 2017-06-26T16:07:45.01802623Z: [   10.540551] hv_vmbus: registering driver hv_netvsc
+[STDERR  ] 2017-06-26T16:07:45.018050306Z: [   10.540898] Fusion MPT base driver 3.04.20
+[STDERR  ] 2017-06-26T16:07:45.018084863Z: [   10.541191] Copyright (c) 1999-2008 LSI Corporation
+[STDERR  ] 2017-06-26T16:07:45.018097647Z: [   10.541726] Fusion MPT SPI Host driver 3.04.20
+[STDERR  ] 2017-06-26T16:07:45.018116621Z: [   10.543656] i8042: PNP: PS/2 Controller [PNP0303:KBD,PNP0f13:MOU] at 0x60,0x64 irq 1,12
+[STDERR  ] 2017-06-26T16:07:45.018129766Z: [   10.547546] serio: i8042 KBD port at 0x60,0x64 irq 1
+[STDERR  ] 2017-06-26T16:07:45.0181422Z: [   10.548126] serio: i8042 AUX port at 0x60,0x64 irq 12
+[STDERR  ] 2017-06-26T16:07:45.018154861Z: [   10.551309] hv_vmbus: registering driver hyperv_keyboard
+[STDERR  ] 2017-06-26T16:07:45.018161449Z: [   10.553286] mousedev: PS/2 mouse device common for all mice
+[STDERR  ] 2017-06-26T16:07:45.018180267Z: [   10.558024] input: AT Translated Set 2 keyboard as /devices/platform/i8042/serio0/input/input1
+[STDERR  ] 2017-06-26T16:07:45.018192784Z: [   10.561092] input: PC Speaker as /devices/platform/pcspkr/input/input2
+[STDERR  ] 2017-06-26T16:07:45.018205347Z: [   10.564489] rtc_cmos 00:00: RTC can wake from S4
+[STDERR  ] 2017-06-26T16:07:45.018242862Z: [   10.567538] rtc_cmos 00:00: rtc core: registered rtc_cmos as rtc0
+[STDERR  ] 2017-06-26T16:07:45.0182578Z: [   10.568666] rtc_cmos 00:00: alarms up to one day, y3k, 114 bytes nvram, hpet irqs
+[STDERR  ] 2017-06-26T16:07:45.018271072Z: [   10.569332] i2c /dev entries driver
+[STDERR  ] 2017-06-26T16:07:45.018283494Z: [   10.571390] device-mapper: ioctl: 4.35.0-ioctl (2016-06-23) initialised: dm-devel@redhat.com
+[STDERR  ] 2017-06-26T16:07:45.018297963Z: [   10.575773] usbcore: registered new interface driver usbhid
+[STDERR  ] 2017-06-26T16:07:45.018310702Z: [   10.576165] usbhid: USB HID core driver
+[STDERR  ] 2017-06-26T16:07:45.018323082Z: [   10.576699] hv_utils: Registering HyperV Utility Driver
+[STDERR  ] 2017-06-26T16:07:45.018334993Z: [   10.577044] hv_vmbus: registering driver hv_util
+[STDERR  ] 2017-06-26T16:07:45.018341157Z: [   10.577353] hv_vmbus: registering driver hv_balloon
+[STDERR  ] 2017-06-26T16:07:45.018358368Z: [   10.577812] oprofile: using NMI interrupt.
+[STDERR  ] 2017-06-26T16:07:45.018364147Z: [   10.578807] GACT probability on
+[STDERR  ] 2017-06-26T16:07:45.018382746Z: [   10.579211] Mirror/redirect action on
+[STDERR  ] 2017-06-26T16:07:45.018415791Z: [   10.579985] Simple TC action Loaded
+[STDERR  ] 2017-06-26T16:07:45.018434386Z: [   10.580767] u32 classifier
+[STDERR  ] 2017-06-26T16:07:45.018448375Z: [   10.580965]     Performance counters on
+[STDERR  ] 2017-06-26T16:07:45.01846062Z: [   10.581241]     input device check on
+[STDERR  ] 2017-06-26T16:07:45.018472496Z: [   10.581472]     Actions configured
+[STDERR  ] 2017-06-26T16:07:45.018484553Z: [   10.581967] Netfilter messages via NETLINK v0.30.
+[STDERR  ] 2017-06-26T16:07:45.018504815Z: [   10.582436] nfnl_acct: registering with nfnetlink.
+[STDERR  ] 2017-06-26T16:07:45.018516732Z: [   10.583857] nf_conntrack version 0.5.0 (8192 buckets, 32768 max)
+[STDERR  ] 2017-06-26T16:07:45.018527849Z: [   10.586940] ctnetlink v0.93: registering with nfnetlink.
+[STDERR  ] 2017-06-26T16:07:45.01853984Z: [   10.589933] nf_tables: (c) 2007-2009 Patrick McHardy <kaber@trash.net>
+[STDERR  ] 2017-06-26T16:07:45.018585331Z: [   10.590933] nf_tables_compat: (c) 2012 Pablo Neira Ayuso <pablo@netfilter.org>
+[STDERR  ] 2017-06-26T16:07:45.0185992Z: [   10.593179] xt_time: kernel timezone is -0000
+[STDERR  ] 2017-06-26T16:07:45.018617917Z: [   10.593659] ip_set: protocol 6
+[STDERR  ] 2017-06-26T16:07:45.018629769Z: [   10.594233] IPVS: Registered protocols (TCP, UDP, SCTP, AH, ESP)
+[STDERR  ] 2017-06-26T16:07:45.018635427Z: [   10.594810] IPVS: Connection hash table configured (size=4096, memory=64Kbytes)
+[STDERR  ] 2017-06-26T16:07:45.018654691Z: [   10.596403] IPVS: Creating netns size=2104 id=0
+[STDERR  ] 2017-06-26T16:07:45.018667129Z: [   10.597244] IPVS: ipvs loaded.
+[STDERR  ] 2017-06-26T16:07:45.018679052Z: [   10.597544] IPVS: [rr] scheduler registered.
+[STDERR  ] 2017-06-26T16:07:45.018697997Z: [   10.597852] IPVS: [wrr] scheduler registered.
+[STDERR  ] 2017-06-26T16:07:45.018704939Z: [   10.598139] IPVS: [lc] scheduler registered.
+[STDERR  ] 2017-06-26T16:07:45.018715653Z: [   10.598414] IPVS: [wlc] scheduler registered.
+[STDERR  ] 2017-06-26T16:07:45.018758534Z: [   10.598694] IPVS: [fo] scheduler registered.
+[STDERR  ] 2017-06-26T16:07:45.018771293Z: [   10.598968] IPVS: [ovf] scheduler registered.
+[STDERR  ] 2017-06-26T16:07:45.018777381Z: [   10.599353] IPVS: [lblc] scheduler registered.
+[STDERR  ] 2017-06-26T16:07:45.018801643Z: [   10.599799] IPVS: [lblcr] scheduler registered.
+[STDERR  ] 2017-06-26T16:07:45.018807601Z: [   10.600381] IPVS: [dh] scheduler registered.
+[STDERR  ] 2017-06-26T16:07:45.018825292Z: [   10.600668] IPVS: [sh] scheduler registered.
+[STDERR  ] 2017-06-26T16:07:45.018836977Z: [   10.600958] IPVS: [sed] scheduler registered.
+[STDERR  ] 2017-06-26T16:07:45.018849049Z: [   10.601237] IPVS: [nq] scheduler registered.
+[STDERR  ] 2017-06-26T16:07:45.018859588Z: [   10.601867] IPVS: ftp: loaded support on port[0] = 21
+[STDERR  ] 2017-06-26T16:07:45.018877535Z: [   10.602712] ipip: IPv4 and MPLS over IPv4 tunneling driver
+[STDERR  ] 2017-06-26T16:07:45.018889245Z: [   10.606877] gre: GRE over IPv4 demultiplexor driver
+[STDERR  ] 2017-06-26T16:07:45.018894762Z: [   10.608848] ip_tables: (C) 2000-2006 Netfilter Core Team
+[STDERR  ] 2017-06-26T16:07:45.018941783Z: [   10.612059] ipt_CLUSTERIP: ClusterIP Version 0.8 loaded successfully
+[STDERR  ] 2017-06-26T16:07:45.018948594Z: [   10.612667] arp_tables: arp_tables: (C) 2002 David S. Miller
+[STDERR  ] 2017-06-26T16:07:45.01896563Z: [   10.614599] NET: Registered protocol family 10
+[STDERR  ] 2017-06-26T16:07:45.018977567Z: [   10.623958] ip6_tables: (C) 2000-2006 Netfilter Core Team
+[STDERR  ] 2017-06-26T16:07:45.01898904Z: [   10.631013] NET: Registered protocol family 17
+[STDERR  ] 2017-06-26T16:07:45.018994674Z: [   10.632037] Bridge firewalling registered
+[STDERR  ] 2017-06-26T16:07:45.019013708Z: [   10.632515] Ebtables v2.0 registered
+[STDERR  ] 2017-06-26T16:07:45.019020138Z: [   10.633865] 8021q: 802.1Q VLAN Support v1.8
+[STDERR  ] 2017-06-26T16:07:45.019037747Z: [   10.635200] 9pnet: Installing 9P2000 support
+[STDERR  ] 2017-06-26T16:07:45.019043474Z: [   10.636570] Key type dns_resolver registered
+[STDERR  ] 2017-06-26T16:07:45.019088508Z: [   10.637351] microcode: AMD CPU family 0x6 not supported
+[STDERR  ] 2017-06-26T16:07:45.019107589Z: [   10.641216] registered taskstats version 1
+[STDERR  ] 2017-06-26T16:07:45.01911935Z: [   10.786509] Key type big_key registered
+[STDERR  ] 2017-06-26T16:07:45.019130544Z: [   10.842068] Key type encrypted registered
+[STDERR  ] 2017-06-26T16:07:45.019142197Z: [   10.845895] rtc_cmos 00:00: setting system clock to 2017-06-26 16:07:30 UTC (1498493250)
+[STDERR  ] 2017-06-26T16:07:45.019153883Z: [   10.863887] ata1: SATA link down (SStatus 0 SControl 300)
+[STDERR  ] 2017-06-26T16:07:45.019161266Z: [   10.865990] ata3: SATA link up 1.5 Gbps (SStatus 113 SControl 300)
+[STDERR  ] 2017-06-26T16:07:45.019178587Z: [   10.869295] ata3.00: ATAPI: QEMU DVD-ROM, 2.5+, max UDMA/100
+[STDERR  ] 2017-06-26T16:07:45.019184614Z: [   10.869762] ata3.00: applying bridge limits
+[STDERR  ] 2017-06-26T16:07:45.019202106Z: [   10.871206] ata4: SATA link down (SStatus 0 SControl 300)
+[STDERR  ] 2017-06-26T16:07:45.019220088Z: [   10.871758] ata2: SATA link down (SStatus 0 SControl 300)
+[STDERR  ] 2017-06-26T16:07:45.019255072Z: [   10.872281] ata6: SATA link down (SStatus 0 SControl 300)
+[STDERR  ] 2017-06-26T16:07:45.019267734Z: [   10.872801] ata5: SATA link down (SStatus 0 SControl 300)
+[STDERR  ] 2017-06-26T16:07:45.01927409Z: [   10.873838] ata3.00: configured for UDMA/100
+[STDERR  ] 2017-06-26T16:07:45.019284818Z: [   10.888106] scsi 2:0:0:0: CD-ROM            QEMU     QEMU DVD-ROM     2.5+ PQ: 0 ANSI: 5
+[STDERR  ] 2017-06-26T16:07:45.019302006Z: [   10.913723] sr 2:0:0:0: [sr0] scsi3-mmc drive: 4x/4x cd/rw xa/form2 tray
+[STDERR  ] 2017-06-26T16:07:45.019320528Z: [   10.914326] cdrom: Uniform CD-ROM driver Revision: 3.20
+[STDERR  ] 2017-06-26T16:07:45.019333146Z: [   10.920632] sr 2:0:0:0: Attached scsi generic sg0 type 5
+[STDERR  ] 2017-06-26T16:07:45.019344148Z: [   11.054166] Freeing unused kernel memory: 1372K (ffffffff89d50000 - ffffffff89ea7000)
+[STDERR  ] 2017-06-26T16:07:45.019355161Z: [   11.054738] Write protecting the kernel read-only data: 12288k
+[STDERR  ] 2017-06-26T16:07:45.019365973Z: [   11.059830] Freeing unused kernel memory: 156K (ffff8beadb7d9000 - ffff8beadb800000)
+[STDERR  ] 2017-06-26T16:07:45.019377482Z: [   11.151917] Freeing unused kernel memory: 1404K (ffff8beadbaa1000 - ffff8beadbc00000)
+[STDERR  ] 2017-06-26T16:07:45.01938881Z: [   11.280768] tsc: Refined TSC clocksource calibration: 2300.043 MHz
+[STDERR  ] 2017-06-26T16:07:45.019427078Z: [   11.281438] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x21275dec2d7, max_idle_ns: 440795269413 ns
+[STDERR  ] 2017-06-26T16:07:45.019439053Z: [   12.300614] clocksource: Switched to clocksource tsc
+[STDERR  ] 2017-06-26T16:07:45.01945111Z: [   16.895583] e1000: Intel(R) PRO/1000 Network Driver - version 7.3.21-k8-NAPI
+[STDERR  ] 2017-06-26T16:07:45.019462904Z: [   16.896120] e1000: Copyright (c) 1999-2006 Intel Corporation.
+[STDERR  ] 2017-06-26T16:07:45.019475465Z: [   16.914031] ACPI: PCI Interrupt Link [GSIG] enabled at IRQ 22
+[STDERR  ] 2017-06-26T16:07:45.01948753Z: [   17.275576] e1000 0000:00:02.0 eth0: (PCI:33MHz:32-bit) 52:54:00:12:34:56
+[STDERR  ] 2017-06-26T16:07:45.019499074Z: [   17.276328] e1000 0000:00:02.0 eth0: Intel(R) PRO/1000 Network Connection
+[STDERR  ] 2017-06-26T16:07:45.019505342Z: 
+[STDERR  ] 2017-06-26T16:07:45.019524323Z: Starting containerd
+[STDERR  ] 2017-06-26T16:07:45.019530459Z: 
+[STDERR  ] 2017-06-26T16:07:45.019557122Z: Welcome to LinuxKit
+[STDERR  ] 2017-06-26T16:07:45.01960008Z: 
+[STDERR  ] 2017-06-26T16:07:45.019612927Z:                         ##         .
+[STDERR  ] 2017-06-26T16:07:45.019628097Z:                   ## ## ##        ==
+[STDERR  ] 2017-06-26T16:07:45.019640168Z:                ## ## ## ## ##    ===
+[STDERR  ] 2017-06-26T16:07:45.019652618Z:            /"""""""""""""""""\___/ ===
+[STDERR  ] 2017-06-26T16:07:45.01966456Z:       ~~~ {~~ ~~~~ ~~~ ~~~~ ~~~ ~ /  ===- ~~~
+[STDERR  ] 2017-06-26T16:07:45.019671412Z:            \______ o           __/
+[STDERR  ] 2017-06-26T16:07:45.019689243Z:              \    \         __/
+[STDERR  ] 2017-06-26T16:07:45.019701755Z:               \____\_______/
+[STDERR  ] 2017-06-26T16:07:45.01972117Z: 
+[STDERR  ] 2017-06-26T16:07:45.019752688Z: [34mINFO[0m[0000] starting containerd boot...                   [34mmodule[0m=containerd
+[STDERR  ] 2017-06-26T16:07:45.019767427Z: [34mINFO[0m[0000] loading plugin "io.containerd.content.v1.content"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.content.v1
+[STDERR  ] 2017-06-26T16:07:45.019786031Z: [34mINFO[0m[0000] skip loading plugin "io.containerd.snapshotter.v1.btrfs"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.snapshotter.v1
+[STDERR  ] 2017-06-26T16:07:45.019798703Z: [34mINFO[0m[0000] loading plugin "io.containerd.snapshotter.v1.overlayfs"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.snapshotter.v1
+[STDERR  ] 2017-06-26T16:07:45.019809872Z: [34mINFO[0m[0000] loading plugin "io.containerd.differ.v1.base-diff"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.differ.v1
+[STDERR  ] 2017-06-26T16:07:45.019816784Z: [34mINFO[0m[0000] loading plugin "io.containerd.metadata.v1.bolt"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.metadata.v1
+[STDERR  ] 2017-06-26T16:07:45.019833258Z: [34mINFO[0m[0000] loading plugin "io.containerd.grpc.v1.containers"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.grpc.v1
+[STDERR  ] 2017-06-26T16:07:45.019857763Z: [34mINFO[0m[0000] loading plugin "io.containerd.grpc.v1.content"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.grpc.v1
+[STDERR  ] 2017-06-26T16:07:45.019864628Z: [34mINFO[0m[0000] loading plugin "io.containerd.grpc.v1.diff"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.grpc.v1
+[STDERR  ] 2017-06-26T16:07:45.019881861Z: [34mINFO[0m[0000] loading plugin "io.containerd.grpc.v1.events"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.grpc.v1
+[STDERR  ] 2017-06-26T16:07:45.01992223Z: [34mINFO[0m[0000] loading plugin "io.containerd.grpc.v1.healthcheck"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.grpc.v1
+[STDERR  ] 2017-06-26T16:07:45.019929587Z: [34mINFO[0m[0000] loading plugin "io.containerd.grpc.v1.images"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.grpc.v1
+[STDERR  ] 2017-06-26T16:07:45.019940773Z: [34mINFO[0m[0000] loading plugin "io.containerd.grpc.v1.namespaces"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.grpc.v1
+[STDERR  ] 2017-06-26T16:07:45.019965471Z: [34mINFO[0m[0000] loading plugin "io.containerd.grpc.v1.snapshots"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.grpc.v1
+[STDERR  ] 2017-06-26T16:07:45.019972295Z: [34mINFO[0m[0000] loading plugin "io.containerd.monitor.v1.cgroups"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.monitor.v1
+[STDERR  ] 2017-06-26T16:07:45.019983387Z: [34mINFO[0m[0000] loading plugin "io.containerd.runtime.v1.linux"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.runtime.v1
+[STDERR  ] 2017-06-26T16:07:45.02000181Z: [34mINFO[0m[0000] loading plugin "io.containerd.grpc.v1.tasks"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.grpc.v1
+[STDERR  ] 2017-06-26T16:07:45.020008596Z: [34mINFO[0m[0000] loading plugin "io.containerd.grpc.v1.version"...  [34mmodule[0m=containerd [34mtype[0m=io.containerd.grpc.v1
+[STDERR  ] 2017-06-26T16:07:45.02002615Z: [34mINFO[0m[0000] serving...                                    [34maddress[0m="/run/containerd/debug.sock" [34mmodule[0m="containerd/debug"
+[STDERR  ] 2017-06-26T16:07:45.020032142Z: [34mINFO[0m[0000] serving...                                    [34maddress[0m="/run/containerd/containerd.sock" [34mmodule[0m="containerd/grpc"
+[STDERR  ] 2017-06-26T16:07:45.020050309Z: [34mINFO[0m[0000] containerd successfully booted in 0.183188s   [34mmodule[0m=containerd
+[STDERR  ] 2017-06-26T16:07:45.020082489Z: Linux linuxkit-525400123456 4.9.33-linuxkit #1 SMP Thu Jun 22 19:57:24 UTC 2017 x86_64 Linux
+[STDERR  ] 2017-06-26T16:07:45.020104159Z: filename:       hello_world.ko
+[STDERR  ] 2017-06-26T16:07:45.020110965Z: author:         Rolf Neugebauer <rolf.neugebauer@docker.com>
+[STDERR  ] 2017-06-26T16:07:45.020127857Z: description:    A simple Hello World kernel module for testing
+[STDERR  ] 2017-06-26T16:07:45.020146166Z: license:        GPL
+[STDERR  ] 2017-06-26T16:07:45.020158285Z: depends:        
+[STDERR  ] 2017-06-26T16:07:45.020170528Z: vermagic:       4.9.33-linuxkit SMP mod_unload 
+[STDERR  ] 2017-06-26T16:07:45.020182055Z: [   19.878608] hello_world: loading out-of-tree module taints kernel.
+[STDERR  ] 2017-06-26T16:07:45.020193681Z: [   19.881147] Hello LinuxKit
+[STDERR  ] 2017-06-26T16:07:45.020200164Z: [   19.971647] Goodbye LinuxKit.
+[STDERR  ] 2017-06-26T16:07:45.020211258Z: Kernel module test suite PASSED
+[STDERR  ] 2017-06-26T16:07:45.020251979Z:  - 000-check
+[STDERR  ] 2017-06-26T16:07:45.02025928Z: [   24.420553] ACPI: Preparing to enter system sleep state S5
+[STDERR  ] 2017-06-26T16:07:45.020277263Z: [   24.421707] reboot: Power down
+[STDERR  ] 2017-06-26T16:07:45.02028259Z: + exit 0
+[STDERR  ] 2017-06-26T16:07:45.020301063Z: + clean_up
+[STDERR  ] 2017-06-26T16:07:45.020313838Z: + docker rmi kmod-test
+[STDOUT  ] 2017-06-26T16:07:45.067784567Z: Untagged: kmod-test:latest
+[STDOUT  ] 2017-06-26T16:07:45.067819408Z: Deleted: sha256:b48f9bbfb8ab3b4b46e7c208c26a8fc9ce7172f58646f9a251eaa59597cfa6c5
+[STDOUT  ] 2017-06-26T16:07:45.067845271Z: Deleted: sha256:c82ba75e961ff652459163243c2c01df0bcbaf4f802ef917c87cfa070137614c
+[STDOUT  ] 2017-06-26T16:07:45.067862143Z: Deleted: sha256:d720252a2aa2190a236df5551a738d826fa408fefc9713652e40cd71c8b0e329
+[STDOUT  ] 2017-06-26T16:07:45.067897559Z: Deleted: sha256:107e73ac4294cf8b9d4233073a8ce7d95a6deae6ea4de914f4e09a9a3703859f
+[STDOUT  ] 2017-06-26T16:07:45.067913615Z: Deleted: sha256:78aa57c3e3fee594c971d55289b6da91387059b476ae7f470835de42bca902d3
+[STDERR  ] 2017-06-26T16:07:45.070695066Z: + find . -depth -iname kmod* -not -iname *.yml -exec rm -rf {} ;
+[PASS    ] linuxkit.kernel.kmod_4.9.x 54.58s
