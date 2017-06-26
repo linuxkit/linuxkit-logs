@@ -1,0 +1,386 @@
+=== Build LinuxKit
+[2017-06-26 21:42.39] Starting...
+Cloning into '/tmp/with_clone3d5c3d8d'...
+done.
+HEAD is now at 3d45046b reports: add week 25 dev report
+[2017-06-26 21:42.39] Running "cp" "-p" "--" "/gcloud/ci-setup.sh" "/tmp/with_clone3d5c3d8d/ci-setup.sh"
+[2017-06-26 21:42.39] Running "/gcloud/create.py" "linuxkit-ci-1"
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Using source disk image https://www.googleapis.com/compute/v1/projects/moby-datakit-ci/global/images/linuxkit-ci-builder-4
+INFO:root:Creating VM
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Getting VM details
+[2017-06-26 21:43.14] Created new VM linuxkit-ci-1
+[2017-06-26 21:43.14] Running "ssh" "-i" "/run/secrets/builder-ssh" "-o" "StrictHostKeyChecking=no" "root@35.189.201.232" "/usr/local/bin/test.sh"
+Warning: Permanently added '35.189.201.232' (ECDSA) to the list of known hosts.
++ rm -rf /tmp/build
++ mkdir /tmp/build
++ cd /tmp/build
++ tar xf -
++ '[' -x ci-setup.sh ']'
++ ./ci-setup.sh
++ mkdir -p /tmp/build/test/_results /tmp/build/artifacts
++ sysctl vm.overcommit_memory=1
+vm.overcommit_memory = 1
++ make ci-pr
+make clean
+make[1]: Entering directory '/tmp/build'
+rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar 
+make[1]: Leaving directory '/tmp/build'
+make -j 3 GOOS=darwin tmp_moby_bin.tar tmp_rtf_bin.tar tmp_linuxkit_bin.tar
+make[1]: Entering directory '/tmp/build'
+docker run --rm --log-driver=none -e GOOS=darwin linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --clone-path github.com/moby/tool --clone https://github.com/moby/tool.git --commit d8cc1b3f08df02ad563d3f548ac2527931a925a6 --package github.com/moby/tool/cmd/moby --ldflags "-X main.GitCommit=d8cc1b3f08df02ad563d3f548ac2527931a925a6 -X main.Version=0.0" -o bin/moby > tmp_moby_bin.tar
+docker run --rm --log-driver=none -e GOOS=darwin linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 34ec986e726d661f2a25ff085d669e057e3e5345 --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=34ec986e726d661f2a25ff085d669e057e3e5345 -X github.com/linuxkit/rtf/cmd.Version=0.0" -o bin/rtf > tmp_rtf_bin.tar
+tar cf - vendor -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i -e GOOS=darwin linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --package github.com/linuxkit/linuxkit --ldflags "-X main.GitCommit=3d45046bbe71fd10b46256dd8bd62eb24f0d2fb7 -X main.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+Unable to find image 'linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df' locally
+Unable to find image 'linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df' locally
+Unable to find image 'linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df' locally
+6579a00b44686d0e504d513fc4860094769fe7df: Pulling from linuxkit/go-compile
+6579a00b44686d0e504d513fc4860094769fe7df: Pulling from linuxkit/go-compile
+6579a00b44686d0e504d513fc4860094769fe7df: Pulling from linuxkit/go-compile
+7bee6021d73b: Pulling fs layer
+bc2351846d69: Pulling fs layer
+f445d9c10f23: Pulling fs layer
+7bee6021d73b: Pulling fs layer
+bc2351846d69: Pulling fs layer
+f445d9c10f23: Pulling fs layer
+7bee6021d73b: Pulling fs layer
+bc2351846d69: Pulling fs layer
+f445d9c10f23: Pulling fs layer
+f445d9c10f23: Verifying Checksum
+f445d9c10f23: Verifying Checksum
+f445d9c10f23: Verifying Checksum
+f445d9c10f23: Download complete
+f445d9c10f23: Download complete
+f445d9c10f23: Download complete
+bc2351846d69: Verifying Checksum
+bc2351846d69: Verifying Checksum
+bc2351846d69: Verifying Checksum
+bc2351846d69: Download complete
+bc2351846d69: Download complete
+bc2351846d69: Download complete
+7bee6021d73b: Verifying Checksum
+7bee6021d73b: Verifying Checksum
+7bee6021d73b: Verifying Checksum
+7bee6021d73b: Download complete
+7bee6021d73b: Download complete
+7bee6021d73b: Download complete
+7bee6021d73b: Pull complete
+7bee6021d73b: Pull complete
+7bee6021d73b: Pull complete
+bc2351846d69: Pull complete
+bc2351846d69: Pull complete
+bc2351846d69: Pull complete
+f445d9c10f23: Pull complete
+f445d9c10f23: Pull complete
+f445d9c10f23: Pull complete
+Digest: sha256:65aa61308f71f509fd003bac05d60644243c863def805992948a0e5a02b95c09
+Digest: sha256:65aa61308f71f509fd003bac05d60644243c863def805992948a0e5a02b95c09
+Digest: sha256:65aa61308f71f509fd003bac05d60644243c863def805992948a0e5a02b95c09
+Status: Downloaded newer image for linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df
+Status: Downloaded newer image for linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df
+Status: Image is up to date for linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df
+Cloning into '.'...
+Cloning into '.'...
+gofmt...
+Note: checking out '34ec986e726d661f2a25ff085d669e057e3e5345'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at 34ec986... Merge pull request #18 from dave-tucker/label-fix
+gofmt...
+Note: checking out 'd8cc1b3f08df02ad563d3f548ac2527931a925a6'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at d8cc1b3... Merge pull request #82 from justincormack/source-ifpresent
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+govet...
+golint...
+ineffassign...
+go build...
+govet...
+golint...
+ineffassign...
+go build...
+make[1]: Leaving directory '/tmp/build'
+make clean
+make[1]: Entering directory '/tmp/build'
+rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar 
+make[1]: Leaving directory '/tmp/build'
+make -j 3 GOOS=windows tmp_moby_bin.tar tmp_rtf_bin.tar tmp_linuxkit_bin.tar
+make[1]: Entering directory '/tmp/build'
+docker run --rm --log-driver=none -e GOOS=windows linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --clone-path github.com/moby/tool --clone https://github.com/moby/tool.git --commit d8cc1b3f08df02ad563d3f548ac2527931a925a6 --package github.com/moby/tool/cmd/moby --ldflags "-X main.GitCommit=d8cc1b3f08df02ad563d3f548ac2527931a925a6 -X main.Version=0.0" -o bin/moby > tmp_moby_bin.tar
+docker run --rm --log-driver=none -e GOOS=windows linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 34ec986e726d661f2a25ff085d669e057e3e5345 --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=34ec986e726d661f2a25ff085d669e057e3e5345 -X github.com/linuxkit/rtf/cmd.Version=0.0" -o bin/rtf > tmp_rtf_bin.tar
+tar cf - vendor -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i -e GOOS=windows linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --package github.com/linuxkit/linuxkit --ldflags "-X main.GitCommit=3d45046bbe71fd10b46256dd8bd62eb24f0d2fb7 -X main.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+Cloning into '.'...
+Cloning into '.'...
+gofmt...
+Note: checking out '34ec986e726d661f2a25ff085d669e057e3e5345'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at 34ec986... Merge pull request #18 from dave-tucker/label-fix
+gofmt...
+Note: checking out 'd8cc1b3f08df02ad563d3f548ac2527931a925a6'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at d8cc1b3... Merge pull request #82 from justincormack/source-ifpresent
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+govet...
+golint...
+ineffassign...
+go build...
+govet...
+golint...
+ineffassign...
+go build...
+make[1]: Leaving directory '/tmp/build'
+make clean
+make[1]: Entering directory '/tmp/build'
+rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar 
+make[1]: Leaving directory '/tmp/build'
+make -j 3 GOOS=linux tmp_moby_bin.tar tmp_rtf_bin.tar tmp_linuxkit_bin.tar
+make[1]: Entering directory '/tmp/build'
+docker run --rm --log-driver=none  linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --clone-path github.com/moby/tool --clone https://github.com/moby/tool.git --commit d8cc1b3f08df02ad563d3f548ac2527931a925a6 --package github.com/moby/tool/cmd/moby --ldflags "-X main.GitCommit=d8cc1b3f08df02ad563d3f548ac2527931a925a6 -X main.Version=0.0" -o bin/moby > tmp_moby_bin.tar
+docker run --rm --log-driver=none  linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 34ec986e726d661f2a25ff085d669e057e3e5345 --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=34ec986e726d661f2a25ff085d669e057e3e5345 -X github.com/linuxkit/rtf/cmd.Version=0.0" -o bin/rtf > tmp_rtf_bin.tar
+tar cf - vendor -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i  linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --package github.com/linuxkit/linuxkit --ldflags "-X main.GitCommit=3d45046bbe71fd10b46256dd8bd62eb24f0d2fb7 -X main.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+Cloning into '.'...
+Cloning into '.'...
+gofmt...
+Note: checking out '34ec986e726d661f2a25ff085d669e057e3e5345'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at 34ec986... Merge pull request #18 from dave-tucker/label-fix
+gofmt...
+Note: checking out 'd8cc1b3f08df02ad563d3f548ac2527931a925a6'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at d8cc1b3... Merge pull request #82 from justincormack/source-ifpresent
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+govet...
+golint...
+govet...
+ineffassign...
+go build...
+golint...
+ineffassign...
+go build...
+make[1]: Leaving directory '/tmp/build'
+make clean
+make[1]: Entering directory '/tmp/build'
+rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar 
+make[1]: Leaving directory '/tmp/build'
+make
+make[1]: Entering directory '/tmp/build'
+docker run --rm --log-driver=none  linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --clone-path github.com/moby/tool --clone https://github.com/moby/tool.git --commit d8cc1b3f08df02ad563d3f548ac2527931a925a6 --package github.com/moby/tool/cmd/moby --ldflags "-X main.GitCommit=d8cc1b3f08df02ad563d3f548ac2527931a925a6 -X main.Version=0.0" -o bin/moby > tmp_moby_bin.tar
+Cloning into '.'...
+Note: checking out 'd8cc1b3f08df02ad563d3f548ac2527931a925a6'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at d8cc1b3... Merge pull request #82 from justincormack/source-ifpresent
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+mkdir -p bin
+tar xf tmp_moby_bin.tar
+rm tmp_moby_bin.tar
+touch bin/moby
+tar cf - vendor -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i  linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --package github.com/linuxkit/linuxkit --ldflags "-X main.GitCommit=3d45046bbe71fd10b46256dd8bd62eb24f0d2fb7 -X main.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_linuxkit_bin.tar
+rm tmp_linuxkit_bin.tar
+touch bin/linuxkit
+docker run --rm --log-driver=none  linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 34ec986e726d661f2a25ff085d669e057e3e5345 --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=34ec986e726d661f2a25ff085d669e057e3e5345 -X github.com/linuxkit/rtf/cmd.Version=0.0" -o bin/rtf > tmp_rtf_bin.tar
+Cloning into '.'...
+Note: checking out '34ec986e726d661f2a25ff085d669e057e3e5345'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at 34ec986... Merge pull request #18 from dave-tucker/label-fix
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_rtf_bin.tar
+rm tmp_rtf_bin.tar
+touch bin/rtf
+make[1]: Leaving directory '/tmp/build'
+make install
+make[1]: Entering directory '/tmp/build'
+cp -R ./bin/* /usr/local//bin
+make[1]: Leaving directory '/tmp/build'
+make -C test pr
+make[1]: Entering directory '/tmp/build/test'
+rm -rf ../artifacts
+mkdir -p ../artifacts
+/usr/local/bin/moby build -output gcp -pull -name ../artifacts/test hack/test.yml
+Extract kernel image: linuxkit/kernel:4.9.x
+Pull image: docker.io/linuxkit/kernel:4.9.x@sha256:14f5467dd92bc8955d46f4b4e108261922ad4c0c2e1abfce5b775d3c8fbb9610
+Add init containers:
+Process init image: linuxkit/init:17693d233dd009b2a3a8d23673cb85969e1dce80
+Pull image: docker.io/linuxkit/init:17693d233dd009b2a3a8d23673cb85969e1dce80@sha256:cb2c1a01777004f34e4e1400a1deab0c7c68e252f97d5387a6708e59483228ef
+Process init image: linuxkit/runc:2649198589ef0020d99f613adaeda45ce0093a38
+Pull image: docker.io/linuxkit/runc:2649198589ef0020d99f613adaeda45ce0093a38@sha256:dd096c6ea03e6da232a0c6d01c1e0d2290c4031408f9c6000c89c9e6590a39da
+Process init image: linuxkit/containerd:a33cdcf50b8107ffe14c92802c460fe7ada39acd
+Pull image: docker.io/linuxkit/containerd:a33cdcf50b8107ffe14c92802c460fe7ada39acd@sha256:bda31ce34bb2e62411ef94c582db5a0079994a67ab7fbdf88b5852f28bc89bb4
+Add onboot containers:
+  Create OCI config for linuxkit/dhcpcd:7d2b8aaaf20c24ad7d11a5ea2ea5b4a80dc966f1
+Pull image: docker.io/linuxkit/dhcpcd:7d2b8aaaf20c24ad7d11a5ea2ea5b4a80dc966f1@sha256:b1bef35accd165a4235ad301f9bef6544922cb6eafdb60268b05d8c9d0b1566b
+Pull image: docker.io/linuxkit/dhcpcd:7d2b8aaaf20c24ad7d11a5ea2ea5b4a80dc966f1@sha256:b1bef35accd165a4235ad301f9bef6544922cb6eafdb60268b05d8c9d0b1566b
+  Create OCI config for linuxkit/test-kernel-config:9f08e3b99f8ac2f422251b3e8c94ce874ee34119
+Pull image: linuxkit/test-kernel-config:9f08e3b99f8ac2f422251b3e8c94ce874ee34119
+Pull image: linuxkit/test-kernel-config:9f08e3b99f8ac2f422251b3e8c94ce874ee34119
+  Create OCI config for linuxkit/poweroff:7404cf2295df89ccfa2dda41997a28307a90cf28
+Pull image: linuxkit/poweroff:7404cf2295df89ccfa2dda41997a28307a90cf28
+Pull image: linuxkit/poweroff:7404cf2295df89ccfa2dda41997a28307a90cf28
+Create outputs:
+  ../artifacts/test.img.tar.gz
+LABELS: Debian, 8.7, amd64, build, linux
+ID: 89a460cd-98ba-460a-b934-31b26cb3e9d7
+[PASS    ] linuxkit.build.examples.minimal 30.97s
+[PASS    ] linuxkit.build.examples.docker 83.64s
+[PASS    ] linuxkit.build.examples.sshd 36.53s
+[PASS    ] linuxkit.build.examples.redis 27.09s
+[PASS    ] linuxkit.build.examples.swap 46.26s
+[PASS    ] linuxkit.build.examples.node_exporter 33.41s
+[PASS    ] linuxkit.build.blueprints.docker_for_mac 68.76s
+[PASS    ] linuxkit.build.outputs 510.77s
+[PASS    ] linuxkit.platforms.qemu.run_kernel 63.32s
+[PASS    ] linuxkit.platforms.qemu.run_iso 54.26s
+[CANCEL  ] linuxkit.platforms.qemu.run_efi 0.06s
+[PASS    ] linuxkit.platforms.qemu.run_qcow 139.74s
+[PASS    ] linuxkit.platforms.qemu.run_raw 135.57s
+[CANCEL  ] linuxkit.platforms.qemu.container 0.02s
+[PASS    ] linuxkit.kernel.config_4.4.x 88.11s
+[PASS    ] linuxkit.kernel.config_4.9.x 78.75s
+[PASS    ] linuxkit.kernel.config_4.11.x 87.20s
+[PASS    ] linuxkit.kernel.kmod_4.9.x 77.84s
+[SKIP    ] linuxkit.security.docker-bench 0.00s
+[PASS    ] linuxkit.security.ports 53.24s
+[PASS    ] linuxkit.packages.binfmt 64.73s
+[PASS    ] linuxkit.packages.ca-certificates 56.76s
+[PASS    ] linuxkit.packages.containerd 577.32s
+[PASS    ] linuxkit.packages.dhcpcd 67.64s
+[PASS    ] linuxkit.packages.mkimage 190.88s
+[PASS    ] linuxkit.packages.sysctl 55.08s
+[SUMMARY ] LogDir: 89a460cd-98ba-460a-b934-31b26cb3e9d7
+[SUMMARY ] Version: 8.7
+[SUMMARY ] Passed: 23
+[SUMMARY ] Failed: 0
+[SUMMARY ] Cancelled: 2
+[SUMMARY ] Skipped: 3
+[SUMMARY ] Duration: 2628.43s
+make[1]: Leaving directory '/tmp/build/test'
+make -C pkg tag
+make[1]: Entering directory '/tmp/build/pkg'
+find: paths must precede expression: 1
+Usage: find [-H] [-L] [-P] [-Olevel] [-D help|tree|search|stat|ratesmake[1]: Leaving directory '/tmp/build/pkg'
+|opt|exec] [path...] [expression]
+find: paths must precede expression: 1
+Usage: find [-H] [-L] [-P] [-Olevel] [-D help|tree|search|stat|rates|opt|exec] [path...] [expression]
+[2017-06-26 22:42.12] Fetching results
+[2017-06-26 22:42.12] Running "scp" "-r" "-i" "/run/secrets/builder-ssh" "-o" "StrictHostKeyChecking=no" "root@35.189.201.232:/tmp/build/test/_results" "root@35.189.201.232:/tmp/build/artifacts" "."
+[2017-06-26 22:42.19] Removing test VM...
+[2017-06-26 22:42.19] Running "/gcloud/destroy.py" "linuxkit-ci-1"
+INFO:root:Destroying VM
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+[2017-06-26 22:43.08] Saved build result test.img.tar.gz (a143f73d5177f43456958a6cfccff50ecce227251891a58ae2e5f21514a618f0)
+[2017-06-26 22:43.08] Success
