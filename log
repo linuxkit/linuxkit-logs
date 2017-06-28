@@ -1,0 +1,2350 @@
+=== Build LinuxKit
+[2017-06-28 11:45.58] Starting...
+Cloning into '/tmp/with_clone122100c3'...
+done.
+HEAD is now at 348e96b4 pkg: Allow override of commit to calculate hash for show-tag
+[2017-06-28 11:48.20] Running "cp" "-p" "--" "/gcloud/ci-setup.sh" "/tmp/with_clone122100c3/ci-setup.sh"
+[2017-06-28 11:48.20] Building with timeout of 120 minutes
+[2017-06-28 11:48.20] Running "/gcloud/create.py" "linuxkit-ci-1"
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Using source disk image https://www.googleapis.com/compute/v1/projects/moby-datakit-ci/global/images/linuxkit-ci-builder-4
+INFO:root:Creating VM
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Getting VM details
+[2017-06-28 11:48.39] Created new VM linuxkit-ci-1
+[2017-06-28 11:48.39] Running "ssh" "-i" "/run/secrets/builder-ssh" "-o" "StrictHostKeyChecking=no" "root@35.190.193.223" "/usr/local/bin/test.sh"
+Warning: Permanently added '35.190.193.223' (ECDSA) to the list of known hosts.
++ rm -rf /tmp/build
++ mkdir /tmp/build
++ cd /tmp/build
++ tar xf -
++ '[' -x ci-setup.sh ']'
++ ./ci-setup.sh
++ mkdir -p /tmp/build/test/_results /tmp/build/artifacts
++ sysctl vm.overcommit_memory=1
+vm.overcommit_memory = 1
++ make ci-pr
+make clean
+make[1]: Entering directory '/tmp/build'
+rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar 
+make[1]: Leaving directory '/tmp/build'
+make -j 3 GOOS=darwin tmp_moby_bin.tar tmp_rtf_bin.tar tmp_linuxkit_bin.tar
+make[1]: Entering directory '/tmp/build'
+docker run --rm --log-driver=none -e GOOS=darwin linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --clone-path github.com/moby/tool --clone https://github.com/moby/tool.git --commit d8cc1b3f08df02ad563d3f548ac2527931a925a6 --package github.com/moby/tool/cmd/moby --ldflags "-X main.GitCommit=d8cc1b3f08df02ad563d3f548ac2527931a925a6 -X main.Version=0.0" -o bin/moby > tmp_moby_bin.tar
+docker run --rm --log-driver=none -e GOOS=darwin linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 34ec986e726d661f2a25ff085d669e057e3e5345 --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=34ec986e726d661f2a25ff085d669e057e3e5345 -X github.com/linuxkit/rtf/cmd.Version=0.0" -o bin/rtf > tmp_rtf_bin.tar
+tar cf - vendor -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i -e GOOS=darwin linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --package github.com/linuxkit/linuxkit --ldflags "-X main.GitCommit=348e96b4829e92062d8e75135412b7f6c994a1d7 -X main.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+Unable to find image 'linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df' locally
+Unable to find image 'linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df' locally
+Unable to find image 'linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df' locally
+6579a00b44686d0e504d513fc4860094769fe7df: Pulling from linuxkit/go-compile
+7bee6021d73b: Pulling fs layer
+bc2351846d69: Pulling fs layer
+f445d9c10f23: Pulling fs layer
+6579a00b44686d0e504d513fc4860094769fe7df: Pulling from linuxkit/go-compile
+7bee6021d73b: Pulling fs layer
+bc2351846d69: Pulling fs layer
+f445d9c10f23: Pulling fs layer
+6579a00b44686d0e504d513fc4860094769fe7df: Pulling from linuxkit/go-compile
+7bee6021d73b: Pulling fs layer
+bc2351846d69: Pulling fs layer
+f445d9c10f23: Pulling fs layer
+f445d9c10f23: Verifying Checksum
+f445d9c10f23: Verifying Checksum
+f445d9c10f23: Verifying Checksum
+f445d9c10f23: Download complete
+f445d9c10f23: Download complete
+f445d9c10f23: Download complete
+bc2351846d69: Verifying Checksum
+bc2351846d69: Verifying Checksum
+bc2351846d69: Download complete
+bc2351846d69: Verifying Checksum
+bc2351846d69: Download complete
+bc2351846d69: Download complete
+7bee6021d73b: Verifying Checksum
+7bee6021d73b: Verifying Checksum
+7bee6021d73b: Verifying Checksum
+7bee6021d73b: Download complete
+7bee6021d73b: Download complete
+7bee6021d73b: Download complete
+7bee6021d73b: Pull complete
+7bee6021d73b: Pull complete
+7bee6021d73b: Pull complete
+bc2351846d69: Pull complete
+bc2351846d69: Pull complete
+bc2351846d69: Pull complete
+f445d9c10f23: Pull complete
+f445d9c10f23: Pull complete
+f445d9c10f23: Pull complete
+Digest: sha256:65aa61308f71f509fd003bac05d60644243c863def805992948a0e5a02b95c09
+Digest: sha256:65aa61308f71f509fd003bac05d60644243c863def805992948a0e5a02b95c09
+Digest: sha256:65aa61308f71f509fd003bac05d60644243c863def805992948a0e5a02b95c09
+Status: Downloaded newer image for linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df
+Status: Downloaded newer image for linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df
+Status: Image is up to date for linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df
+Cloning into '.'...
+Cloning into '.'...
+gofmt...
+Note: checking out '34ec986e726d661f2a25ff085d669e057e3e5345'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at 34ec986... Merge pull request #18 from dave-tucker/label-fix
+gofmt...
+Note: checking out 'd8cc1b3f08df02ad563d3f548ac2527931a925a6'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at d8cc1b3... Merge pull request #82 from justincormack/source-ifpresent
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+govet...
+golint...
+ineffassign...
+go build...
+govet...
+golint...
+ineffassign...
+go build...
+make[1]: Leaving directory '/tmp/build'
+make clean
+make[1]: Entering directory '/tmp/build'
+rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar 
+make[1]: Leaving directory '/tmp/build'
+make -j 3 GOOS=windows tmp_moby_bin.tar tmp_rtf_bin.tar tmp_linuxkit_bin.tar
+make[1]: Entering directory '/tmp/build'
+docker run --rm --log-driver=none -e GOOS=windows linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --clone-path github.com/moby/tool --clone https://github.com/moby/tool.git --commit d8cc1b3f08df02ad563d3f548ac2527931a925a6 --package github.com/moby/tool/cmd/moby --ldflags "-X main.GitCommit=d8cc1b3f08df02ad563d3f548ac2527931a925a6 -X main.Version=0.0" -o bin/moby > tmp_moby_bin.tar
+docker run --rm --log-driver=none -e GOOS=windows linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 34ec986e726d661f2a25ff085d669e057e3e5345 --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=34ec986e726d661f2a25ff085d669e057e3e5345 -X github.com/linuxkit/rtf/cmd.Version=0.0" -o bin/rtf > tmp_rtf_bin.tar
+tar cf - vendor -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i -e GOOS=windows linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --package github.com/linuxkit/linuxkit --ldflags "-X main.GitCommit=348e96b4829e92062d8e75135412b7f6c994a1d7 -X main.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+Cloning into '.'...
+Cloning into '.'...
+gofmt...
+Note: checking out '34ec986e726d661f2a25ff085d669e057e3e5345'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at 34ec986... Merge pull request #18 from dave-tucker/label-fix
+gofmt...
+Note: checking out 'd8cc1b3f08df02ad563d3f548ac2527931a925a6'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at d8cc1b3... Merge pull request #82 from justincormack/source-ifpresent
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+govet...
+golint...
+ineffassign...
+go build...
+govet...
+golint...
+ineffassign...
+go build...
+make[1]: Leaving directory '/tmp/build'
+make clean
+make[1]: Entering directory '/tmp/build'
+rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar 
+make[1]: Leaving directory '/tmp/build'
+make -j 3 GOOS=linux tmp_moby_bin.tar tmp_rtf_bin.tar tmp_linuxkit_bin.tar
+make[1]: Entering directory '/tmp/build'
+docker run --rm --log-driver=none  linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --clone-path github.com/moby/tool --clone https://github.com/moby/tool.git --commit d8cc1b3f08df02ad563d3f548ac2527931a925a6 --package github.com/moby/tool/cmd/moby --ldflags "-X main.GitCommit=d8cc1b3f08df02ad563d3f548ac2527931a925a6 -X main.Version=0.0" -o bin/moby > tmp_moby_bin.tar
+docker run --rm --log-driver=none  linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 34ec986e726d661f2a25ff085d669e057e3e5345 --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=34ec986e726d661f2a25ff085d669e057e3e5345 -X github.com/linuxkit/rtf/cmd.Version=0.0" -o bin/rtf > tmp_rtf_bin.tar
+tar cf - vendor -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i  linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --package github.com/linuxkit/linuxkit --ldflags "-X main.GitCommit=348e96b4829e92062d8e75135412b7f6c994a1d7 -X main.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+Cloning into '.'...
+Cloning into '.'...
+gofmt...
+Note: checking out '34ec986e726d661f2a25ff085d669e057e3e5345'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at 34ec986... Merge pull request #18 from dave-tucker/label-fix
+gofmt...
+Note: checking out 'd8cc1b3f08df02ad563d3f548ac2527931a925a6'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at d8cc1b3... Merge pull request #82 from justincormack/source-ifpresent
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+govet...
+golint...
+govet...
+ineffassign...
+go build...
+golint...
+ineffassign...
+go build...
+make[1]: Leaving directory '/tmp/build'
+make clean
+make[1]: Entering directory '/tmp/build'
+rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar 
+make[1]: Leaving directory '/tmp/build'
+make
+make[1]: Entering directory '/tmp/build'
+docker run --rm --log-driver=none  linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --clone-path github.com/moby/tool --clone https://github.com/moby/tool.git --commit d8cc1b3f08df02ad563d3f548ac2527931a925a6 --package github.com/moby/tool/cmd/moby --ldflags "-X main.GitCommit=d8cc1b3f08df02ad563d3f548ac2527931a925a6 -X main.Version=0.0" -o bin/moby > tmp_moby_bin.tar
+Cloning into '.'...
+Note: checking out 'd8cc1b3f08df02ad563d3f548ac2527931a925a6'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at d8cc1b3... Merge pull request #82 from justincormack/source-ifpresent
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+mkdir -p bin
+tar xf tmp_moby_bin.tar
+rm tmp_moby_bin.tar
+touch bin/moby
+tar cf - vendor -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i  linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --package github.com/linuxkit/linuxkit --ldflags "-X main.GitCommit=348e96b4829e92062d8e75135412b7f6c994a1d7 -X main.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_linuxkit_bin.tar
+rm tmp_linuxkit_bin.tar
+touch bin/linuxkit
+docker run --rm --log-driver=none  linuxkit/go-compile:6579a00b44686d0e504d513fc4860094769fe7df --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 34ec986e726d661f2a25ff085d669e057e3e5345 --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=34ec986e726d661f2a25ff085d669e057e3e5345 -X github.com/linuxkit/rtf/cmd.Version=0.0" -o bin/rtf > tmp_rtf_bin.tar
+Cloning into '.'...
+Note: checking out '34ec986e726d661f2a25ff085d669e057e3e5345'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at 34ec986... Merge pull request #18 from dave-tucker/label-fix
+gofmt...
+govet...
+golint...
+ineffassign...
+go build...
+tar xf tmp_rtf_bin.tar
+rm tmp_rtf_bin.tar
+touch bin/rtf
+make[1]: Leaving directory '/tmp/build'
+make install
+make[1]: Entering directory '/tmp/build'
+cp -R ./bin/* /usr/local//bin
+make[1]: Leaving directory '/tmp/build'
+make -C test pr
+make[1]: Entering directory '/tmp/build/test'
+rm -rf ../artifacts
+mkdir -p ../artifacts
+/usr/local/bin/moby build -output gcp -pull -name ../artifacts/test hack/test.yml
+Extract kernel image: linuxkit/kernel:4.9.34
+Pull image: docker.io/linuxkit/kernel:4.9.34@sha256:d1e0b542fd21b71dd99639c46535ada6335bc8abcd397ad09c40229e66fe7d6b
+Add init containers:
+Process init image: linuxkit/init:36c56f0664d49c5a6adc1120d1bf5ba6ac30b389
+Pull image: docker.io/linuxkit/init:36c56f0664d49c5a6adc1120d1bf5ba6ac30b389@sha256:6ca9b70e9d4f802fcac9f8bc6006302fd8d6c2e79b0ed6d20d16e685b9355ff7
+Process init image: linuxkit/runc:2649198589ef0020d99f613adaeda45ce0093a38
+Pull image: docker.io/linuxkit/runc:2649198589ef0020d99f613adaeda45ce0093a38@sha256:dd096c6ea03e6da232a0c6d01c1e0d2290c4031408f9c6000c89c9e6590a39da
+Process init image: linuxkit/containerd:1e3e8f207421de8deac8cedc26a138d6b1661a0d
+Pull image: docker.io/linuxkit/containerd:1e3e8f207421de8deac8cedc26a138d6b1661a0d@sha256:cb0def679f5a26b02842c0c6cac919d792e052d44d3de941af618b5beb29fb60
+Add onboot containers:
+  Create OCI config for linuxkit/dhcpcd:6c1ca76dbf808d5c27d10cbf22a8d4399be5c8ae
+Pull image: docker.io/linuxkit/dhcpcd:6c1ca76dbf808d5c27d10cbf22a8d4399be5c8ae@sha256:129a415917480edacc3751d0dbbcd9c27b21a0def79546e5c9945d872923e4ea
+Pull image: docker.io/linuxkit/dhcpcd:6c1ca76dbf808d5c27d10cbf22a8d4399be5c8ae@sha256:129a415917480edacc3751d0dbbcd9c27b21a0def79546e5c9945d872923e4ea
+  Create OCI config for linuxkit/test-kernel-config:9f08e3b99f8ac2f422251b3e8c94ce874ee34119
+Pull image: linuxkit/test-kernel-config:9f08e3b99f8ac2f422251b3e8c94ce874ee34119
+Pull image: linuxkit/test-kernel-config:9f08e3b99f8ac2f422251b3e8c94ce874ee34119
+  Create OCI config for linuxkit/poweroff:7404cf2295df89ccfa2dda41997a28307a90cf28
+Pull image: linuxkit/poweroff:7404cf2295df89ccfa2dda41997a28307a90cf28
+Pull image: linuxkit/poweroff:7404cf2295df89ccfa2dda41997a28307a90cf28
+Create outputs:
+  ../artifacts/test.img.tar.gz
+LABELS: build, linux, Debian, 8.7, amd64
+ID: 52d42ff0-1713-48f5-b0fa-b66600592610
+[PASS    ] linuxkit.build.examples.minimal 25.93s
+[PASS    ] linuxkit.build.examples.docker 73.84s
+[PASS    ] linuxkit.build.examples.sshd 30.54s
+[PASS    ] linuxkit.build.examples.redis 25.49s
+[PASS    ] linuxkit.build.examples.swap 44.64s
+[PASS    ] linuxkit.build.examples.node_exporter 25.25s
+[PASS    ] linuxkit.build.blueprints.docker_for_mac 60.54s
+[PASS    ] linuxkit.build.outputs 438.60s
+[PASS    ] linuxkit.platforms.qemu.run_kernel 42.64s
+[PASS    ] linuxkit.platforms.qemu.run_iso 43.00s
+[CANCEL  ] linuxkit.platforms.qemu.run_efi 0.06s
+[PASS    ] linuxkit.platforms.qemu.run_qcow 120.41s
+[PASS    ] linuxkit.platforms.qemu.run_raw 121.13s
+[CANCEL  ] linuxkit.platforms.qemu.container 0.06s
+[PASS    ] linuxkit.kernel.config_4.4.x 77.06s
+[PASS    ] linuxkit.kernel.config_4.9.x 69.73s
+[PASS    ] linuxkit.kernel.config_4.11.x 76.13s
+[PASS    ] linuxkit.kernel.kmod_4.9.x 74.67s
+[SKIP    ] linuxkit.security.docker-bench 0.00s
+[PASS    ] linuxkit.security.ports 50.32s
+[PASS    ] linuxkit.packages.binfmt 54.58s
+[PASS    ] linuxkit.packages.ca-certificates 50.52s
+[PASS    ] linuxkit.packages.containerd 522.10s
+[PASS    ] linuxkit.packages.dhcpcd 60.91s
+[PASS    ] linuxkit.packages.getty-containerd 94.17s
+[PASS    ] linuxkit.packages.mkimage 177.09s
+[PASS    ] linuxkit.packages.sysctl 53.93s
+[SUMMARY ] LogDir: 52d42ff0-1713-48f5-b0fa-b66600592610
+[SUMMARY ] Version: 8.7
+[SUMMARY ] Passed: 24
+[SUMMARY ] Failed: 0
+[SUMMARY ] Cancelled: 2
+[SUMMARY ] Skipped: 3
+[SUMMARY ] Duration: 2413.99s
+make[1]: Leaving directory '/tmp/build/test'
+make -C pkg tag
+make[1]: Entering directory '/tmp/build/pkg'
+make[2]: Entering directory '/tmp/build/pkg/containerd'
+DOCKER_CONTENT_TRUST=1 docker pull linuxkit/containerd:1e3e8f207421de8deac8cedc26a138d6b1661a0d-dirty || \
+docker build  -t linuxkit/containerd:1e3e8f207421de8deac8cedc26a138d6b1661a0d-dirty .
+No trust data for 1e3e8f207421de8deac8cedc26a138d6b1661a0d-dirty
+Sending build context to Docker daemon  14.34kB
+Step 1/19 : FROM linuxkit/alpine:c608d404c1cb36cce0c7d9303e30b52c9d81ccf0 as alpine
+c608d404c1cb36cce0c7d9303e30b52c9d81ccf0: Pulling from linuxkit/alpine
+43d680a959df: Already exists
+323f576e1608: Pulling fs layer
+af5614ae1ad5: Pulling fs layer
+ae0020479fdc: Pulling fs layer
+9008469259e6: Pulling fs layer
+5d0ca6618bef: Pulling fs layer
+fa46c4e4ddea: Pulling fs layer
+b20314dd3626: Pulling fs layer
+93689da83721: Pulling fs layer
+3313942780a0: Pulling fs layer
+9008469259e6: Waiting
+5d0ca6618bef: Waiting
+fa46c4e4ddea: Waiting
+b20314dd3626: Waiting
+93689da83721: Waiting
+3313942780a0: Waiting
+323f576e1608: Verifying Checksum
+323f576e1608: Download complete
+af5614ae1ad5: Verifying Checksum
+af5614ae1ad5: Download complete
+323f576e1608: Pull complete
+af5614ae1ad5: Pull complete
+5d0ca6618bef: Verifying Checksum
+5d0ca6618bef: Download complete
+9008469259e6: Verifying Checksum
+9008469259e6: Download complete
+fa46c4e4ddea: Verifying Checksum
+fa46c4e4ddea: Download complete
+b20314dd3626: Verifying Checksum
+b20314dd3626: Download complete
+93689da83721: Verifying Checksum
+93689da83721: Download complete
+3313942780a0: Verifying Checksum
+3313942780a0: Download complete
+ae0020479fdc: Verifying Checksum
+ae0020479fdc: Download complete
+ae0020479fdc: Pull complete
+9008469259e6: Pull complete
+5d0ca6618bef: Pull complete
+fa46c4e4ddea: Pull complete
+b20314dd3626: Pull complete
+93689da83721: Pull complete
+3313942780a0: Pull complete
+Digest: sha256:4a731e68a86959a93e4dd38036aa879af12ea9bbc8ccdb7007e97104f37cec33
+Status: Downloaded newer image for linuxkit/alpine:c608d404c1cb36cce0c7d9303e30b52c9d81ccf0
+ ---> b5fd1502dd6c
+Step 2/19 : RUN apk add   btrfs-progs-dev   gcc   git   go   libc-dev   linux-headers   make   tzdata   && true
+ ---> Running in 5790dae8c1d5
+(1/27) Installing libuuid (2.28.2-r2)
+(2/27) Installing btrfs-progs-libs (4.10.2-r0)
+(3/27) Installing btrfs-progs-dev (4.10.2-r0)
+(4/27) Installing binutils-libs (2.28-r2)
+(5/27) Installing binutils (2.28-r2)
+(6/27) Installing gmp (6.1.2-r0)
+(7/27) Installing isl (0.17.1-r0)
+(8/27) Installing libgomp (6.3.0-r4)
+(9/27) Installing libatomic (6.3.0-r4)
+(10/27) Installing pkgconf (1.3.7-r0)
+(11/27) Installing libgcc (6.3.0-r4)
+(12/27) Installing mpfr3 (3.1.5-r0)
+(13/27) Installing mpc1 (1.0.3-r0)
+(14/27) Installing libstdc++ (6.3.0-r4)
+(15/27) Installing gcc (6.3.0-r4)
+(16/27) Installing ca-certificates (20161130-r2)
+(17/27) Installing libssh2 (1.8.0-r1)
+(18/27) Installing libcurl (7.54.0-r0)
+(19/27) Installing expat (2.2.0-r1)
+(20/27) Installing pcre (8.40-r2)
+(21/27) Installing git (2.13.0-r0)
+(22/27) Installing go (1.8.1-r2)
+(23/27) Installing musl-dev (1.1.16-r10)
+(24/27) Installing libc-dev (0.7.1-r0)
+(25/27) Installing linux-headers (4.4.6-r2)
+(26/27) Installing make (4.2.1-r0)
+(27/27) Installing tzdata (2017a-r0)
+Executing busybox-1.26.2-r5.trigger
+Executing ca-certificates-20161130-r2.trigger
+OK: 307 MiB in 38 packages
+ ---> d89b5a2a7092
+Removing intermediate container 5790dae8c1d5
+Step 3/19 : ENV GOPATH /go PATH $PATH:/go/bin
+ ---> Running in 3fba20031034
+ ---> e793cc167a52
+Removing intermediate container 3fba20031034
+Step 4/19 : RUN mkdir -p $GOPATH/src/github.com/containerd &&   cd $GOPATH/src/github.com/containerd &&   git clone https://github.com/containerd/containerd.git
+ ---> Running in 317c96856916
+[91mCloning into 'containerd'...
+[0m ---> cfcd9410b38e
+Removing intermediate container 317c96856916
+Step 5/19 : WORKDIR $GOPATH/src/github.com/containerd/containerd
+ ---> 82a4c6e94c68
+Removing intermediate container f3217c49ca62
+Step 6/19 : RUN git checkout $CONTAINERD_COMMIT
+ ---> Running in 6ad4237b838a
+Your branch is up-to-date with 'origin/master'.
+ ---> e7e89a60a733
+Removing intermediate container 6ad4237b838a
+Step 7/19 : RUN make binaries EXTRA_FLAGS="-buildmode pie" EXTRA_LDFLAGS="-extldflags \\\"-fno-PIC -static\\\""
+ ---> Running in 4881f6cfd419
+🇩 bin/ctr
+🇩 bin/containerd
+🇩 bin/protoc-gen-gogoctrd
+🇩 bin/dist
+🇩 bin/ctrd-protobuild
+🇩 bin/containerd-shim
+🇩 binaries
+ ---> 1a981a79a544
+Removing intermediate container 4881f6cfd419
+Step 8/19 : RUN cp bin/containerd bin/ctr bin/containerd-shim bin/dist /usr/bin/
+ ---> Running in 6b0dafbfb0cb
+ ---> 923c126e1cbe
+Removing intermediate container 6b0dafbfb0cb
+Step 9/19 : ADD cmd /go/src/cmd
+ ---> 457c311c6c78
+Removing intermediate container 1b0d2f5cea3f
+Step 10/19 : RUN cd /go/src/cmd/service && ./skanky-vendor.sh $GOPATH/src/github.com/containerd/containerd
+ ---> Running in 806f34d48d20
+ ---> 0fd6f7574abd
+Removing intermediate container 806f34d48d20
+Step 11/19 : RUN go-compile.sh /go/src/cmd/service
+ ---> Running in 4a64004d4a80
+[91mgofmt...
+[0m[91mgovet...
+[0m[91mgolint...
+[0m[91mineffassign...
+[0m[91mgo test...
+[0m?   	cmd/service	[no test files]
+[91mgo build...
+[0m[91m# cmd/service
+warning: unable to find runtime/cgo.a
+[0m ---> 499b258bdf62
+Removing intermediate container 4a64004d4a80
+Step 12/19 : WORKDIR /
+ ---> 74b9570d368b
+Removing intermediate container 8e43d59f910e
+Step 13/19 : COPY . .
+ ---> a3fb877bb8da
+Removing intermediate container 1560ef42e8b8
+Step 14/19 : FROM scratch
+ ---> 
+Step 15/19 : ENTRYPOINT 
+ ---> Running in e2e6667131cb
+ ---> f31f9423f1a3
+Removing intermediate container e2e6667131cb
+Step 16/19 : WORKDIR /
+ ---> 921ee93b245a
+Removing intermediate container e1cd049037ae
+Step 17/19 : COPY --from=alpine /usr/bin/containerd /usr/bin/ctr /usr/bin/dist /usr/bin/containerd-shim /go/bin/service /usr/bin/
+ ---> fde0415b8f1a
+Removing intermediate container 0df83c06e53e
+Step 18/19 : COPY --from=alpine /etc/containerd/config.toml /etc/containerd/
+ ---> 02b5ce0ee88f
+Removing intermediate container 3e3860932d52
+Step 19/19 : COPY --from=alpine /usr/share/zoneinfo/UTC /etc/localtime
+ ---> c55602340468
+Removing intermediate container c5876d51adb8
+Successfully built c55602340468
+Successfully tagged linuxkit/containerd:1e3e8f207421de8deac8cedc26a138d6b1661a0d-dirty
+make[2]: Leaving directory '/tmp/build/pkg/containerd'
+make[2]: Entering directory '/tmp/build/pkg/binfmt'
+DOCKER_CONTENT_TRUST=1 docker pull linuxkit/binfmt:24e2b996f7d6ad20bfa9c9f1564a3c6172db47ce-dirty || \
+docker build  -t linuxkit/binfmt:24e2b996f7d6ad20bfa9c9f1564a3c6172db47ce-dirty .
+No trust data for 24e2b996f7d6ad20bfa9c9f1564a3c6172db47ce-dirty
+Sending build context to Docker daemon  9.216kB
+Step 1/15 : FROM linuxkit/alpine:c608d404c1cb36cce0c7d9303e30b52c9d81ccf0 AS qemu
+ ---> b5fd1502dd6c
+Step 2/15 : RUN apk add     qemu-aarch64     qemu-arm     qemu-ppc64le
+ ---> Running in 11283960a34d
+(1/3) Installing qemu-aarch64 (2.8.1-r1)
+(2/3) Installing qemu-arm (2.8.1-r1)
+(3/3) Installing qemu-ppc64le (2.8.1-r1)
+Executing busybox-1.26.2-r5.trigger
+OK: 12 MiB in 14 packages
+ ---> 59dda01708bb
+Removing intermediate container 11283960a34d
+Step 3/15 : FROM linuxkit/alpine:c608d404c1cb36cce0c7d9303e30b52c9d81ccf0 AS mirror
+ ---> b5fd1502dd6c
+Step 4/15 : RUN apk add --no-cache go musl-dev
+ ---> Running in 1343183cd209
+(1/14) Installing binutils-libs (2.28-r2)
+(2/14) Installing binutils (2.28-r2)
+(3/14) Installing gmp (6.1.2-r0)
+(4/14) Installing isl (0.17.1-r0)
+(5/14) Installing libgomp (6.3.0-r4)
+(6/14) Installing libatomic (6.3.0-r4)
+(7/14) Installing pkgconf (1.3.7-r0)
+(8/14) Installing libgcc (6.3.0-r4)
+(9/14) Installing mpfr3 (3.1.5-r0)
+(10/14) Installing mpc1 (1.0.3-r0)
+(11/14) Installing libstdc++ (6.3.0-r4)
+(12/14) Installing gcc (6.3.0-r4)
+(13/14) Installing go (1.8.1-r2)
+(14/14) Installing musl-dev (1.1.16-r10)
+Executing busybox-1.26.2-r5.trigger
+OK: 277 MiB in 25 packages
+ ---> 08ecd7169823
+Removing intermediate container 1343183cd209
+Step 5/15 : ENV GOPATH /go PATH $PATH:/go/bin
+ ---> Running in 43687f7c3404
+ ---> 7380577699a7
+Removing intermediate container 43687f7c3404
+Step 6/15 : COPY main.go /go/src/binfmt/
+ ---> 365ebe0b1069
+Removing intermediate container 695152b48412
+Step 7/15 : RUN go-compile.sh /go/src/binfmt
+ ---> Running in 4a7d31f298d0
+[91mgofmt...
+[0m[91mgovet...
+[0m[91mgolint...
+[0m[91mineffassign...
+[0m[91mgo test...
+[0m?   	binfmt	[no test files]
+[91mgo build...
+[0m[91m# binfmt
+warning: unable to find runtime/cgo.a
+[0m ---> 76d140ffa4a4
+Removing intermediate container 4a7d31f298d0
+Step 8/15 : FROM scratch
+ ---> 
+Step 9/15 : ENTRYPOINT 
+ ---> Using cache
+ ---> f31f9423f1a3
+Step 10/15 : WORKDIR /
+ ---> Using cache
+ ---> 921ee93b245a
+Step 11/15 : COPY --from=qemu usr/bin/qemu-* usr/bin/
+ ---> 44b50724a130
+Removing intermediate container ecc0d6e5ea41
+Step 12/15 : COPY --from=mirror /go/bin/binfmt usr/bin/binfmt
+ ---> 9cbb110f6df6
+Removing intermediate container 240ca8aaa296
+Step 13/15 : COPY etc/binfmt.d/00_linuxkit.conf etc/binfmt.d/00_linuxkit.conf
+ ---> 69debed59af8
+Removing intermediate container 40c42047f07b
+Step 14/15 : CMD /usr/bin/binfmt -dir /etc/binfmt.d/ -mount /binfmt_misc
+ ---> Running in 2ae787fd126d
+ ---> 147bb9dcafe7
+Removing intermediate container 2ae787fd126d
+Step 15/15 : LABEL org.mobyproject.config '{"binds": ["/proc/sys/fs/binfmt_misc:/binfmt_misc"], "readonly": true, "net": "new", "ipc": "new"}'
+ ---> Running in 7df26c4643a4
+ ---> a053d7a7dd30
+Removing intermediate container 7df26c4643a4
+Successfully built a053d7a7dd30
+Successfully tagged linuxkit/binfmt:24e2b996f7d6ad20bfa9c9f1564a3c6172db47ce-dirty
+make[2]: Leaving directory '/tmp/build/pkg/binfmt'
+make[2]: Entering directory '/tmp/build/pkg/docker-ce'
+DOCKER_CONTENT_TRUST=1 docker pull linuxkit/docker-ce:f75d2ad5f46729b10209ec5cfec65305b91259b6-dirty || \
+docker build  -t linuxkit/docker-ce:f75d2ad5f46729b10209ec5cfec65305b91259b6-dirty .
+No trust data for f75d2ad5f46729b10209ec5cfec65305b91259b6-dirty
+Sending build context to Docker daemon  4.608kB
+Step 1/14 : FROM linuxkit/alpine:c608d404c1cb36cce0c7d9303e30b52c9d81ccf0 AS mirror
+ ---> b5fd1502dd6c
+Step 2/14 : RUN mkdir -p /out/etc/apk && cp -r /etc/apk/* /out/etc/apk/
+ ---> Running in ed71b6b4949e
+ ---> 9ae44f6f1516
+Removing intermediate container ed71b6b4949e
+Step 3/14 : RUN apk add --no-cache --initdb -p /out 	alpine-baselayout 	btrfs-progs 	busybox 	ca-certificates 	curl 	e2fsprogs 	e2fsprogs-extra 	iptables 	musl 	xfsprogs 	xz
+ ---> Running in b576d81f524c
+(1/24) Installing musl (1.1.16-r10)
+(2/24) Installing busybox (1.26.2-r5)
+Executing busybox-1.26.2-r5.post-install
+(3/24) Installing alpine-baselayout (3.0.4-r0)
+Executing alpine-baselayout-3.0.4-r0.pre-install
+Executing alpine-baselayout-3.0.4-r0.post-install
+(4/24) Installing libuuid (2.28.2-r2)
+(5/24) Installing libblkid (2.28.2-r2)
+(6/24) Installing lzo (2.10-r0)
+(7/24) Installing zlib (1.2.11-r0)
+(8/24) Installing btrfs-progs (4.10.2-r0)
+(9/24) Installing libressl2.5-libcrypto (2.5.4-r0)
+(10/24) Installing ca-certificates (20161130-r2)
+(11/24) Installing libssh2 (1.8.0-r1)
+(12/24) Installing libressl2.5-libssl (2.5.4-r0)
+(13/24) Installing libcurl (7.54.0-r0)
+(14/24) Installing curl (7.54.0-r0)
+(15/24) Installing libcom_err (1.43.4-r0)
+(16/24) Installing e2fsprogs-libs (1.43.4-r0)
+(17/24) Installing e2fsprogs (1.43.4-r0)
+(18/24) Installing e2fsprogs-extra (1.43.4-r0)
+(19/24) Installing libmnl (1.0.4-r0)
+(20/24) Installing libnftnl-libs (1.0.7-r0)
+(21/24) Installing iptables (1.6.1-r0)
+(22/24) Installing xfsprogs (4.5.0-r0)
+(23/24) Installing xz-libs (5.2.3-r0)
+(24/24) Installing xz (5.2.3-r0)
+Executing busybox-1.26.2-r5.trigger
+Executing ca-certificates-20161130-r2.trigger
+OK: 11 MiB in 24 packages
+ ---> cb79c860b301
+Removing intermediate container b576d81f524c
+Step 4/14 : RUN rm -rf /out/etc/apk /out/lib/apk /out/var/cache
+ ---> Running in 997a8d4712e4
+ ---> 8c751781721e
+Removing intermediate container 997a8d4712e4
+Step 5/14 : FROM linuxkit/vpnkit-forwarder:e2776b82ddfe82ed7f90e55d7a2b424e62e9a279 AS vpnkit
+ ---> 388f9f3af889
+Step 6/14 : FROM scratch
+ ---> 
+Step 7/14 : COPY --from=mirror /out/ /
+ ---> 742b1509b5b4
+Removing intermediate container dec7ada84298
+Step 8/14 : COPY --from=vpnkit /vpnkit-expose-port /usr/bin/vpnkit-expose-port
+ ---> 3f4c90c955cb
+Removing intermediate container a166feed60ec
+Step 9/14 : RUN set -x 	&& addgroup -S docker 	&& addgroup -S dockremap 	&& adduser -S -G dockremap dockremap 	&& echo 'dockremap:165536:65536' >> /etc/subuid 	&& echo 'dockremap:165536:65536' >> /etc/subgid
+ ---> Running in 152767658e43
+[91m+ addgroup -S docker
+[0m[91m+ addgroup -S dockremap
+[0m[91m+ adduser -S -G dockremap dockremap
+[0m[91m+ echo dockremap:165536:65536
++ echo dockremap:165536:65536
+[0m ---> eb5cbb61aaf5
+Removing intermediate container 152767658e43
+Step 10/14 : ENV DOCKER_BUCKET get.docker.com
+ ---> Running in 335fd07434eb
+ ---> 03a7c969d55b
+Removing intermediate container 335fd07434eb
+Step 11/14 : ENV DOCKER_VERSION 17.05.0-ce
+ ---> Running in fe1ee91d4a43
+ ---> 4b35a454c269
+Removing intermediate container fe1ee91d4a43
+Step 12/14 : ENV DOCKER_SHA256 340e0b5a009ba70e1b644136b94d13824db0aeb52e09071410f35a95d94316d9
+ ---> Running in 40035d2b1f57
+ ---> e5cc1575e9dc
+Removing intermediate container 40035d2b1f57
+Step 13/14 : RUN set -x 	&& curl -fSL "https://${DOCKER_BUCKET}/builds/Linux/x86_64/docker-${DOCKER_VERSION}.tgz" -o docker.tgz 	&& echo "${DOCKER_SHA256} *docker.tgz" | sha256sum -c - 	&& tar -xzvf docker.tgz 	&& mv docker/* /usr/bin/ 	&& rmdir docker 	&& rm docker.tgz 	&& docker -v
+ ---> Running in feb60d1fa145
+[91m+ curl -fSL https://get.docker.com/builds/Linux/x86_64/docker-17.05.0-ce.tgz -o docker.tgz
+[0m[91m  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload[0m[91m   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0[0m[91m 17 27.1M   17 4814k    0     0  11.0M      0  0:00:02 --:--:--  0:00:02 11.3M[0m[91m 83 27.1M   83 22.7M    0     0  15.9M      0  0:00:01  0:00:01 --:--:-- 16.1M[0m[91m100 27.1M  100 27.1M    0     0  16.4M      0  0:00:01  0:00:01 --:--:-- 16.5M
+[0m[91m+ sha256sum -c -
+[0m[91m+ echo 340e0b5a009ba70e1b644136b94d13824db0aeb52e09071410f35a95d94316d9 *docker.tgz
+[0mdocker.tgz: OK
+[91m+ tar -xzvf docker.tgz
+[0mdocker/
+docker/docker-init
+docker/completion/
+docker/completion/zsh/
+docker/completion/zsh/_docker
+docker/completion/fish/
+docker/completion/fish/docker.fish
+docker/completion/bash/
+docker/completion/bash/docker
+docker/docker
+docker/docker-containerd-shim
+docker/docker-containerd
+docker/docker-proxy
+docker/docker-containerd-ctr
+docker/dockerd
+docker/docker-runc
+[91m+ mv docker/completion docker/docker docker/docker-containerd docker/docker-containerd-ctr docker/docker-containerd-shim docker/docker-init docker/docker-proxy docker/docker-runc docker/dockerd /usr/bin/
+[0m[91m+ rmdir docker
+[0m[91m+ rm docker.tgz
+[0m[91m+ docker -v
+[0mDocker version 17.05.0-ce, build 89658be
+ ---> 4b339e4a8f1b
+Removing intermediate container feb60d1fa145
+Step 14/14 : ENTRYPOINT /usr/bin/docker-init /usr/bin/dockerd
+ ---> Running in 95913d8afbad
+ ---> a965b444c789
+Removing intermediate container 95913d8afbad
+Successfully built a965b444c789
+Successfully tagged linuxkit/docker-ce:f75d2ad5f46729b10209ec5cfec65305b91259b6-dirty
+make[2]: Leaving directory '/tmp/build/pkg/docker-ce'
+make[2]: Entering directory '/tmp/build/pkg/getty'
+DOCKER_CONTENT_TRUST=1 docker pull linuxkit/getty:6cbeee0392b0670053ce2bf05a5a0d67ec2bce05-dirty || \
+docker build  -t linuxkit/getty:6cbeee0392b0670053ce2bf05a5a0d67ec2bce05-dirty .
+No trust data for 6cbeee0392b0670053ce2bf05a5a0d67ec2bce05-dirty
+Sending build context to Docker daemon  16.38kB
+Step 1/14 : FROM linuxkit/alpine:c608d404c1cb36cce0c7d9303e30b52c9d81ccf0 AS mirror
+ ---> b5fd1502dd6c
+Step 2/14 : RUN mkdir -p /out/etc/apk && cp -r /etc/apk/* /out/etc/apk/
+ ---> Using cache
+ ---> 9ae44f6f1516
+Step 3/14 : RUN apk add --no-cache --initdb -p /out     alpine-baselayout     busybox     ca-certificates     musl     tini     util-linux     && true
+ ---> Running in 6129642c5acb
+(1/17) Installing musl (1.1.16-r10)
+(2/17) Installing busybox (1.26.2-r5)
+Executing busybox-1.26.2-r5.post-install
+(3/17) Installing alpine-baselayout (3.0.4-r0)
+Executing alpine-baselayout-3.0.4-r0.pre-install
+Executing alpine-baselayout-3.0.4-r0.post-install
+(4/17) Installing libressl2.5-libcrypto (2.5.4-r0)
+(5/17) Installing ca-certificates (20161130-r2)
+(6/17) Installing tini (0.14.0-r0)
+(7/17) Installing libuuid (2.28.2-r2)
+(8/17) Installing libblkid (2.28.2-r2)
+(9/17) Installing libmount (2.28.2-r2)
+(10/17) Installing libsmartcols (2.28.2-r2)
+(11/17) Installing findmnt (2.28.2-r2)
+(12/17) Installing libfdisk (2.28.2-r2)
+(13/17) Installing ncurses-terminfo-base (6.0-r7)
+(14/17) Installing ncurses-terminfo (6.0-r7)
+(15/17) Installing ncurses-libs (6.0-r7)
+(16/17) Installing zlib (1.2.11-r0)
+(17/17) Installing util-linux (2.28.2-r2)
+Executing busybox-1.26.2-r5.trigger
+Executing ca-certificates-20161130-r2.trigger
+OK: 15 MiB in 17 packages
+ ---> 7059a1a4d796
+Removing intermediate container 6129642c5acb
+Step 4/14 : RUN rm -rf /out/etc/apk /out/lib/apk /out/var/cache
+ ---> Running in 54a6e2e22c7e
+ ---> 30e75e9a8987
+Removing intermediate container 54a6e2e22c7e
+Step 5/14 : RUN cp /out/usr/bin/setsid /out/usr/bin/setsid.getty
+ ---> Running in 29a3b92c4916
+ ---> 030d9d0dfb95
+Removing intermediate container 29a3b92c4916
+Step 6/14 : RUN rm -rf /out/etc/inittab
+ ---> Running in f2f16dbb0c5a
+ ---> 7e800c46f29d
+Removing intermediate container f2f16dbb0c5a
+Step 7/14 : FROM scratch
+ ---> 
+Step 8/14 : ENTRYPOINT /sbin/tini -s -v --
+ ---> Running in 55cbec790e83
+ ---> 6491793061f3
+Removing intermediate container 55cbec790e83
+Step 9/14 : WORKDIR /
+ ---> 69ac984959a1
+Removing intermediate container 412379ee7733
+Step 10/14 : COPY --from=mirror /out/ /
+ ---> a1c3edceb67a
+Removing intermediate container 855c4406237f
+Step 11/14 : COPY usr/ /usr/
+ ---> 054332cec2a7
+Removing intermediate container 8284026c2e8f
+Step 12/14 : COPY etc/ /etc/
+ ---> 7387c128cc95
+Removing intermediate container 61df807a3268
+Step 13/14 : CMD /usr/bin/rungetty.sh
+ ---> Running in 7b3ca63bbf7e
+ ---> 25c8e39a7141
+Removing intermediate container 7b3ca63bbf7e
+Step 14/14 : LABEL org.mobyproject.config '{"pid": "host", "net":"host", "binds": ["/run:/run", "/tmp:/tmp", "/etc:/hostroot/etc", "/usr/bin/ctr:/usr/bin/ctr", "/usr/bin/runc:/usr/bin/runc", "/usr/bin/dist:/usr/bin/dist", "/var:/var","/containers:/containers","/dev:/dev","/sys:/sys"], "capabilities": ["all"]}'
+ ---> Running in ccaf7be1f872
+ ---> fd03ebc9fc60
+Removing intermediate container ccaf7be1f872
+Successfully built fd03ebc9fc60
+Successfully tagged linuxkit/getty:6cbeee0392b0670053ce2bf05a5a0d67ec2bce05-dirty
+make[2]: Leaving directory '/tmp/build/pkg/getty'
+make[2]: Entering directory '/tmp/build/pkg/mount'
+DOCKER_CONTENT_TRUST=1 docker pull linuxkit/mount:fe22dc5cbf109b4637b1caaafc76ccbf5140c3da-dirty || \
+docker build  -t linuxkit/mount:fe22dc5cbf109b4637b1caaafc76ccbf5140c3da-dirty .
+No trust data for fe22dc5cbf109b4637b1caaafc76ccbf5140c3da-dirty
+Sending build context to Docker daemon   5.12kB
+Step 1/12 : FROM linuxkit/alpine:c608d404c1cb36cce0c7d9303e30b52c9d81ccf0 AS mirror
+ ---> b5fd1502dd6c
+Step 2/12 : RUN mkdir -p /out/etc/apk && cp -r /etc/apk/* /out/etc/apk/
+ ---> Using cache
+ ---> 9ae44f6f1516
+Step 3/12 : RUN apk add --no-cache --initdb -p /out     alpine-baselayout     busybox     jq     musl     sfdisk     && true
+ ---> Running in f9baeb47fb93
+(1/10) Installing musl (1.1.16-r10)
+(2/10) Installing busybox (1.26.2-r5)
+Executing busybox-1.26.2-r5.post-install
+(3/10) Installing alpine-baselayout (3.0.4-r0)
+Executing alpine-baselayout-3.0.4-r0.pre-install
+Executing alpine-baselayout-3.0.4-r0.post-install
+(4/10) Installing oniguruma (6.2.0-r0)
+(5/10) Installing jq (1.5-r3)
+(6/10) Installing libuuid (2.28.2-r2)
+(7/10) Installing libblkid (2.28.2-r2)
+(8/10) Installing libfdisk (2.28.2-r2)
+(9/10) Installing libsmartcols (2.28.2-r2)
+(10/10) Installing sfdisk (2.28.2-r2)
+Executing busybox-1.26.2-r5.trigger
+OK: 3 MiB in 10 packages
+ ---> b645a2095b47
+Removing intermediate container f9baeb47fb93
+Step 4/12 : RUN rm -rf /out/etc/apk /out/lib/apk /out/var/cache
+ ---> Running in a311cf217293
+ ---> d62d6c85dff0
+Removing intermediate container a311cf217293
+Step 5/12 : FROM scratch
+ ---> 
+Step 6/12 : ENTRYPOINT 
+ ---> Running in bbd506c0aa80
+ ---> 17bc5a20d569
+Removing intermediate container bbd506c0aa80
+Step 7/12 : CMD 
+ ---> Running in 3d2b1841b7b5
+ ---> 72f3919b6b42
+Removing intermediate container 3d2b1841b7b5
+Step 8/12 : WORKDIR /
+ ---> 662482bf02f0
+Removing intermediate container 57605cc588e6
+Step 9/12 : COPY --from=mirror /out/ /
+ ---> 8c929c8644bc
+Removing intermediate container c54cdc9da29d
+Step 10/12 : COPY mount.sh /
+ ---> c6e6ecff4b87
+Removing intermediate container 14b78549c28b
+Step 11/12 : CMD /bin/sh /mount.sh
+ ---> Running in f6e19b084dd3
+ ---> ccce8d08f139
+Removing intermediate container f6e19b084dd3
+Step 12/12 : LABEL org.mobyproject.config '{"binds": ["/dev:/dev", "/var:/var:rshared,rbind"], "capabilities": ["CAP_SYS_ADMIN"], "rootfsPropagation": "shared", "net": "new", "ipc": "new"}'
+ ---> Running in 3ed38013454d
+ ---> d414fd0ecbd5
+Removing intermediate container 3ed38013454d
+Successfully built d414fd0ecbd5
+Successfully tagged linuxkit/mount:fe22dc5cbf109b4637b1caaafc76ccbf5140c3da-dirty
+make[2]: Leaving directory '/tmp/build/pkg/mount'
+make[2]: Entering directory '/tmp/build/pkg/trim-after-delete'
+DOCKER_CONTENT_TRUST=1 docker pull linuxkit/trim-after-delete:6cc6131300c287fcd40041a28119fee2fc874539-dirty || \
+docker build  -t linuxkit/trim-after-delete:6cc6131300c287fcd40041a28119fee2fc874539-dirty .
+No trust data for 6cc6131300c287fcd40041a28119fee2fc874539-dirty
+Sending build context to Docker daemon  9.216kB
+Step 1/16 : FROM linuxkit/alpine:630ee558e4869672fae230c78364e367b8ea67a9 AS mirror
+630ee558e4869672fae230c78364e367b8ea67a9: Pulling from linuxkit/alpine
+2aecc7e1714b: Pulling fs layer
+c1aa366477d0: Pulling fs layer
+4100d446729a: Pulling fs layer
+6cba244986d5: Pulling fs layer
+a0d03551bb97: Pulling fs layer
+70a045513035: Pulling fs layer
+1e52d2a48995: Pulling fs layer
+c07cb31ab6d8: Pulling fs layer
+43e3ae25381b: Pulling fs layer
+6cba244986d5: Waiting
+a0d03551bb97: Waiting
+70a045513035: Waiting
+1e52d2a48995: Waiting
+c07cb31ab6d8: Waiting
+43e3ae25381b: Waiting
+c1aa366477d0: Verifying Checksum
+c1aa366477d0: Download complete
+4100d446729a: Verifying Checksum
+4100d446729a: Download complete
+2aecc7e1714b: Verifying Checksum
+2aecc7e1714b: Download complete
+2aecc7e1714b: Pull complete
+c1aa366477d0: Pull complete
+4100d446729a: Pull complete
+70a045513035: Verifying Checksum
+70a045513035: Download complete
+a0d03551bb97: Verifying Checksum
+a0d03551bb97: Download complete
+1e52d2a48995: Verifying Checksum
+1e52d2a48995: Download complete
+c07cb31ab6d8: Verifying Checksum
+c07cb31ab6d8: Download complete
+43e3ae25381b: Verifying Checksum
+43e3ae25381b: Download complete
+6cba244986d5: Verifying Checksum
+6cba244986d5: Download complete
+6cba244986d5: Pull complete
+a0d03551bb97: Pull complete
+70a045513035: Pull complete
+1e52d2a48995: Pull complete
+c07cb31ab6d8: Pull complete
+43e3ae25381b: Pull complete
+Digest: sha256:62e9d37939b4e36bc1b86e6a4ab363e069ba4001d88e8e316a9771eeac27cacf
+Status: Downloaded newer image for linuxkit/alpine:630ee558e4869672fae230c78364e367b8ea67a9
+ ---> 72ff54f67634
+Step 2/16 : RUN mkdir -p /out/etc/apk && cp -r /etc/apk/* /out/etc/apk/
+ ---> Running in 226f18889ac5
+ ---> 419124e4ace0
+Removing intermediate container 226f18889ac5
+Step 3/16 : RUN apk add --no-cache --initdb -p /out     alpine-baselayout     busybox     util-linux
+ ---> Running in 318e218b703f
+(1/14) Installing musl (1.1.16-r9)
+(2/14) Installing busybox (1.26.2-r4)
+Executing busybox-1.26.2-r4.post-install
+(3/14) Installing alpine-baselayout (3.0.4-r0)
+Executing alpine-baselayout-3.0.4-r0.pre-install
+Executing alpine-baselayout-3.0.4-r0.post-install
+(4/14) Installing libuuid (2.28.2-r2)
+(5/14) Installing libblkid (2.28.2-r2)
+(6/14) Installing libmount (2.28.2-r2)
+(7/14) Installing libsmartcols (2.28.2-r2)
+(8/14) Installing findmnt (2.28.2-r2)
+(9/14) Installing libfdisk (2.28.2-r2)
+(10/14) Installing ncurses-terminfo-base (6.0-r7)
+(11/14) Installing ncurses-terminfo (6.0-r7)
+(12/14) Installing ncurses-libs (6.0-r7)
+(13/14) Installing zlib (1.2.11-r0)
+(14/14) Installing util-linux (2.28.2-r2)
+Executing busybox-1.26.2-r4.trigger
+OK: 12 MiB in 14 packages
+ ---> 9ec1db8ac759
+Removing intermediate container 318e218b703f
+Step 4/16 : RUN rm -rf /out/etc/apk /out/lib/apk /out/var/cache
+ ---> Running in 4f539cbab3b8
+ ---> 8a5530cee3c4
+Removing intermediate container 4f539cbab3b8
+Step 5/16 : RUN apk add --no-cache go musl-dev
+ ---> Running in eae5ca15fd6d
+(1/14) Installing binutils-libs (2.28-r2)
+(2/14) Installing binutils (2.28-r2)
+(3/14) Installing gmp (6.1.2-r0)
+(4/14) Installing isl (0.17.1-r0)
+(5/14) Installing libgomp (6.3.0-r4)
+(6/14) Installing libatomic (6.3.0-r4)
+(7/14) Installing pkgconf (1.3.7-r0)
+(8/14) Installing libgcc (6.3.0-r4)
+(9/14) Installing mpfr3 (3.1.5-r0)
+(10/14) Installing mpc1 (1.0.3-r0)
+(11/14) Installing libstdc++ (6.3.0-r4)
+(12/14) Installing gcc (6.3.0-r4)
+(13/14) Installing go (1.8.1-r0)
+(14/14) Installing musl-dev (1.1.16-r9)
+Executing busybox-1.26.2-r4.trigger
+OK: 277 MiB in 25 packages
+ ---> f617b0c134fd
+Removing intermediate container eae5ca15fd6d
+Step 6/16 : ENV GOPATH /go PATH $PATH:/go/bin
+ ---> Running in 010e4e2c1e7d
+ ---> 4f01aa7e3958
+Removing intermediate container 010e4e2c1e7d
+Step 7/16 : COPY . /go/src/trim-after-delete
+ ---> 7f7d8f737d82
+Removing intermediate container aa31192f6161
+Step 8/16 : RUN go-compile.sh /go/src/trim-after-delete
+ ---> Running in a1ae2987c4d0
+[91mgofmt...
+[0m[91mgovet...
+[0m[91mgolint...
+[0m[91mineffassign...
+[0m[91mgo test...
+[0m?   	trim-after-delete	[no test files]
+[91mgo build...
+[0m[91m# trim-after-delete
+warning: unable to find runtime/cgo.a
+[0m ---> a6e9959262d2
+Removing intermediate container a1ae2987c4d0
+Step 9/16 : FROM scratch
+ ---> 
+Step 10/16 : ENTRYPOINT 
+ ---> Using cache
+ ---> f31f9423f1a3
+Step 11/16 : CMD 
+ ---> Running in 41dcf356ad54
+ ---> ab15e8c33168
+Removing intermediate container 41dcf356ad54
+Step 12/16 : WORKDIR /
+ ---> 85f747d466ca
+Removing intermediate container 52ae61a64974
+Step 13/16 : COPY --from=mirror /out/ /
+ ---> 267dfacef2b3
+Removing intermediate container 1ca3435ed920
+Step 14/16 : COPY --from=mirror /go/bin/trim-after-delete /usr/bin/trim-after-delete
+ ---> ae1f14b21d56
+Removing intermediate container 0c19aacdc9e7
+Step 15/16 : CMD /usr/bin/trim-after-delete -- /sbin/fstrim /var/lib/docker
+ ---> Running in 9b61201b0e19
+ ---> 813cc5a02222
+Removing intermediate container 9b61201b0e19
+Step 16/16 : LABEL org.mobyproject.config '{"binds": ["/var/run:/var/run", "/var/lib/docker:/var/lib/docker"], "capabilities": ["CAP_SYS_ADMIN"]}'
+ ---> Running in 0aa4019dee0b
+ ---> 427b19321535
+Removing intermediate container 0aa4019dee0b
+Successfully built 427b19321535
+Successfully tagged linuxkit/trim-after-delete:6cc6131300c287fcd40041a28119fee2fc874539-dirty
+make[2]: Leaving directory '/tmp/build/pkg/trim-after-delete'
+make[2]: Entering directory '/tmp/build/pkg/metadata'
+DOCKER_CONTENT_TRUST=1 docker pull linuxkit/metadata:09781c8a8097e5aa3ae522c74856d80e1da3b915-dirty || \
+docker build  -t linuxkit/metadata:09781c8a8097e5aa3ae522c74856d80e1da3b915-dirty .
+No trust data for 09781c8a8097e5aa3ae522c74856d80e1da3b915-dirty
+Sending build context to Docker daemon  24.58kB
+Step 1/12 : FROM linuxkit/alpine:c608d404c1cb36cce0c7d9303e30b52c9d81ccf0 AS mirror
+ ---> b5fd1502dd6c
+Step 2/12 : RUN apk add --no-cache go musl-dev
+ ---> Using cache
+ ---> 08ecd7169823
+Step 3/12 : ENV GOPATH /go PATH $PATH:/go/bin
+ ---> Using cache
+ ---> 7380577699a7
+Step 4/12 : COPY . /go/src/metadata/
+ ---> 6fef09f19bb4
+Removing intermediate container c78873e0466d
+Step 5/12 : RUN go-compile.sh /go/src/metadata
+ ---> Running in 3d2c8f25d8f4
+[91mgofmt...
+[0m[91mgovet...
+[0m[91mgolint...
+[0m[91mineffassign...
+[0m[91mgo test...
+[0m?   	metadata	[no test files]
+[91mgo build...
+[0m[91m# metadata
+warning: unable to find runtime/cgo.a
+[0m ---> 506164bdd643
+Removing intermediate container 3d2c8f25d8f4
+Step 6/12 : FROM scratch
+ ---> 
+Step 7/12 : ENTRYPOINT 
+ ---> Using cache
+ ---> f31f9423f1a3
+Step 8/12 : CMD 
+ ---> Using cache
+ ---> ab15e8c33168
+Step 9/12 : WORKDIR /
+ ---> Using cache
+ ---> 85f747d466ca
+Step 10/12 : COPY --from=mirror /go/bin/metadata /usr/bin/metadata
+ ---> 40c08894e2c1
+Removing intermediate container fe74c2fe1a1c
+Step 11/12 : CMD /usr/bin/metadata
+ ---> Running in 4257c80fbeee
+ ---> ecb54aa3c3be
+Removing intermediate container 4257c80fbeee
+Step 12/12 : LABEL org.mobyproject.config '{"binds": ["/dev:/dev", "/var:/var", "/tmp/etc/resolv.conf:/etc/resolv.conf"], "capabilities": ["CAP_SYS_ADMIN"]}'
+ ---> Running in d700cc5174f6
+ ---> 390254ded414
+Removing intermediate container d700cc5174f6
+Successfully built 390254ded414
+Successfully tagged linuxkit/metadata:09781c8a8097e5aa3ae522c74856d80e1da3b915-dirty
+make[2]: Leaving directory '/tmp/build/pkg/metadata'
+make[2]: Entering directory '/tmp/build/pkg/rngd'
+DOCKER_CONTENT_TRUST=1 docker pull linuxkit/rngd:b50b22dd574c5377708977af769f053009fff6d5-dirty || \
+docker build  -t linuxkit/rngd:b50b22dd574c5377708977af769f053009fff6d5-dirty .
+No trust data for b50b22dd574c5377708977af769f053009fff6d5-dirty
+Sending build context to Docker daemon  7.168kB
+Step 1/21 : FROM linuxkit/alpine:c608d404c1cb36cce0c7d9303e30b52c9d81ccf0 AS mirror
+ ---> b5fd1502dd6c
+Step 2/21 : RUN mkdir -p /out/etc/apk && cp -r /etc/apk/* /out/etc/apk/
+ ---> Using cache
+ ---> 9ae44f6f1516
+Step 3/21 : RUN apk add --no-cache --initdb -p /out     tini
+ ---> Running in 829b760f4d84
+(1/2) Installing musl (1.1.16-r10)
+(2/2) Installing tini (0.14.0-r0)
+OK: 0 MiB in 2 packages
+ ---> 1c05597549bc
+Removing intermediate container 829b760f4d84
+Step 4/21 : RUN rm -rf /out/etc/apk /out/lib/apk /out/var/cache
+ ---> Running in b71b8926c4a6
+ ---> abfcb51c0bbc
+Removing intermediate container b71b8926c4a6
+Step 5/21 : RUN mkdir -p /out/dev /out/proc /out/sys
+ ---> Running in b4d18551e54d
+ ---> d4fd59db8bd3
+Removing intermediate container b4d18551e54d
+Step 6/21 : FROM linuxkit/alpine:c608d404c1cb36cce0c7d9303e30b52c9d81ccf0 AS build
+ ---> b5fd1502dd6c
+Step 7/21 : RUN apk add     argp-standalone     automake     curl     gcc     linux-headers     make     musl-dev     patch
+ ---> Running in 8a06aba51cc0
+(1/23) Installing argp-standalone (1.3-r2)
+(2/23) Installing perl (5.24.1-r2)
+(3/23) Installing automake (1.15-r0)
+(4/23) Installing ca-certificates (20161130-r2)
+(5/23) Installing libssh2 (1.8.0-r1)
+(6/23) Installing libcurl (7.54.0-r0)
+(7/23) Installing curl (7.54.0-r0)
+(8/23) Installing binutils-libs (2.28-r2)
+(9/23) Installing binutils (2.28-r2)
+(10/23) Installing gmp (6.1.2-r0)
+(11/23) Installing isl (0.17.1-r0)
+(12/23) Installing libgomp (6.3.0-r4)
+(13/23) Installing libatomic (6.3.0-r4)
+(14/23) Installing pkgconf (1.3.7-r0)
+(15/23) Installing libgcc (6.3.0-r4)
+(16/23) Installing mpfr3 (3.1.5-r0)
+(17/23) Installing mpc1 (1.0.3-r0)
+(18/23) Installing libstdc++ (6.3.0-r4)
+(19/23) Installing gcc (6.3.0-r4)
+(20/23) Installing linux-headers (4.4.6-r2)
+(21/23) Installing make (4.2.1-r0)
+(22/23) Installing musl-dev (1.1.16-r10)
+(23/23) Installing patch (2.7.5-r1)
+Executing busybox-1.26.2-r5.trigger
+Executing ca-certificates-20161130-r2.trigger
+OK: 142 MiB in 34 packages
+ ---> 7a3abd6cb8e4
+Removing intermediate container 8a06aba51cc0
+Step 8/21 : COPY . /
+ ---> ba8deab8094f
+Removing intermediate container 5b903e527433
+Step 9/21 : ENV pkgname rng-tools pkgver 5
+ ---> Running in d60322487283
+ ---> faefcdceefc7
+Removing intermediate container d60322487283
+Step 10/21 : RUN curl -fSL "http://downloads.sourceforge.net/project/gkernel/$pkgname/$pkgver/$pkgname-$pkgver.tar.gz" -o "$pkgname-$pkgver.tar.gz"
+ ---> Running in 964bac5d48bf
+[91m  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0[0m[91m  0   341    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+[0m[91m 13  119k   13 16144    0     0  16030      0  0:00:07  0:00:01  0:00:06 16030[0m[91m100  119k  100  119k    0     0  93622      0  0:00:01  0:00:01 --:--:--  348k
+[0m ---> 2a15ba40d35f
+Removing intermediate container 964bac5d48bf
+Step 11/21 : RUN sha256sum -c sha256sums
+ ---> Running in 5e0d012d1aa8
+rng-tools-5.tar.gz: OK
+ ---> 3443b64e7b62
+Removing intermediate container 5e0d012d1aa8
+Step 12/21 : RUN zcat $pkgname-$pkgver.tar.gz | tar xf -
+ ---> Running in e7fc070f7df2
+ ---> 6ff84be714dc
+Removing intermediate container e7fc070f7df2
+Step 13/21 : RUN cd $pkgname-$pkgver && for p in ../*.patch; do cat $p | patch -p1; done
+ ---> Running in b20c91bb186a
+patching file rdrand_asm.S
+Hunk #1 succeeded at 85 with fuzz 2 (offset 36 lines).
+Hunk #2 succeeded at 175 with fuzz 2 (offset 90 lines).
+Hunk #3 succeeded at 192 with fuzz 2 (offset 81 lines).
+Hunk #4 succeeded at 296 with fuzz 2 (offset 119 lines).
+ ---> bbeb24311b41
+Removing intermediate container b20c91bb186a
+Step 14/21 : RUN cd $pkgname-$pkgver &&   export LIBS="-largp" &&   LDFLAGS=-static ./configure     --prefix=/usr     --libexecdir=/usr/lib/rng-tools     --sysconfdir=/etc     --disable-silent-rules &&   make &&   make DESTDIR=/ install &&   strip /usr/sbin/rngd
+ ---> Running in aa42ad7ed23c
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for a thread-safe mkdir -p... ./install-sh -c -d
+checking for gawk... no
+checking for mawk... no
+checking for nawk... no
+checking for awk... awk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking whether to enable maintainer-specific portions of Makefiles... no
+checking for gcc... gcc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables... 
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether gcc accepts -g... yes
+checking for gcc option to accept ISO C89... none needed
+checking for style of include used by make... GNU
+checking dependency style of gcc... gcc3
+checking for ranlib... ranlib
+checking how to run the C preprocessor... gcc -E
+checking for grep that handles long lines and -e... /bin/grep
+checking for egrep... /bin/grep -E
+checking whether gcc needs -traditional... no
+checking for ANSI C header files... yes
+checking for sys/types.h... yes
+checking for sys/stat.h... yes
+checking for stdlib.h... yes
+checking for string.h... yes
+checking for memory.h... yes
+checking for strings.h... yes
+checking for inttypes.h... yes
+checking for stdint.h... yes
+checking for unistd.h... yes
+checking gcrypt.h usability... no
+checking gcrypt.h presence... no
+checking for gcrypt.h... no
+configure: libgcrypt support disabled
+checking dependency style of gcc... gcc3
+checking that generated files are newer than configure... done
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating contrib/Makefile
+config.status: creating rngd.8
+config.status: creating rngtest.1
+config.status: creating rng-tools-config.h
+config.status: executing depfiles commands
+make  all-recursive
+make[1]: Entering directory '/rng-tools-5'
+Making all in contrib
+make[2]: Entering directory '/rng-tools-5/contrib'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/rng-tools-5/contrib'
+make[2]: Entering directory '/rng-tools-5'
+gcc -DHAVE_CONFIG_H -I.     -g -O2 -MT fips.o -MD -MP -MF .deps/fips.Tpo -c -o fips.o fips.c
+mv -f .deps/fips.Tpo .deps/fips.Po
+rm -f librngd.a
+ar cru librngd.a fips.o 
+[91mar: `u' modifier ignored since `D' is the default (see `U')
+[0mranlib librngd.a
+gcc -DHAVE_CONFIG_H -I.     -g -O2 -MT stats.o -MD -MP -MF .deps/stats.Tpo -c -o stats.o stats.c
+mv -f .deps/stats.Tpo .deps/stats.Po
+gcc -DHAVE_CONFIG_H -I.     -g -O2 -MT rngtest.o -MD -MP -MF .deps/rngtest.Tpo -c -o rngtest.o rngtest.c
+mv -f .deps/rngtest.Tpo .deps/rngtest.Po
+gcc  -g -O2  -static -o rngtest stats.o rngtest.o librngd.a -largp
+gcc -DHAVE_CONFIG_H -I.     -g -O2 -MT rngd.o -MD -MP -MF .deps/rngd.Tpo -c -o rngd.o rngd.c
+mv -f .deps/rngd.Tpo .deps/rngd.Po
+gcc -DHAVE_CONFIG_H -I.     -g -O2 -MT rngd_entsource.o -MD -MP -MF .deps/rngd_entsource.Tpo -c -o rngd_entsource.o rngd_entsource.c
+mv -f .deps/rngd_entsource.Tpo .deps/rngd_entsource.Po
+gcc -DHAVE_CONFIG_H -I.     -g -O2 -MT rngd_linux.o -MD -MP -MF .deps/rngd_linux.Tpo -c -o rngd_linux.o rngd_linux.c
+[91mIn file included from rngd_linux.c:36:0:
+/usr/include/sys/poll.h:1:2: warning: #warning redirecting incorrect #include <sys/poll.h> to <poll.h> [-Wcpp]
+ #warning redirecting incorrect #include <sys/poll.h> to <poll.h>
+  ^~~~~~~
+[0mmv -f .deps/rngd_linux.Tpo .deps/rngd_linux.Po
+gcc -DHAVE_CONFIG_H -I.     -g -O2 -MT util.o -MD -MP -MF .deps/util.Tpo -c -o util.o util.c
+mv -f .deps/util.Tpo .deps/util.Po
+gcc -DHAVE_CONFIG_H -I.     -g -O2 -MT rngd_rdrand.o -MD -MP -MF .deps/rngd_rdrand.Tpo -c -o rngd_rdrand.o rngd_rdrand.c
+mv -f .deps/rngd_rdrand.Tpo .deps/rngd_rdrand.Po
+gcc -DHAVE_CONFIG_H -I.     -g -O2 -MT rdrand_asm.o -MD -MP -MF .deps/rdrand_asm.Tpo -c -o rdrand_asm.o rdrand_asm.S
+mv -f .deps/rdrand_asm.Tpo .deps/rdrand_asm.Po
+gcc  -g -O2  -static -o rngd rngd.o rngd_entsource.o rngd_linux.o util.o rngd_rdrand.o rdrand_asm.o librngd.a -largp
+make[2]: Leaving directory '/rng-tools-5'
+make[1]: Leaving directory '/rng-tools-5'
+Making install in contrib
+make[1]: Entering directory '/rng-tools-5/contrib'
+make[2]: Entering directory '/rng-tools-5/contrib'
+make[2]: Nothing to be done for 'install-exec-am'.
+make[2]: Nothing to be done for 'install-data-am'.
+make[2]: Leaving directory '/rng-tools-5/contrib'
+make[1]: Leaving directory '/rng-tools-5/contrib'
+make[1]: Entering directory '/rng-tools-5'
+make[2]: Entering directory '/rng-tools-5'
+ ./install-sh -c -d '//usr/bin'
+  /usr/bin/install -c rngtest '//usr/bin'
+ ./install-sh -c -d '//usr/sbin'
+  /usr/bin/install -c rngd '//usr/sbin'
+ ./install-sh -c -d '//usr/share/man/man1'
+ /usr/bin/install -c -m 644 rngtest.1 '//usr/share/man/man1'
+ ./install-sh -c -d '//usr/share/man/man8'
+ /usr/bin/install -c -m 644 rngd.8 '//usr/share/man/man8'
+make[2]: Leaving directory '/rng-tools-5'
+make[1]: Leaving directory '/rng-tools-5'
+ ---> 806cb3af548b
+Removing intermediate container aa42ad7ed23c
+Step 15/21 : FROM scratch
+ ---> 
+Step 16/21 : ENTRYPOINT 
+ ---> Running in d6eda1dc678e
+ ---> c922cc0942b2
+Removing intermediate container d6eda1dc678e
+Step 17/21 : WORKDIR /
+ ---> 154d1d7bd533
+Removing intermediate container 5eb52f792f3c
+Step 18/21 : COPY --from=mirror /out/ /
+ ---> f9fe02b6e695
+Removing intermediate container e5b5e18d3ff4
+Step 19/21 : COPY --from=build usr/sbin/rngd usr/sbin/rngd
+ ---> d921d0d61696
+Removing intermediate container 53f67fd48d16
+Step 20/21 : CMD /sbin/tini /usr/sbin/rngd -f
+ ---> Running in e8af99fd66f7
+ ---> 7f19d48a9f0b
+Removing intermediate container e8af99fd66f7
+Step 21/21 : LABEL org.mobyproject.config '{"capabilities": ["CAP_SYS_ADMIN"], "oomScoreAdj": -800, "readonly": true, "net": "new", "ipc": "new"}'
+ ---> Running in e9b078d3c44f
+ ---> 6ded59fcaf17
+Removing intermediate container e9b078d3c44f
+Successfully built 6ded59fcaf17
+Successfully tagged linuxkit/rngd:b50b22dd574c5377708977af769f053009fff6d5-dirty
+make[2]: Leaving directory '/tmp/build/pkg/rngd'
+make[2]: Entering directory '/tmp/build/pkg/qemu-ga'
+DOCKER_CONTENT_TRUST=1 docker pull linuxkit/qemu-ga:2dbdc6523df576773b7c7d56d3a394429a4488ce-dirty || \
+docker build  -t linuxkit/qemu-ga:2dbdc6523df576773b7c7d56d3a394429a4488ce-dirty .
+No trust data for 2dbdc6523df576773b7c7d56d3a394429a4488ce-dirty
+Sending build context to Docker daemon  3.072kB
+Step 1/10 : FROM linuxkit/alpine:c608d404c1cb36cce0c7d9303e30b52c9d81ccf0 AS build
+ ---> b5fd1502dd6c
+Step 2/10 : RUN mkdir -p /out/etc/apk && cp -r /etc/apk/* /out/etc/apk/
+ ---> Using cache
+ ---> 9ae44f6f1516
+Step 3/10 : RUN mkdir -p /out/var/run
+ ---> Running in aae1627fa96b
+ ---> 123ff654fcd3
+Removing intermediate container aae1627fa96b
+Step 4/10 : RUN apk add --no-cache --initdb -p /out     qemu-guest-agent     musl
+ ---> Running in 64a24be8944d
+(1/12) Installing musl (1.1.16-r10)
+(2/12) Installing libgcc (6.3.0-r4)
+(3/12) Installing busybox (1.26.2-r5)
+Executing busybox-1.26.2-r5.post-install
+(4/12) Installing libffi (3.2.1-r3)
+(5/12) Installing libintl (0.19.8.1-r1)
+(6/12) Installing libuuid (2.28.2-r2)
+(7/12) Installing libblkid (2.28.2-r2)
+(8/12) Installing libmount (2.28.2-r2)
+(9/12) Installing pcre (8.40-r2)
+(10/12) Installing zlib (1.2.11-r0)
+(11/12) Installing glib (2.52.1-r0)
+(12/12) Installing qemu-guest-agent (2.8.1-r1)
+Executing busybox-1.26.2-r5.trigger
+Executing glib-2.52.1-r0.trigger
+OK: 6 MiB in 12 packages
+ ---> 543e354a088a
+Removing intermediate container 64a24be8944d
+Step 5/10 : FROM scratch
+ ---> 
+Step 6/10 : WORKDIR /
+ ---> 5dd23d6b39b1
+Removing intermediate container 900df5e31236
+Step 7/10 : ENTRYPOINT 
+ ---> Running in 6a6c6458c95f
+ ---> 2bfb0c922073
+Removing intermediate container 6a6c6458c95f
+Step 8/10 : COPY --from=build /out /
+ ---> 1f2aa1cc9efa
+Removing intermediate container 92ecbdb5a78a
+Step 9/10 : CMD /usr/bin/qemu-ga -p /dev/vport0p1
+ ---> Running in 32d77ef0f5be
+ ---> 8b6102f3579a
+Removing intermediate container 32d77ef0f5be
+Step 10/10 : LABEL org.mobyproject.config '{"net": "host"}'
+ ---> Running in c60e36dbd0d1
+ ---> 48a6aa085b76
+Removing intermediate container c60e36dbd0d1
+Successfully built 48a6aa085b76
+Successfully tagged linuxkit/qemu-ga:2dbdc6523df576773b7c7d56d3a394429a4488ce-dirty
+make[2]: Leaving directory '/tmp/build/pkg/qemu-ga'
+make[2]: Entering directory '/tmp/build/pkg/runc'
+DOCKER_CONTENT_TRUST=1 docker pull linuxkit/runc:291131ec026430371e7c36165c3f43734fbc2541-dirty || \
+docker build  -t linuxkit/runc:291131ec026430371e7c36165c3f43734fbc2541-dirty .
+No trust data for 291131ec026430371e7c36165c3f43734fbc2541-dirty
+Sending build context to Docker daemon  3.584kB
+Step 1/13 : FROM linuxkit/alpine:c608d404c1cb36cce0c7d9303e30b52c9d81ccf0 as alpine
+ ---> b5fd1502dd6c
+Step 2/13 : RUN apk add   bash   gcc   git   go   libc-dev   libseccomp-dev   linux-headers   make   && true
+ ---> Running in d0243e52074e
+(1/30) Installing ncurses-terminfo-base (6.0-r7)
+(2/30) Installing ncurses-terminfo (6.0-r7)
+(3/30) Installing ncurses-libs (6.0-r7)
+(4/30) Installing readline (6.3.008-r5)
+(5/30) Installing bash (4.3.48-r1)
+Executing bash-4.3.48-r1.post-install
+(6/30) Installing binutils-libs (2.28-r2)
+(7/30) Installing binutils (2.28-r2)
+(8/30) Installing gmp (6.1.2-r0)
+(9/30) Installing isl (0.17.1-r0)
+(10/30) Installing libgomp (6.3.0-r4)
+(11/30) Installing libatomic (6.3.0-r4)
+(12/30) Installing pkgconf (1.3.7-r0)
+(13/30) Installing libgcc (6.3.0-r4)
+(14/30) Installing mpfr3 (3.1.5-r0)
+(15/30) Installing mpc1 (1.0.3-r0)
+(16/30) Installing libstdc++ (6.3.0-r4)
+(17/30) Installing gcc (6.3.0-r4)
+(18/30) Installing ca-certificates (20161130-r2)
+(19/30) Installing libssh2 (1.8.0-r1)
+(20/30) Installing libcurl (7.54.0-r0)
+(21/30) Installing expat (2.2.0-r1)
+(22/30) Installing pcre (8.40-r2)
+(23/30) Installing git (2.13.0-r0)
+(24/30) Installing go (1.8.1-r2)
+(25/30) Installing musl-dev (1.1.16-r10)
+(26/30) Installing libc-dev (0.7.1-r0)
+(27/30) Installing libseccomp (2.3.2-r0)
+(28/30) Installing libseccomp-dev (2.3.2-r0)
+(29/30) Installing linux-headers (4.4.6-r2)
+(30/30) Installing make (4.2.1-r0)
+Executing busybox-1.26.2-r5.trigger
+Executing ca-certificates-20161130-r2.trigger
+OK: 312 MiB in 41 packages
+ ---> 6f5ef000c734
+Removing intermediate container d0243e52074e
+Step 3/13 : ENV GOPATH /root/go
+ ---> Running in d4afd204e1b2
+ ---> 281a643edf6d
+Removing intermediate container d4afd204e1b2
+Step 4/13 : ENV RUNC_COMMIT ac50e77bbb440dcab354a328c79754e2502b79ca
+ ---> Running in c31a9fec7fc0
+ ---> 2342b9b3c574
+Removing intermediate container c31a9fec7fc0
+Step 5/13 : RUN mkdir -p $GOPATH/src/github.com/opencontainers &&   cd $GOPATH/src/github.com/opencontainers &&   git clone https://github.com/opencontainers/runc.git
+ ---> Running in a647eee85460
+[91mCloning into 'runc'...
+[0m ---> a35047adc43b
+Removing intermediate container a647eee85460
+Step 6/13 : WORKDIR $GOPATH/src/github.com/opencontainers/runc
+ ---> 896a9a57761a
+Removing intermediate container ec6e53d7e231
+Step 7/13 : RUN git checkout $RUNC_COMMIT
+ ---> Running in 597d83d293d2
+[91mNote: checking out 'ac50e77bbb440dcab354a328c79754e2502b79ca'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+HEAD is now at ac50e77... Merge pull request #1398 from clnperez/console-fix
+[0m ---> 35de290dea18
+Removing intermediate container 597d83d293d2
+Step 8/13 : RUN make static BUILDTAGS="seccomp"
+ ---> Running in c978669048d7
+CGO_ENABLED=1 go build -i -tags "seccomp cgo static_build" -ldflags "-w -extldflags -static -X main.gitCommit="ac50e77bbb440dcab354a328c79754e2502b79ca" -X main.version=1.0.0-rc3" -o runc .
+CGO_ENABLED=1 go build -i -tags "seccomp cgo static_build" -ldflags "-w -extldflags -static -X main.gitCommit="ac50e77bbb440dcab354a328c79754e2502b79ca" -X main.version=1.0.0-rc3" -o contrib/cmd/recvtty/recvtty ./contrib/cmd/recvtty
+ ---> 8ce6e68307fb
+Removing intermediate container c978669048d7
+Step 9/13 : RUN cp runc /usr/bin/
+ ---> Running in e78eb4974a52
+ ---> c89936502fcd
+Removing intermediate container e78eb4974a52
+Step 10/13 : FROM scratch
+ ---> 
+Step 11/13 : WORKDIR /
+ ---> 55dbbf36bc8a
+Removing intermediate container db9df3e88bdd
+Step 12/13 : ENTRYPOINT 
+ ---> Running in 4b5606e86987
+ ---> 41ff4d9139d4
+Removing intermediate container 4b5606e86987
+Step 13/13 : COPY --from=alpine /usr/bin/runc /usr/bin/
+ ---> e786aeb9d8ac
+Removing intermediate container 34963e526ee4
+Successfully built e786aeb9d8ac
+Successfully tagged linuxkit/runc:291131ec026430371e7c36165c3f43734fbc2541-dirty
+make[2]: Leaving directory '/tmp/build/pkg/runc'
+make[2]: Entering directory '/tmp/build/pkg/sysctl'
+DOCKER_CONTENT_TRUST=1 docker pull linuxkit/sysctl:0633d72d7ea416ec858d75f8691ed636b5d4446d-dirty || \
+docker build  -t linuxkit/sysctl:0633d72d7ea416ec858d75f8691ed636b5d4446d-dirty .
+No trust data for 0633d72d7ea416ec858d75f8691ed636b5d4446d-dirty
+Sending build context to Docker daemon  8.192kB
+Step 1/13 : FROM linuxkit/alpine:c608d404c1cb36cce0c7d9303e30b52c9d81ccf0 AS mirror
+ ---> b5fd1502dd6c
+Step 2/13 : RUN apk add --no-cache go musl-dev
+ ---> Using cache
+ ---> 08ecd7169823
+Step 3/13 : ENV GOPATH /go PATH $PATH:/go/bin
+ ---> Using cache
+ ---> 7380577699a7
+Step 4/13 : COPY main.go /go/src/sysctl/
+ ---> d411d3ceafbe
+Removing intermediate container dda23e64c7eb
+Step 5/13 : RUN go-compile.sh /go/src/sysctl
+ ---> Running in bc177065cc70
+[91mgofmt...
+[0m[91mgovet...
+[0m[91mgolint...
+[0m[91mineffassign...
+[0m[91mgo test...
+[0m?   	sysctl	[no test files]
+[91mgo build...
+[0m[91m# sysctl
+warning: unable to find runtime/cgo.a
+[0m ---> 165c051cde00
+Removing intermediate container bc177065cc70
+Step 6/13 : FROM scratch
+ ---> 
+Step 7/13 : ENTRYPOINT 
+ ---> Using cache
+ ---> f31f9423f1a3
+Step 8/13 : CMD 
+ ---> Using cache
+ ---> ab15e8c33168
+Step 9/13 : WORKDIR /
+ ---> Using cache
+ ---> 85f747d466ca
+Step 10/13 : COPY --from=mirror /go/bin/sysctl /usr/bin/sysctl
+ ---> 4ea04c8a9e6e
+Removing intermediate container 568e6a11e4a8
+Step 11/13 : COPY etc/ /etc/
+ ---> fdcfc873fd53
+Removing intermediate container f477816f37f5
+Step 12/13 : CMD /usr/bin/sysctl
+ ---> Running in 8b62afc80572
+ ---> cae510032161
+Removing intermediate container 8b62afc80572
+Step 13/13 : LABEL org.mobyproject.config '{"pid": "host", "readonly": true, "capabilities": ["CAP_SYS_ADMIN"]}'
+ ---> Running in cd991d1fb576
+ ---> f165c5c8c9c9
+Removing intermediate container cd991d1fb576
+Successfully built f165c5c8c9c9
+Successfully tagged linuxkit/sysctl:0633d72d7ea416ec858d75f8691ed636b5d4446d-dirty
+make[2]: Leaving directory '/tmp/build/pkg/sysctl'
+make[2]: Entering directory '/tmp/build/pkg/format'
+DOCKER_CONTENT_TRUST=1 docker pull linuxkit/format:ba085fdcac31c383acee3b4b91d78eb7095e5ac3-dirty || \
+docker build  -t linuxkit/format:ba085fdcac31c383acee3b4b91d78eb7095e5ac3-dirty .
+No trust data for ba085fdcac31c383acee3b4b91d78eb7095e5ac3-dirty
+Sending build context to Docker daemon   7.68kB
+Step 1/12 : FROM linuxkit/alpine:c608d404c1cb36cce0c7d9303e30b52c9d81ccf0 AS mirror
+ ---> b5fd1502dd6c
+Step 2/12 : RUN mkdir -p /out/etc/apk && cp -r /etc/apk/* /out/etc/apk/
+ ---> Using cache
+ ---> 9ae44f6f1516
+Step 3/12 : RUN apk add --no-cache --initdb -p /out     alpine-baselayout     busybox     e2fsprogs     e2fsprogs-extra     jq     musl     sfdisk     && true
+ ---> Running in 69f8f9858ddc
+(1/14) Installing musl (1.1.16-r10)
+(2/14) Installing busybox (1.26.2-r5)
+Executing busybox-1.26.2-r5.post-install
+(3/14) Installing alpine-baselayout (3.0.4-r0)
+Executing alpine-baselayout-3.0.4-r0.pre-install
+Executing alpine-baselayout-3.0.4-r0.post-install
+(4/14) Installing libuuid (2.28.2-r2)
+(5/14) Installing libblkid (2.28.2-r2)
+(6/14) Installing libcom_err (1.43.4-r0)
+(7/14) Installing e2fsprogs-libs (1.43.4-r0)
+(8/14) Installing e2fsprogs (1.43.4-r0)
+(9/14) Installing e2fsprogs-extra (1.43.4-r0)
+(10/14) Installing oniguruma (6.2.0-r0)
+(11/14) Installing jq (1.5-r3)
+(12/14) Installing libfdisk (2.28.2-r2)
+(13/14) Installing libsmartcols (2.28.2-r2)
+(14/14) Installing sfdisk (2.28.2-r2)
+Executing busybox-1.26.2-r5.trigger
+OK: 5 MiB in 14 packages
+ ---> 09245f428661
+Removing intermediate container 69f8f9858ddc
+Step 4/12 : RUN rm -rf /out/etc/apk /out/lib/apk /out/var/cache
+ ---> Running in dc0e6d28966e
+ ---> e5b2ac962c8c
+Removing intermediate container dc0e6d28966e
+Step 5/12 : FROM scratch
+ ---> 
+Step 6/12 : ENTRYPOINT 
+ ---> Using cache
+ ---> 17bc5a20d569
+Step 7/12 : CMD 
+ ---> Using cache
+ ---> 72f3919b6b42
+Step 8/12 : WORKDIR /
+ ---> Using cache
+ ---> 662482bf02f0
+Step 9/12 : COPY --from=mirror /out/ /
+ ---> fabdf41bfcca
+Removing intermediate container d0a7a07a14a3
+Step 10/12 : COPY format.sh /
+ ---> 808afb7803e5
+Removing intermediate container f8b9d647774f
+Step 11/12 : CMD /bin/sh /format.sh
+ ---> Running in b82bc2a99d4f
+ ---> 71ef4d09f6ee
+Removing intermediate container b82bc2a99d4f
+Step 12/12 : LABEL org.mobyproject.config '{"binds": ["/dev:/dev"], "capabilities": ["CAP_SYS_ADMIN", "CAP_MKNOD"], "net": "new", "ipc": "new"}'
+ ---> Running in aea63f7103c3
+ ---> 300b3d00b91c
+Removing intermediate container aea63f7103c3
+Successfully built 300b3d00b91c
+Successfully tagged linuxkit/format:ba085fdcac31c383acee3b4b91d78eb7095e5ac3-dirty
+make[2]: Leaving directory '/tmp/build/pkg/format'
+make[2]: Entering directory '/tmp/build/pkg/openntpd'
+DOCKER_CONTENT_TRUST=1 docker pull linuxkit/openntpd:a4c642d52e985922fcd97db52e471db123cc6841-dirty || \
+docker build  -t linuxkit/openntpd:a4c642d52e985922fcd97db52e471db123cc6841-dirty .
+No trust data for a4c642d52e985922fcd97db52e471db123cc6841-dirty
+Sending build context to Docker daemon  5.632kB
+Step 1/12 : FROM linuxkit/alpine:c608d404c1cb36cce0c7d9303e30b52c9d81ccf0 AS mirror
+ ---> b5fd1502dd6c
+Step 2/12 : RUN mkdir -p /out/etc/apk && cp -r /etc/apk/* /out/etc/apk/
+ ---> Using cache
+ ---> 9ae44f6f1516
+Step 3/12 : RUN apk add --no-cache --initdb -p /out     alpine-baselayout     busybox     musl     openntpd     && true
+ ---> Running in d97b994184f5
+(1/7) Installing musl (1.1.16-r10)
+(2/7) Installing busybox (1.26.2-r5)
+Executing busybox-1.26.2-r5.post-install
+(3/7) Installing alpine-baselayout (3.0.4-r0)
+Executing alpine-baselayout-3.0.4-r0.pre-install
+Executing alpine-baselayout-3.0.4-r0.post-install
+(4/7) Installing libressl2.5-libcrypto (2.5.4-r0)
+(5/7) Installing libressl2.5-libssl (2.5.4-r0)
+(6/7) Installing libressl2.5-libtls (2.5.4-r0)
+(7/7) Installing openntpd (6.0_p1-r3)
+Executing openntpd-6.0_p1-r3.pre-install
+Executing busybox-1.26.2-r5.trigger
+OK: 3 MiB in 7 packages
+ ---> 33e425459dc5
+Removing intermediate container d97b994184f5
+Step 4/12 : RUN rm -rf /out/etc/apk /out/lib/apk /out/var/cache
+ ---> Running in 52d19f994685
+ ---> d42799ebcbb8
+Removing intermediate container 52d19f994685
+Step 5/12 : FROM scratch
+ ---> 
+Step 6/12 : ENTRYPOINT 
+ ---> Using cache
+ ---> 17bc5a20d569
+Step 7/12 : CMD 
+ ---> Using cache
+ ---> 72f3919b6b42
+Step 8/12 : WORKDIR /
+ ---> Using cache
+ ---> 662482bf02f0
+Step 9/12 : COPY --from=mirror /out/ /
+ ---> 3627a66155db
+Removing intermediate container 87cf84dde695
+Step 10/12 : COPY etc/ /etc/
+ ---> c6deb7a6013f
+Removing intermediate container 53c5950759f5
+Step 11/12 : CMD /usr/sbin/ntpd -d -s
+ ---> Running in a45c7c9b8df8
+ ---> d23b541dc74a
+Removing intermediate container a45c7c9b8df8
+Step 12/12 : LABEL org.mobyproject.config '{"capabilities": ["CAP_SYS_TIME", "CAP_SYS_NICE", "CAP_SYS_CHROOT", "CAP_SETUID", "CAP_SETGID"]}'
+ ---> Running in 85c10b2d5575
+ ---> 60c7519a809e
+Removing intermediate container 85c10b2d5575
+Successfully built 60c7519a809e
+Successfully tagged linuxkit/openntpd:a4c642d52e985922fcd97db52e471db123cc6841-dirty
+make[2]: Leaving directory '/tmp/build/pkg/openntpd'
+make[2]: Entering directory '/tmp/build/pkg/vsudd'
+DOCKER_CONTENT_TRUST=1 docker pull linuxkit/vsudd:9e5882b4450a97836e113bcad231f497aa7bdba4-dirty || \
+docker build  -t linuxkit/vsudd:9e5882b4450a97836e113bcad231f497aa7bdba4-dirty .
+No trust data for 9e5882b4450a97836e113bcad231f497aa7bdba4-dirty
+Sending build context to Docker daemon  3.584kB
+Step 1/8 : FROM linuxkit/alpine:c608d404c1cb36cce0c7d9303e30b52c9d81ccf0 AS mirror
+ ---> b5fd1502dd6c
+Step 2/8 : RUN apk add --no-cache go musl-dev git build-base
+ ---> Running in 9b882aab3a28
+(1/25) Installing binutils-libs (2.28-r2)
+(2/25) Installing binutils (2.28-r2)
+(3/25) Installing gmp (6.1.2-r0)
+(4/25) Installing isl (0.17.1-r0)
+(5/25) Installing libgomp (6.3.0-r4)
+(6/25) Installing libatomic (6.3.0-r4)
+(7/25) Installing pkgconf (1.3.7-r0)
+(8/25) Installing libgcc (6.3.0-r4)
+(9/25) Installing mpfr3 (3.1.5-r0)
+(10/25) Installing mpc1 (1.0.3-r0)
+(11/25) Installing libstdc++ (6.3.0-r4)
+(12/25) Installing gcc (6.3.0-r4)
+(13/25) Installing musl-dev (1.1.16-r10)
+(14/25) Installing libc-dev (0.7.1-r0)
+(15/25) Installing g++ (6.3.0-r4)
+(16/25) Installing make (4.2.1-r0)
+(17/25) Installing fortify-headers (0.8-r0)
+(18/25) Installing build-base (0.5-r0)
+(19/25) Installing ca-certificates (20161130-r2)
+(20/25) Installing libssh2 (1.8.0-r1)
+(21/25) Installing libcurl (7.54.0-r0)
+(22/25) Installing expat (2.2.0-r1)
+(23/25) Installing pcre (8.40-r2)
+(24/25) Installing git (2.13.0-r0)
+(25/25) Installing go (1.8.1-r2)
+Executing busybox-1.26.2-r5.trigger
+Executing ca-certificates-20161130-r2.trigger
+OK: 359 MiB in 36 packages
+ ---> e1fadac818ea
+Removing intermediate container 9b882aab3a28
+Step 3/8 : ENV GOPATH /go PATH $PATH:/go/bin
+ ---> Running in 2a4e8dd14ec7
+ ---> f019fc72d078
+Removing intermediate container 2a4e8dd14ec7
+Step 4/8 : ENV VIRTSOCK_COMMIT a381dcc5bcddf1d7f449495c373dbf70f8e501c0
+ ---> Running in 3a4cb6d814ff
+ ---> 1162e886a2e4
+Removing intermediate container 3a4cb6d814ff
+Step 5/8 : RUN git clone https://github.com/linuxkit/virtsock.git /go/src/github.com/linuxkit/virtsock &&     cd /go/src/github.com/linuxkit/virtsock &&     git checkout $VIRTSOCK_COMMIT &&     make vsudd
+ ---> Running in 01be5231593d
+[91mCloning into '/go/src/github.com/linuxkit/virtsock'...
+[0m[91mNote: checking out 'a381dcc5bcddf1d7f449495c373dbf70f8e501c0'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+[0m[91mHEAD is now at a381dcc... Merge pull request #30 from MagnusS/cmd-vsudd
+[0m+ build/vsudd.linux
+GOOS=linux GOARCH=amd64 \
+go build -o build/vsudd.linux -buildmode pie --ldflags '-s -w -extldflags "-static"' \
+	cmd/vsudd/main.go cmd/vsudd/vsyslog.go
+ ---> 018ada965026
+Removing intermediate container 01be5231593d
+Step 6/8 : FROM scratch
+ ---> 
+Step 7/8 : COPY --from=mirror /go/src/github.com/linuxkit/virtsock/build/vsudd.linux /vsudd
+ ---> 44b005e0fc9b
+Removing intermediate container db289876b78e
+Step 8/8 : ENTRYPOINT /vsudd
+ ---> Running in 6491c4c23889
+ ---> 1c6e273308ba
+Removing intermediate container 6491c4c23889
+Successfully built 1c6e273308ba
+Successfully tagged linuxkit/vsudd:9e5882b4450a97836e113bcad231f497aa7bdba4-dirty
+make[2]: Leaving directory '/tmp/build/pkg/vsudd'
+make[2]: Entering directory '/tmp/build/pkg/sshd'
+DOCKER_CONTENT_TRUST=1 docker pull linuxkit/sshd:f095b62ddca658e99d5751872c933ef3d5d18cec-dirty || \
+docker build  -t linuxkit/sshd:f095b62ddca658e99d5751872c933ef3d5d18cec-dirty .
+No trust data for f095b62ddca658e99d5751872c933ef3d5d18cec-dirty
+Sending build context to Docker daemon  12.29kB
+Step 1/13 : FROM linuxkit/alpine:c608d404c1cb36cce0c7d9303e30b52c9d81ccf0 AS mirror
+ ---> b5fd1502dd6c
+Step 2/13 : RUN mkdir -p /out/etc/apk && cp -r /etc/apk/* /out/etc/apk/
+ ---> Using cache
+ ---> 9ae44f6f1516
+Step 3/13 : RUN apk add --no-cache --initdb -p /out     alpine-baselayout     busybox     ca-certificates     musl     openssh-server     tini     util-linux     && true
+ ---> Running in c366a05cf56b
+(1/19) Installing musl (1.1.16-r10)
+(2/19) Installing busybox (1.26.2-r5)
+Executing busybox-1.26.2-r5.post-install
+(3/19) Installing alpine-baselayout (3.0.4-r0)
+Executing alpine-baselayout-3.0.4-r0.pre-install
+Executing alpine-baselayout-3.0.4-r0.post-install
+(4/19) Installing libressl2.5-libcrypto (2.5.4-r0)
+(5/19) Installing ca-certificates (20161130-r2)
+(6/19) Installing openssh-keygen (7.5_p1-r1)
+(7/19) Installing zlib (1.2.11-r0)
+(8/19) Installing openssh-server (7.5_p1-r1)
+(9/19) Installing tini (0.14.0-r0)
+(10/19) Installing libuuid (2.28.2-r2)
+(11/19) Installing libblkid (2.28.2-r2)
+(12/19) Installing libmount (2.28.2-r2)
+(13/19) Installing libsmartcols (2.28.2-r2)
+(14/19) Installing findmnt (2.28.2-r2)
+(15/19) Installing libfdisk (2.28.2-r2)
+(16/19) Installing ncurses-terminfo-base (6.0-r7)
+(17/19) Installing ncurses-terminfo (6.0-r7)
+(18/19) Installing ncurses-libs (6.0-r7)
+(19/19) Installing util-linux (2.28.2-r2)
+Executing busybox-1.26.2-r5.trigger
+Executing ca-certificates-20161130-r2.trigger
+OK: 16 MiB in 19 packages
+ ---> 1b7af415df44
+Removing intermediate container c366a05cf56b
+Step 4/13 : RUN rm -rf /out/etc/apk /out/lib/apk /out/var/cache
+ ---> Running in 5022ff545819
+ ---> 7c330e346181
+Removing intermediate container 5022ff545819
+Step 5/13 : FROM scratch
+ ---> 
+Step 6/13 : ENTRYPOINT 
+ ---> Using cache
+ ---> 17bc5a20d569
+Step 7/13 : WORKDIR /
+ ---> 2e2babe8b63e
+Removing intermediate container 761ad1c25dc7
+Step 8/13 : COPY --from=mirror /out/ /
+ ---> b8a6622de7da
+Removing intermediate container 0fc22b7585ea
+Step 9/13 : COPY etc/ /etc/
+ ---> 9a74a2b785dc
+Removing intermediate container 7865b842b1ca
+Step 10/13 : COPY usr/ /usr/
+ ---> 339a00ae3a70
+Removing intermediate container 67e6221d4f84
+Step 11/13 : RUN mkdir -p /etc/ssh /root/.ssh && chmod 0700 /root/.ssh
+ ---> Running in 819835ec9233
+ ---> dc0d64392bb5
+Removing intermediate container 819835ec9233
+Step 12/13 : CMD /sbin/tini /usr/bin/ssh.sh
+ ---> Running in 9fa314ad78ba
+ ---> fd70491b5208
+Removing intermediate container 9fa314ad78ba
+Step 13/13 : LABEL org.mobyproject.config '{"pid": "host", "binds": ["/root/.ssh:/root/.ssh", "/etc/resolv.conf:/etc/resolv.conf", "/run:/run", "/tmp:/tmp", "/etc:/hostroot/etc", "/usr/bin/ctr:/usr/bin/ctr", "/usr/bin/runc:/usr/bin/runc", "/usr/bin/dist:/usr/bin/dist", "/var:/var","/containers:/containers","/dev:/dev","/sys:/sys"], "capabilities": ["all"]}'
+ ---> Running in 625bb473508e
+ ---> 5018be13b394
+Removing intermediate container 625bb473508e
+Successfully built 5018be13b394
+Successfully tagged linuxkit/sshd:f095b62ddca658e99d5751872c933ef3d5d18cec-dirty
+make[2]: Leaving directory '/tmp/build/pkg/sshd'
+make[2]: Entering directory '/tmp/build/pkg/node_exporter'
+DOCKER_CONTENT_TRUST=1 docker pull linuxkit/node_exporter:0e8d0f1d979507837ad88943864c02b310f7a78f-dirty || \
+docker build  -t linuxkit/node_exporter:0e8d0f1d979507837ad88943864c02b310f7a78f-dirty .
+No trust data for 0e8d0f1d979507837ad88943864c02b310f7a78f-dirty
+Sending build context to Docker daemon  3.072kB
+Step 1/3 : FROM prom/node-exporter:v0.14.0@sha256:ea8396dd32be6195ef03438b2f459b2e69a88b8fc798c3fc51559f56d4b158fa
+v0.14.0: Pulling from prom/node-exporter
+df74c0cea8ad: Already exists
+a3ed95caeb02: Already exists
+ce984171bf74: Already exists
+a3ed95caeb02: Already exists
+5844de687528: Already exists
+a3ed95caeb02: Already exists
+a3ed95caeb02: Already exists
+Digest: sha256:ea8396dd32be6195ef03438b2f459b2e69a88b8fc798c3fc51559f56d4b158fa
+Status: Downloaded newer image for prom/node-exporter:v0.14.0@sha256:ea8396dd32be6195ef03438b2f459b2e69a88b8fc798c3fc51559f56d4b158fa
+ ---> bb4a6b774658
+Step 2/3 : ENTRYPOINT /bin/node_exporter -collector.procfs /host/proc -collector.sysfs /host/sys -collector.filesystem.ignored-mount-points ^/(sys|proc|dev|host|etc)($|/)
+ ---> Running in e5b5cea7c300
+ ---> c8c2e83ab0bd
+Removing intermediate container e5b5cea7c300
+Step 3/3 : LABEL org.mobyproject.config '{"pid": "host", "binds": ["/proc:/host/proc", "/sys:/host/sys", "/:/rootfs"], "capabilities": ["all"]}'
+ ---> Running in cf012e359acd
+ ---> 24fd94dd7a23
+Removing intermediate container cf012e359acd
+Successfully built 24fd94dd7a23
+Successfully tagged linuxkit/node_exporter:0e8d0f1d979507837ad88943864c02b310f7a78f-dirty
+make[2]: Leaving directory '/tmp/build/pkg/node_exporter'
+make[2]: Entering directory '/tmp/build/pkg/init'
+DOCKER_CONTENT_TRUST=1 docker pull linuxkit/init:36c56f0664d49c5a6adc1120d1bf5ba6ac30b389-dirty || \
+docker build  -t linuxkit/init:36c56f0664d49c5a6adc1120d1bf5ba6ac30b389-dirty .
+No trust data for 36c56f0664d49c5a6adc1120d1bf5ba6ac30b389-dirty
+Sending build context to Docker daemon  18.94kB
+Step 1/17 : FROM linuxkit/alpine:c608d404c1cb36cce0c7d9303e30b52c9d81ccf0 AS build
+ ---> b5fd1502dd6c
+Step 2/17 : RUN apk add --no-cache --initdb alpine-baselayout make gcc musl-dev
+ ---> Running in e390c3857d7a
+(1/14) Installing binutils-libs (2.28-r2)
+(2/14) Installing binutils (2.28-r2)
+(3/14) Installing gmp (6.1.2-r0)
+(4/14) Installing isl (0.17.1-r0)
+(5/14) Installing libgomp (6.3.0-r4)
+(6/14) Installing libatomic (6.3.0-r4)
+(7/14) Installing pkgconf (1.3.7-r0)
+(8/14) Installing libgcc (6.3.0-r4)
+(9/14) Installing mpfr3 (3.1.5-r0)
+(10/14) Installing mpc1 (1.0.3-r0)
+(11/14) Installing libstdc++ (6.3.0-r4)
+(12/14) Installing gcc (6.3.0-r4)
+(13/14) Installing make (4.2.1-r0)
+(14/14) Installing musl-dev (1.1.16-r10)
+Executing busybox-1.26.2-r5.trigger
+OK: 97 MiB in 25 packages
+ ---> b99c5966cf03
+Removing intermediate container e390c3857d7a
+Step 3/17 : ADD usermode-helper.c .
+ ---> c78f99705bb7
+Removing intermediate container ab139348c8da
+Step 4/17 : RUN make usermode-helper
+ ---> Running in 66054b8c121a
+cc     usermode-helper.c   -o usermode-helper
+ ---> b952da64d71f
+Removing intermediate container 66054b8c121a
+Step 5/17 : FROM linuxkit/alpine:c608d404c1cb36cce0c7d9303e30b52c9d81ccf0 AS mirror
+ ---> b5fd1502dd6c
+Step 6/17 : RUN mkdir -p /out/etc/apk && cp -r /etc/apk/* /out/etc/apk/
+ ---> Using cache
+ ---> 9ae44f6f1516
+Step 7/17 : RUN apk add --no-cache --initdb -p /out alpine-baselayout busybox musl
+ ---> Running in 84052a4365c5
+(1/3) Installing musl (1.1.16-r10)
+(2/3) Installing busybox (1.26.2-r5)
+Executing busybox-1.26.2-r5.post-install
+(3/3) Installing alpine-baselayout (3.0.4-r0)
+Executing alpine-baselayout-3.0.4-r0.pre-install
+Executing alpine-baselayout-3.0.4-r0.post-install
+Executing busybox-1.26.2-r5.trigger
+OK: 1 MiB in 3 packages
+ ---> 503d1be448c0
+Removing intermediate container 84052a4365c5
+Step 8/17 : RUN rm -rf /out/etc/apk /out/lib/apk /out/var/cache
+ ---> Running in e9967fd46c46
+ ---> 45bace4aa326
+Removing intermediate container e9967fd46c46
+Step 9/17 : FROM scratch
+ ---> 
+Step 10/17 : ENTRYPOINT 
+ ---> Using cache
+ ---> 17bc5a20d569
+Step 11/17 : CMD 
+ ---> Using cache
+ ---> 72f3919b6b42
+Step 12/17 : WORKDIR /
+ ---> Using cache
+ ---> 662482bf02f0
+Step 13/17 : COPY --from=build usermode-helper /sbin/
+ ---> 11a9d8e03425
+Removing intermediate container fff078beed5a
+Step 14/17 : COPY --from=mirror /out/ /
+ ---> 128af0b45f7f
+Removing intermediate container 705a55bb295b
+Step 15/17 : COPY init /
+ ---> ff71d0527b5d
+Removing intermediate container 7d8fd2681917
+Step 16/17 : COPY etc etc/
+ ---> d3ef85e51426
+Removing intermediate container ea03872acc18
+Step 17/17 : COPY bin bin/
+ ---> b1ecef87d637
+Removing intermediate container 97925465e9d0
+Successfully built b1ecef87d637
+Successfully tagged linuxkit/init:36c56f0664d49c5a6adc1120d1bf5ba6ac30b389-dirty
+make[2]: Leaving directory '/tmp/build/pkg/init'
+make[2]: Entering directory '/tmp/build/pkg/swap'
+DOCKER_CONTENT_TRUST=1 docker pull linuxkit/swap:cfdce4b41db13ce996cfa986b12b69b94f56f718-dirty || \
+docker build  -t linuxkit/swap:cfdce4b41db13ce996cfa986b12b69b94f56f718-dirty .
+No trust data for cfdce4b41db13ce996cfa986b12b69b94f56f718-dirty
+Sending build context to Docker daemon  11.78kB
+Step 1/12 : FROM linuxkit/alpine:c608d404c1cb36cce0c7d9303e30b52c9d81ccf0 AS mirror
+ ---> b5fd1502dd6c
+Step 2/12 : RUN mkdir -p /out/etc/apk && cp -r /etc/apk/* /out/etc/apk/
+ ---> Using cache
+ ---> 9ae44f6f1516
+Step 3/12 : RUN apk add --no-cache --initdb -p /out     alpine-baselayout     busybox     cryptsetup     musl     util-linux
+ ---> Running in d74e2de9de4c
+(1/19) Installing musl (1.1.16-r10)
+(2/19) Installing busybox (1.26.2-r5)
+Executing busybox-1.26.2-r5.post-install
+(3/19) Installing alpine-baselayout (3.0.4-r0)
+Executing alpine-baselayout-3.0.4-r0.pre-install
+Executing alpine-baselayout-3.0.4-r0.post-install
+(4/19) Installing libressl2.5-libcrypto (2.5.4-r0)
+(5/19) Installing device-mapper-libs (2.02.168-r3)
+(6/19) Installing libuuid (2.28.2-r2)
+(7/19) Installing cryptsetup-libs (1.7.5-r0)
+(8/19) Installing popt (1.16-r6)
+(9/19) Installing cryptsetup (1.7.5-r0)
+(10/19) Installing libblkid (2.28.2-r2)
+(11/19) Installing libmount (2.28.2-r2)
+(12/19) Installing libsmartcols (2.28.2-r2)
+(13/19) Installing findmnt (2.28.2-r2)
+(14/19) Installing libfdisk (2.28.2-r2)
+(15/19) Installing ncurses-terminfo-base (6.0-r7)
+(16/19) Installing ncurses-terminfo (6.0-r7)
+(17/19) Installing ncurses-libs (6.0-r7)
+(18/19) Installing zlib (1.2.11-r0)
+(19/19) Installing util-linux (2.28.2-r2)
+Executing busybox-1.26.2-r5.trigger
+OK: 14 MiB in 19 packages
+ ---> 9cf49293a137
+Removing intermediate container d74e2de9de4c
+Step 4/12 : RUN rm -rf /out/etc/apk /out/lib/apk /out/var/cache
+ ---> Running in ca521e434901
+ ---> 5a0b441a9b8a
+Removing intermediate container ca521e434901
+Step 5/12 : FROM scratch
+ ---> 
+Step 6/12 : ENTRYPOINT 
+ ---> Using cache
+ ---> 17bc5a20d569
+Step 7/12 : CMD 
+ ---> Using cache
+ ---> 72f3919b6b42
+Step 8/12 : WORKDIR /
+ ---> Using cache
+ ---> 662482bf02f0
+Step 9/12 : COPY --from=mirror /out/ /
+ ---> c422ce3c866d
+Removing intermediate container 874db0b208d4
+Step 10/12 : COPY /swap.sh .
+ ---> 6d9fb48d600e
+Removing intermediate container d28eaaebda83
+Step 11/12 : ENTRYPOINT swap.sh
+ ---> Running in 3ac4e3e6e638
+ ---> 5c0723dc6ce4
+Removing intermediate container 3ac4e3e6e638
+Step 12/12 : LABEL org.mobyproject.config '{"binds": ["/dev:/dev", "/var:/var"], "capabilities": ["CAP_SYS_ADMIN", "CAP_MKNOD"], "net": "new", "ipc": "new"}'
+ ---> Running in b5a1886f1f46
+ ---> 953f35700c06
+Removing intermediate container b5a1886f1f46
+Successfully built 953f35700c06
+Successfully tagged linuxkit/swap:cfdce4b41db13ce996cfa986b12b69b94f56f718-dirty
+make[2]: Leaving directory '/tmp/build/pkg/swap'
+make[2]: Entering directory '/tmp/build/pkg/ca-certificates'
+DOCKER_CONTENT_TRUST=1 docker pull linuxkit/ca-certificates:46b59484919bfa9af700e54e042048cb06261de4-dirty || \
+docker build  -t linuxkit/ca-certificates:46b59484919bfa9af700e54e042048cb06261de4-dirty .
+No trust data for 46b59484919bfa9af700e54e042048cb06261de4-dirty
+Sending build context to Docker daemon  3.072kB
+Step 1/6 : FROM linuxkit/alpine:c608d404c1cb36cce0c7d9303e30b52c9d81ccf0 as alpine
+ ---> b5fd1502dd6c
+Step 2/6 : RUN apk add ca-certificates
+ ---> Running in cc1c8592cd81
+(1/1) Installing ca-certificates (20161130-r2)
+Executing busybox-1.26.2-r5.trigger
+Executing ca-certificates-20161130-r2.trigger
+OK: 5 MiB in 12 packages
+ ---> cebd011e57cd
+Removing intermediate container cc1c8592cd81
+Step 3/6 : FROM scratch
+ ---> 
+Step 4/6 : ENTRYPOINT 
+ ---> Using cache
+ ---> 17bc5a20d569
+Step 5/6 : WORKDIR /
+ ---> Using cache
+ ---> 2e2babe8b63e
+Step 6/6 : COPY --from=alpine /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+ ---> d6573eafb5f5
+Removing intermediate container d7fdf2551734
+Successfully built d6573eafb5f5
+Successfully tagged linuxkit/ca-certificates:46b59484919bfa9af700e54e042048cb06261de4-dirty
+make[2]: Leaving directory '/tmp/build/pkg/ca-certificates'
+make[2]: Entering directory '/tmp/build/pkg/dhcpcd'
+DOCKER_CONTENT_TRUST=1 docker pull linuxkit/dhcpcd:6c1ca76dbf808d5c27d10cbf22a8d4399be5c8ae-dirty || \
+docker build  -t linuxkit/dhcpcd:6c1ca76dbf808d5c27d10cbf22a8d4399be5c8ae-dirty .
+No trust data for 6c1ca76dbf808d5c27d10cbf22a8d4399be5c8ae-dirty
+Sending build context to Docker daemon  9.216kB
+Step 1/12 : FROM linuxkit/alpine:c608d404c1cb36cce0c7d9303e30b52c9d81ccf0 AS mirror
+ ---> b5fd1502dd6c
+Step 2/12 : RUN mkdir -p /out/etc/apk && cp -r /etc/apk/* /out/etc/apk/
+ ---> Using cache
+ ---> 9ae44f6f1516
+Step 3/12 : RUN apk add --no-cache --initdb -p /out     alpine-baselayout     busybox     dhcpcd     musl
+ ---> Running in 6d5a31369c8b
+(1/4) Installing musl (1.1.16-r10)
+(2/4) Installing busybox (1.26.2-r5)
+Executing busybox-1.26.2-r5.post-install
+(3/4) Installing alpine-baselayout (3.0.4-r0)
+Executing alpine-baselayout-3.0.4-r0.pre-install
+Executing alpine-baselayout-3.0.4-r0.post-install
+(4/4) Installing dhcpcd (6.11.5-r1)
+Executing busybox-1.26.2-r5.trigger
+OK: 2 MiB in 4 packages
+ ---> fd6cc02496c6
+Removing intermediate container 6d5a31369c8b
+Step 4/12 : RUN rm -rf /out/etc/apk /out/lib/apk /out/var/cache
+ ---> Running in f3c63b1fbace
+ ---> 6f0d22f1601d
+Removing intermediate container f3c63b1fbace
+Step 5/12 : FROM scratch
+ ---> 
+Step 6/12 : ENTRYPOINT 
+ ---> Using cache
+ ---> 17bc5a20d569
+Step 7/12 : CMD 
+ ---> Using cache
+ ---> 72f3919b6b42
+Step 8/12 : WORKDIR /
+ ---> Using cache
+ ---> 662482bf02f0
+Step 9/12 : COPY --from=mirror /out/ /
+ ---> 9e4899e69d2b
+Removing intermediate container a75cca106ea6
+Step 10/12 : COPY /dhcpcd.conf /usr/ /
+ ---> b6383d4d9678
+Removing intermediate container 7e927db5f30f
+Step 11/12 : CMD /sbin/dhcpcd --nobackground -f /dhcpcd.conf
+ ---> Running in 3026e2544aa4
+ ---> 2edc5efc11b5
+Removing intermediate container 3026e2544aa4
+Step 12/12 : LABEL org.mobyproject.config '{"binds": ["/var:/var", "/tmp/etc:/etc"], "capabilities": ["CAP_NET_ADMIN", "CAP_NET_BIND_SERVICE", "CAP_NET_RAW"]}'
+ ---> Running in b6c8f94adb28
+ ---> 1e6db7dbc844
+Removing intermediate container b6c8f94adb28
+Successfully built 1e6db7dbc844
+Successfully tagged linuxkit/dhcpcd:6c1ca76dbf808d5c27d10cbf22a8d4399be5c8ae-dirty
+make[2]: Leaving directory '/tmp/build/pkg/dhcpcd'
+make[2]: Entering directory '/tmp/build/pkg/sysfs'
+DOCKER_CONTENT_TRUST=1 docker pull linuxkit/sysfs:b4091d81261f4582ff899a8510110fc4f2be2b49-dirty || \
+docker build  -t linuxkit/sysfs:b4091d81261f4582ff899a8510110fc4f2be2b49-dirty .
+No trust data for b4091d81261f4582ff899a8510110fc4f2be2b49-dirty
+Sending build context to Docker daemon   7.68kB
+Step 1/13 : FROM linuxkit/alpine:c608d404c1cb36cce0c7d9303e30b52c9d81ccf0 AS mirror
+ ---> b5fd1502dd6c
+Step 2/13 : RUN apk add --no-cache go musl-dev
+ ---> Using cache
+ ---> 08ecd7169823
+Step 3/13 : ENV GOPATH /go PATH $PATH:/go/bin
+ ---> Using cache
+ ---> 7380577699a7
+Step 4/13 : COPY main.go /go/src/sysfs/
+ ---> 40649c1e97e9
+Removing intermediate container 6328f244c943
+Step 5/13 : RUN go-compile.sh /go/src/sysfs
+ ---> Running in ddf212b60924
+[91mgofmt...
+[0m[91mgovet...
+[0m[91mgolint...
+[0m[91mineffassign...
+[0m[91mgo test...
+[0m?   	sysfs	[no test files]
+[91mgo build...
+[0m[91m# sysfs
+warning: unable to find runtime/cgo.a
+[0m ---> 23f76c79704f
+Removing intermediate container ddf212b60924
+Step 6/13 : FROM scratch
+ ---> 
+Step 7/13 : ENTRYPOINT 
+ ---> Using cache
+ ---> f31f9423f1a3
+Step 8/13 : CMD 
+ ---> Using cache
+ ---> ab15e8c33168
+Step 9/13 : WORKDIR /
+ ---> Using cache
+ ---> 85f747d466ca
+Step 10/13 : COPY --from=mirror /go/bin/sysfs /usr/bin/sysfs
+ ---> ac4ee91c87c6
+Removing intermediate container 685dd80815e7
+Step 11/13 : COPY etc/ /etc/
+ ---> 83acc4ae302c
+Removing intermediate container e8ff40a4307c
+Step 12/13 : CMD /usr/bin/sysfs
+ ---> Running in f4ff1fca50dd
+ ---> f5e1e1669ec3
+Removing intermediate container f4ff1fca50dd
+Step 13/13 : LABEL org.mobyproject.config '{"net": "new", "ipc": "new"}'
+ ---> Running in f015cf6c2508
+ ---> eec3507a00c8
+Removing intermediate container f015cf6c2508
+Successfully built eec3507a00c8
+Successfully tagged linuxkit/sysfs:b4091d81261f4582ff899a8510110fc4f2be2b49-dirty
+make[2]: Leaving directory '/tmp/build/pkg/sysfs'
+make[2]: Entering directory '/tmp/build/pkg/mkimage'
+DOCKER_CONTENT_TRUST=1 docker pull linuxkit/mkimage:3c01548c7166e710f8332e18773a28284bc13179-dirty || \
+docker build  -t linuxkit/mkimage:3c01548c7166e710f8332e18773a28284bc13179-dirty .
+No trust data for 3c01548c7166e710f8332e18773a28284bc13179-dirty
+Sending build context to Docker daemon  6.144kB
+Step 1/12 : FROM linuxkit/alpine:c608d404c1cb36cce0c7d9303e30b52c9d81ccf0 AS mirror
+ ---> b5fd1502dd6c
+Step 2/12 : RUN mkdir -p /out/etc/apk && cp -r /etc/apk/* /out/etc/apk/
+ ---> Using cache
+ ---> 9ae44f6f1516
+Step 3/12 : RUN apk add --no-cache --initdb -p /out     alpine-baselayout     busybox     e2fsprogs     e2fsprogs-extra     musl     sfdisk     syslinux     xfsprogs     && true
+ ---> Running in c6bb72a98e65
+(1/27) Installing musl (1.1.16-r10)
+(2/27) Installing busybox (1.26.2-r5)
+Executing busybox-1.26.2-r5.post-install
+(3/27) Installing alpine-baselayout (3.0.4-r0)
+Executing alpine-baselayout-3.0.4-r0.pre-install
+Executing alpine-baselayout-3.0.4-r0.post-install
+(4/27) Installing libuuid (2.28.2-r2)
+(5/27) Installing libblkid (2.28.2-r2)
+(6/27) Installing libcom_err (1.43.4-r0)
+(7/27) Installing e2fsprogs-libs (1.43.4-r0)
+(8/27) Installing e2fsprogs (1.43.4-r0)
+(9/27) Installing e2fsprogs-extra (1.43.4-r0)
+(10/27) Installing libfdisk (2.28.2-r2)
+(11/27) Installing libsmartcols (2.28.2-r2)
+(12/27) Installing sfdisk (2.28.2-r2)
+(13/27) Installing mtools (4.0.18-r1)
+(14/27) Installing blkid (2.28.2-r2)
+(15/27) Installing libressl2.5-libcrypto (2.5.4-r0)
+(16/27) Installing libressl2.5-libssl (2.5.4-r0)
+(17/27) Installing zlib (1.2.11-r0)
+(18/27) Installing apk-tools (2.7.2-r0)
+(19/27) Installing scanelf (1.2.2-r0)
+(20/27) Installing lddtree (1.26-r0)
+(21/27) Installing device-mapper-libs (2.02.168-r3)
+(22/27) Installing cryptsetup-libs (1.7.5-r0)
+(23/27) Installing xz-libs (5.2.3-r0)
+(24/27) Installing kmod (23-r1)
+(25/27) Installing mkinitfs (3.1.0-r0)
+Executing mkinitfs-3.1.0-r0.post-install
+(26/27) Installing syslinux (6.04_pre1-r1)
+(27/27) Installing xfsprogs (4.5.0-r0)
+Executing busybox-1.26.2-r5.trigger
+OK: 12 MiB in 27 packages
+ ---> e727a81fd511
+Removing intermediate container c6bb72a98e65
+Step 4/12 : RUN rm -rf /out/etc/apk /out/lib/apk /out/var/cache
+ ---> Running in 497c042720c7
+ ---> 346c404e3e3e
+Removing intermediate container 497c042720c7
+Step 5/12 : FROM scratch
+ ---> 
+Step 6/12 : ENTRYPOINT 
+ ---> Using cache
+ ---> 17bc5a20d569
+Step 7/12 : CMD 
+ ---> Using cache
+ ---> 72f3919b6b42
+Step 8/12 : WORKDIR /
+ ---> Using cache
+ ---> 662482bf02f0
+Step 9/12 : COPY --from=mirror /out/ /
+ ---> 448367216944
+Removing intermediate container b3c48cebc1e9
+Step 10/12 : COPY mkimage.sh /usr/bin/
+ ---> 64acff7b6031
+Removing intermediate container 307029edd038
+Step 11/12 : CMD mkimage.sh
+ ---> Running in 0cd7d6cafa9f
+ ---> 1921e02cb764
+Removing intermediate container 0cd7d6cafa9f
+Step 12/12 : LABEL org.mobyproject.config '{"readonly": true, "capabilities": ["CAP_SYS_ADMIN", "CAP_MKNOD"], "binds": ["/dev:/dev"]}'
+ ---> Running in 71d66d5f1ef7
+ ---> c88ca65123df
+Removing intermediate container 71d66d5f1ef7
+Successfully built c88ca65123df
+Successfully tagged linuxkit/mkimage:3c01548c7166e710f8332e18773a28284bc13179-dirty
+make[2]: Leaving directory '/tmp/build/pkg/mkimage'
+make[2]: Entering directory '/tmp/build/pkg/vpnkit-forwarder'
+DOCKER_CONTENT_TRUST=1 docker pull linuxkit/vpnkit-forwarder:e2776b82ddfe82ed7f90e55d7a2b424e62e9a279-dirty || \
+docker build  -t linuxkit/vpnkit-forwarder:e2776b82ddfe82ed7f90e55d7a2b424e62e9a279-dirty .
+No trust data for e2776b82ddfe82ed7f90e55d7a2b424e62e9a279-dirty
+Sending build context to Docker daemon  4.608kB
+Step 1/9 : FROM linuxkit/alpine:c608d404c1cb36cce0c7d9303e30b52c9d81ccf0 AS mirror
+ ---> b5fd1502dd6c
+Step 2/9 : RUN apk add --no-cache go musl-dev git build-base
+ ---> Using cache
+ ---> e1fadac818ea
+Step 3/9 : ENV GOPATH /go PATH $PATH:/go/bin
+ ---> Using cache
+ ---> f019fc72d078
+Step 4/9 : ENV COMMIT 2d6d82167cf81c665c05d1425a79adfbc1a71177
+ ---> Running in ac29297fb4f3
+ ---> 318ad367235f
+Removing intermediate container ac29297fb4f3
+Step 5/9 : RUN git clone https://github.com/moby/vpnkit.git /go/src/github.com/moby/vpnkit &&     cd /go/src/github.com/moby/vpnkit &&     git checkout $COMMIT &&     cd go &&     make all
+ ---> Running in d9f23b70d1da
+[91mCloning into '/go/src/github.com/moby/vpnkit'...
+[0m[91mNote: checking out '2d6d82167cf81c665c05d1425a79adfbc1a71177'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b <new-branch-name>
+
+[0m[91mHEAD is now at 2d6d821... Merge pull request #237 from MagnusS/build_flags
+[0mGOOS=linux GOARCH=amd64 \
+go build -o build/vpnkit-forwarder.linux --ldflags '-s -w -extldflags "-static"' --buildmode pie \
+cmd/vpnkit-forwarder/main.go cmd/vpnkit-forwarder/one.go cmd/vpnkit-forwarder/many.go cmd/vpnkit-forwarder/proxy.go
+cp -v build/vpnkit-forwarder.linux build/vpnkit-expose-port.linux
+'build/vpnkit-forwarder.linux' -> 'build/vpnkit-expose-port.linux'
+ ---> fde616133e1e
+Removing intermediate container d9f23b70d1da
+Step 6/9 : FROM scratch
+ ---> 
+Step 7/9 : COPY --from=mirror /go/src/github.com/moby/vpnkit/go/build/vpnkit-forwarder.linux /vpnkit-forwarder
+ ---> 8edd98bd8469
+Removing intermediate container 5045ccf8e3ed
+Step 8/9 : COPY --from=mirror /go/src/github.com/moby/vpnkit/go/build/vpnkit-expose-port.linux /vpnkit-expose-port
+ ---> 028e2ce5971e
+Removing intermediate container 5c2ad6420c02
+Step 9/9 : CMD /vpnkit-forwarder
+ ---> Running in 9c75aea951ec
+ ---> 915d53ce4b54
+Removing intermediate container 9c75aea951ec
+Successfully built 915d53ce4b54
+Successfully tagged linuxkit/vpnkit-forwarder:e2776b82ddfe82ed7f90e55d7a2b424e62e9a279-dirty
+make[2]: Leaving directory '/tmp/build/pkg/vpnkit-forwarder'
+make[2]: Entering directory '/tmp/build/pkg/open-vm-tools'
+DOCKER_CONTENT_TRUST=1 docker pull linuxkit/open-vm-tools:dbb93b76bd86fb3fe47abbd407f8853660ce7bdc-dirty || \
+docker build  -t linuxkit/open-vm-tools:dbb93b76bd86fb3fe47abbd407f8853660ce7bdc-dirty .
+No trust data for dbb93b76bd86fb3fe47abbd407f8853660ce7bdc-dirty
+Sending build context to Docker daemon  3.072kB
+Step 1/10 : FROM linuxkit/alpine:c608d404c1cb36cce0c7d9303e30b52c9d81ccf0 AS mirror
+ ---> b5fd1502dd6c
+Step 2/10 : RUN mkdir -p /out/etc/apk && cp -r /etc/apk/* /out/etc/apk/
+ ---> Using cache
+ ---> 9ae44f6f1516
+Step 3/10 : RUN apk add --no-cache --initdb -p /out     alpine-baselayout     busybox     open-vm-tools
+ ---> Running in 574a43dc64e1
+(1/25) Installing musl (1.1.16-r10)
+(2/25) Installing busybox (1.26.2-r5)
+Executing busybox-1.26.2-r5.post-install
+(3/25) Installing alpine-baselayout (3.0.4-r0)
+Executing alpine-baselayout-3.0.4-r0.pre-install
+Executing alpine-baselayout-3.0.4-r0.post-install
+(4/25) Installing libressl2.5-libcrypto (2.5.4-r0)
+(5/25) Installing fuse (2.9.7-r0)
+(6/25) Installing libgcc (6.3.0-r4)
+(7/25) Installing libffi (3.2.1-r3)
+(8/25) Installing libintl (0.19.8.1-r1)
+(9/25) Installing libuuid (2.28.2-r2)
+(10/25) Installing libblkid (2.28.2-r2)
+(11/25) Installing libmount (2.28.2-r2)
+(12/25) Installing pcre (8.40-r2)
+(13/25) Installing zlib (1.2.11-r0)
+(14/25) Installing glib (2.52.1-r0)
+(15/25) Installing libstdc++ (6.3.0-r4)
+(16/25) Installing icu-libs (58.2-r2)
+(17/25) Installing libmspack (0.5_alpha-r0)
+(18/25) Installing libressl2.5-libssl (2.5.4-r0)
+(19/25) Installing krb5-conf (1.0-r1)
+(20/25) Installing libcom_err (1.43.4-r0)
+(21/25) Installing keyutils-libs (1.5.9-r1)
+(22/25) Installing libverto (0.2.5-r2)
+(23/25) Installing krb5-libs (1.14.3-r2)
+(24/25) Installing libtirpc (1.0.1-r1)
+(25/25) Installing open-vm-tools (10.1.0-r7)
+Executing open-vm-tools-10.1.0-r7.pre-install
+Executing busybox-1.26.2-r5.trigger
+Executing glib-2.52.1-r0.trigger
+OK: 43 MiB in 25 packages
+ ---> df7663325ae8
+Removing intermediate container 574a43dc64e1
+Step 4/10 : RUN rm -rf /out/etc/apk /out/lib/apk /out/var/cache
+ ---> Running in 81903d809963
+ ---> 3ee971ac55b2
+Removing intermediate container 81903d809963
+Step 5/10 : FROM scratch
+ ---> 
+Step 6/10 : ENTRYPOINT 
+ ---> Using cache
+ ---> 17bc5a20d569
+Step 7/10 : CMD 
+ ---> Using cache
+ ---> 72f3919b6b42
+Step 8/10 : WORKDIR /
+ ---> Using cache
+ ---> 662482bf02f0
+Step 9/10 : COPY --from=mirror /out/ /
+ ---> fd6caf7deb58
+Removing intermediate container e04dba3ee8aa
+Step 10/10 : CMD /usr/bin/vmtoolsd
+ ---> Running in 8688b2f76282
+ ---> da61eb8e5d65
+Removing intermediate container 8688b2f76282
+Successfully built da61eb8e5d65
+Successfully tagged linuxkit/open-vm-tools:dbb93b76bd86fb3fe47abbd407f8853660ce7bdc-dirty
+make[2]: Leaving directory '/tmp/build/pkg/open-vm-tools'
+make[1]: Leaving directory '/tmp/build/pkg'
+[2017-06-28 12:53.01] Fetching results
+[2017-06-28 12:53.01] Running "scp" "-r" "-i" "/run/secrets/builder-ssh" "-o" "StrictHostKeyChecking=no" "root@35.190.193.223:/tmp/build/test/_results" "root@35.190.193.223:/tmp/build/artifacts" "."
+[2017-06-28 12:53.07] Removing test VM...
+[2017-06-28 12:53.07] Running "/gcloud/destroy.py" "linuxkit-ci-1"
+INFO:root:Destroying VM
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+[2017-06-28 12:54.06] Saved build result test.img.tar.gz (da2fbfcd03be75b84e425516c65bb154d56168ddbd32d3b7a434334387618d62)
+[2017-06-28 12:54.06] Success
