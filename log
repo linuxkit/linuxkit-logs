@@ -1,0 +1,66 @@
+=== Docker build CI.Dockerfile
+[2017-06-28 13:35.50] Starting...
+Cloning into '/tmp/with_clone2ea16d23'...
+done.
+HEAD is now at 4ef21e1 Merge pull request #19 from dave-tucker/machineup
+Sending build context to Docker daemon 83.46 kB
+Step 1/18 : FROM datakit/ci@sha256:daecb5fa1e017c39323d39bebfc0e6f94762452f46c29aafe115e7270166d692 AS build-env
+sha256:daecb5fa1e017c39323d39bebfc0e6f94762452f46c29aafe115e7270166d692: Pulling from datakit/ci
+Digest: sha256:daecb5fa1e017c39323d39bebfc0e6f94762452f46c29aafe115e7270166d692
+Status: Image is up to date for datakit/ci@sha256:daecb5fa1e017c39323d39bebfc0e6f94762452f46c29aafe115e7270166d692
+ ---> f16cddfd6f02
+Step 2/18 : ARG CONFIG=dkciCI
+ ---> Using cache
+ ---> 4a456019e835
+Step 3/18 : ADD . /src
+ ---> Using cache
+ ---> cf5709ee4224
+Step 4/18 : WORKDIR /src
+ ---> Using cache
+ ---> 7000bd546d99
+Step 5/18 : RUN sudo chown -R opam /src
+ ---> Using cache
+ ---> e9eeaa4dfec4
+Step 6/18 : RUN opam config exec make
+ ---> Using cache
+ ---> d432686b550c
+Step 7/18 : FROM alpine:3.5
+3.5: Pulling from library/alpine
+Digest: sha256:af2a5bd2f8de8fc1ecabf1c76611cdc6a5f1ada1a2bdd7d3816e121b70300308
+Status: Image is up to date for alpine:3.5
+ ---> 074d602a59d7
+Step 8/18 : RUN apk update && apk add 	libev 	docker 	py-pip 	py-setuptools 	tar 	tzdata 	ca-certificates 	openssl 	wget 	bash 	gmp 	openssh-client 	make 	curl 	qemu-img 	qemu-system-x86_64
+ ---> Using cache
+ ---> 41eb3361ef48
+Step 9/18 : RUN pip install google-api-python-client
+ ---> Using cache
+ ---> a9b42bcec967
+Step 10/18 : RUN pip install google-cloud-storage
+ ---> Using cache
+ ---> 3d41a3627b00
+Step 11/18 : RUN wget https://github.com/docker/notary/releases/download/v0.4.3/notary-Linux-amd64 -O /usr/local/bin/notary
+ ---> Using cache
+ ---> b1dad9510f4f
+Step 12/18 : RUN echo '06cd02c4c2e7a3b1ad9899b03b3d4dde5392d964c675247d32f604a24661f839 */usr/local/bin/notary' | sha256sum -w -c -
+ ---> Using cache
+ ---> 185a3af5b1da
+Step 13/18 : RUN chmod a+x /usr/local/bin/notary
+ ---> Using cache
+ ---> 729eda1ee827
+Step 14/18 : USER root
+ ---> Using cache
+ ---> afc3bb89d448
+Step 15/18 : ENTRYPOINT /usr/local/bin/ci
+ ---> Using cache
+ ---> 74cdf27168bf
+Step 16/18 : CMD 
+ ---> Using cache
+ ---> e314d0757880
+Step 17/18 : ADD run-files/gcloud /gcloud
+ ---> Using cache
+ ---> 345ac890e3f1
+Step 18/18 : COPY --from=build-env /src/_build/default/src/ci.exe /usr/local/bin/ci
+ ---> Using cache
+ ---> 58706a3a3dab
+Successfully built 58706a3a3dab
+[2017-06-28 13:35.53] Success
