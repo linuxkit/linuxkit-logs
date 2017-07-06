@@ -1,0 +1,203 @@
+=== Build LinuxKit
+[2017-07-06 15:15.45] Starting...
+Cloning into '/tmp/with_clone16a0e716'...
+done.
+HEAD is now at a84a5138 Add a helper script for bulk updating component sha's
+[2017-07-06 15:15.46] Running "cp" "-p" "--" "/gcloud/ci-setup.sh" "/tmp/with_clone16a0e716/ci-setup.sh"
+[2017-07-06 15:15.46] Building with timeout of 120 minutes
+[2017-07-06 15:15.46] Running "/gcloud/create.py" "linuxkit-ci-1"
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Using source disk image https://www.googleapis.com/compute/v1/projects/moby-datakit-ci/global/images/linuxkit-ci-builder-4
+INFO:root:Creating VM
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Getting VM details
+[2017-07-06 15:16.11] Created new VM linuxkit-ci-1
+[2017-07-06 15:16.11] Running "ssh" "-i" "/run/secrets/builder-ssh" "-o" "StrictHostKeyChecking=no" "root@146.148.31.207" "/usr/local/bin/test.sh"
+
+[+  0m 56s] Warning: Permanently added '146.148.31.207' (ECDSA) to the list of known hosts.
+[+  0m 57s] + rm -rf /tmp/build
+[+  0m 57s] + mkdir /tmp/build
+[+  0m 57s] + cd /tmp/build
+[+  0m 57s] + tar xf -
+[+  1m 05s] + '[' -x ci-setup.sh ']'
+[+  1m 05s] + ./ci-setup.sh
+[+  1m 05s] + mkdir -p /tmp/build/test/_results /tmp/build/artifacts
+[+  1m 05s] + sysctl vm.overcommit_memory=1
+[+  1m 05s] vm.overcommit_memory = 1
+[+  1m 05s] + make ci-pr
+[+  1m 05s] make clean
+[+  1m 05s] make[1]: Entering directory '/tmp/build'
+[+  1m 05s] rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar
+[+  1m 05s] make[1]: Leaving directory '/tmp/build'
+[+  1m 05s] make -j 3 GOOS=darwin tmp_moby_bin.tar tmp_rtf_bin.tar tmp_linuxkit_bin.tar
+[+  1m 05s] make[1]: Entering directory '/tmp/build'
+[+  1m 05s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy= -e GOOS=darwin linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86 --clone-path github.com/moby/tool --clone https://github.com/moby/tool.git --commit c3edfec75915d993c76e4a52dcffb4d2278e1da3 --package github.com/moby/tool/cmd/moby --ldflags "-X main.GitCommit=c3edfec75915d993c76e4a52dcffb4d2278e1da3 -X main.Version=0.0" -o bin/moby > tmp_moby_bin.tar
+[+  1m 05s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy= -e GOOS=darwin linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86 --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 1268bd2ef979bd840dc35dcb8d5dc0a5c75ba129 --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=1268bd2ef979bd840dc35dcb8d5dc0a5c75ba129 -X github.com/linuxkit/rtf/cmd.Version=0.0" -o bin/rtf > tmp_rtf_bin.tar
+[+  1m 05s] tar cf - vendor -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i -e GOOS=darwin linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86 --package github.com/linuxkit/linuxkit --ldflags "-X main.GitCommit=a84a5138615fbf7a2a079470e37b1fea331371dd -X main.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+[+  1m 06s] Unable to find image 'linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86' locally
+[+  1m 06s] Unable to find image 'linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86' locally
+[+  1m 06s] Unable to find image 'linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86' locally
+[+  1m 07s] f68574b165475cff908190e0f1e86cbbb1884f86: Pulling from linuxkit/go-compile
+[+  1m 07s] f68574b165475cff908190e0f1e86cbbb1884f86: Pulling from linuxkit/go-compile
+[+  1m 07s] f68574b165475cff908190e0f1e86cbbb1884f86: Pulling from linuxkit/go-compile
+[+  1m 07s] c8dca307cb17: Pulling fs layer
+[+  1m 07s] 687979a0778c: Pulling fs layer
+[+  1m 07s] ec7650567b6e: Pulling fs layer
+[+  1m 07s] c8dca307cb17: Pulling fs layer
+[+  1m 07s] 687979a0778c: Pulling fs layer
+[+  1m 07s] ec7650567b6e: Pulling fs layer
+[+  1m 07s] c8dca307cb17: Pulling fs layer
+[+  1m 07s] 687979a0778c: Pulling fs layer
+[+  1m 07s] ec7650567b6e: Pulling fs layer
+[+  1m 08s] ec7650567b6e: Verifying Checksum
+[+  1m 08s] ec7650567b6e: Download complete
+[+  1m 08s] ec7650567b6e: Download complete
+[+  1m 08s] ec7650567b6e: Download complete
+[+  1m 08s] 687979a0778c: Verifying Checksum
+[+  1m 08s] 687979a0778c: Download complete
+[+  1m 08s] 687979a0778c: Verifying Checksum
+[+  1m 08s] 687979a0778c: Download complete
+[+  1m 08s] 687979a0778c: Verifying Checksum
+[+  1m 08s] 687979a0778c: Download complete
+[+  1m 16s] c8dca307cb17: Verifying Checksum
+[+  1m 16s] c8dca307cb17: Verifying Checksum
+[+  1m 16s] c8dca307cb17: Download complete
+[+  1m 16s] c8dca307cb17: Download complete
+[+  1m 16s] c8dca307cb17: Download complete
+[+  1m 22s] c8dca307cb17: c8dca307cb17: Pull complete
+[+  1m 22s] Pull complete
+[+  1m 22s] c8dca307cb17: Pull complete
+[+  1m 23s] 687979a0778c: Pull complete
+[+  1m 23s] 687979a0778c: Pull complete
+[+  1m 23s] 687979a0778c: Pull complete
+[+  1m 23s] ec7650567b6e: ec7650567b6e: Pull complete
+[+  1m 23s] Pull complete
+[+  1m 23s] ec7650567b6e: Pull complete
+[+  1m 23s] Digest: sha256:5f7fc89d133e082d683e70b873111b88f793c946b08d77a0f8ff880970a434e4
+[+  1m 23s] Digest: sha256:5f7fc89d133e082d683e70b873111b88f793c946b08d77a0f8ff880970a434e4
+[+  1m 23s] Status: Downloaded newer image for linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86
+[+  1m 23s] Digest: sha256:5f7fc89d133e082d683e70b873111b88f793c946b08d77a0f8ff880970a434e4
+[+  1m 23s] Status: Image is up to date for linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86
+[+  1m 23s] Status: Downloaded newer image for linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86
+[+  1m 24s] Cloning into '.'...
+[+  1m 24s] Cloning into '.'...
+[+  1m 24s] gofmt...
+[+  1m 25s] Note: checking out '1268bd2ef979bd840dc35dcb8d5dc0a5c75ba129'.
+[+  1m 25s] 
+[+  1m 25s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  1m 25s] changes and commit them, and you can discard any commits you make in this
+[+  1m 25s] state without impacting any branches by performing another checkout.
+[+  1m 25s] 
+[+  1m 25s] If you want to create a new branch to retain commits you create, you may
+[+  1m 25s] do so (now or later) by using -b with the checkout command again. Example:
+[+  1m 25s] 
+[+  1m 25s]   git checkout -b <new-branch-name>
+[+  1m 25s] 
+[+  1m 25s] HEAD is now at 1268bd2... Merge pull request #20 from dave-tucker/fix-sort
+[+  1m 25s] gofmt...
+[+  1m 26s] Note: checking out 'c3edfec75915d993c76e4a52dcffb4d2278e1da3'.
+[+  1m 26s] 
+[+  1m 26s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  1m 26s] changes and commit them, and you can discard any commits you make in this
+[+  1m 26s] state without impacting any branches by performing another checkout.
+[+  1m 26s] 
+[+  1m 26s] If you want to create a new branch to retain commits you create, you may
+[+  1m 26s] do so (now or later) by using -b with the checkout command again. Example:
+[+  1m 26s] 
+[+  1m 26s]   git checkout -b <new-branch-name>
+[+  1m 26s] 
+[+  1m 26s] HEAD is now at c3edfec... revendor runc + runtime-spec to match containerd 8e1a04ff9ee3
+[+  1m 26s] gofmt...
+[+  1m 26s] govet...
+[+  1m 26s] golint...
+[+  1m 26s] ineffassign...
+[+  1m 26s] go build...
+[+  1m 29s] govet...
+[+  1m 32s] govet...
+[+  1m 32s] golint...
+[+  1m 32s] ineffassign...
+[+  1m 32s] go build...
+[+  1m 42s] golint...
+[+  1m 42s] ineffassign...
+[+  1m 42s] go build...
+[+  3m 07s] make[1]: Leaving directory '/tmp/build'
+[+  3m 07s] make clean
+[+  3m 07s] make[1]: Entering directory '/tmp/build'
+[+  3m 07s] rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar
+[+  3m 07s] make[1]: Leaving directory '/tmp/build'
+[+  3m 07s] make -j 3 GOOS=windows tmp_moby_bin.tar tmp_rtf_bin.tar tmp_linuxkit_bin.tar
+[+  3m 07s] make[1]: Entering directory '/tmp/build'
+[+  3m 07s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy= -e GOOS=windows linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86 --clone-path github.com/moby/tool --clone https://github.com/moby/tool.git --commit c3edfec75915d993c76e4a52dcffb4d2278e1da3 --package github.com/moby/tool/cmd/moby --ldflags "-X main.GitCommit=c3edfec75915d993c76e4a52dcffb4d2278e1da3 -X main.Version=0.0" -o bin/moby > tmp_moby_bin.tar
+[+  3m 07s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy= -e GOOS=windows linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86 --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 1268bd2ef979bd840dc35dcb8d5dc0a5c75ba129 --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=1268bd2ef979bd840dc35dcb8d5dc0a5c75ba129 -X github.com/linuxkit/rtf/cmd.Version=0.0" -o bin/rtf > tmp_rtf_bin.tar
+[+  3m 07s] tar cf - vendor -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i -e GOOS=windows linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86 --package github.com/linuxkit/linuxkit --ldflags "-X main.GitCommit=a84a5138615fbf7a2a079470e37b1fea331371dd -X main.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+[+  3m 07s] gofmt...
+[+  3m 07s] Cloning into '.'...
+[+  3m 07s] Cloning into '.'...
+[+  3m 09s] Note: checking out '1268bd2ef979bd840dc35dcb8d5dc0a5c75ba129'.
+[+  3m 09s] 
+[+  3m 09s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  3m 09s] changes and commit them, and you can discard any commits you make in this
+[+  3m 09s] state without impacting any branches by performing another checkout.
+[+  3m 09s] 
+[+  3m 09s] If you want to create a new branch to retain commits you create, you may
+[+  3m 09s] do so (now or later) by using -b with the checkout command again. Example:
+[+  3m 09s] 
+[+  3m 09s]   git checkout -b <new-branch-name>
+[+  3m 09s] 
+[+  3m 09s] HEAD is now at 1268bd2... Merge pull request #20 from dave-tucker/fix-sort
+[+  3m 09s] gofmt...
+[+  3m 09s] Note: checking out 'c3edfec75915d993c76e4a52dcffb4d2278e1da3'.
+[+  3m 09s] 
+[+  3m 09s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  3m 09s] changes and commit them, and you can discard any commits you make in this
+[+  3m 09s] state without impacting any branches by performing another checkout.
+[+  3m 09s] 
+[+  3m 09s] If you want to create a new branch to retain commits you create, you may
+[+  3m 09s] do so (now or later) by using -b with the checkout command again. Example:
+[+  3m 09s] 
+[+  3m 09s]   git checkout -b <new-branch-name>
+[+  3m 09s] 
+[+  3m 09s] HEAD is now at c3edfec... revendor runc + runtime-spec to match containerd 8e1a04ff9ee3
+[+  3m 09s] gofmt...
+[+  3m 09s] govet...
+[+  3m 09s] golint...
+[+  3m 09s] ineffassign...
+[+  3m 09s] go build...
+[+  3m 12s] govet...
+[+  3m 15s] govet...
+[+  3m 15s] golint...
+[+  3m 15s] ineffassign...
+[+  3m 16s] go build...
+[+  3m 25s] golint...
+[+  3m 26s] ineffassign...
+[+  3m 26s] go build...
+[+  3m 53s] # github.com/moby/tool/vendor/github.com/opencontainers/runc/libcontainer/user
+[+  3m 53s] ../../vendor/github.com/opencontainers/runc/libcontainer/user/lookup.go:44: undefined: unix.Getuid
+[+  3m 53s] ../../vendor/github.com/opencontainers/runc/libcontainer/user/lookup.go:92: undefined: unix.Getgid
+[+  4m 12s] Makefile:31: recipe for target 'tmp_moby_bin.tar' failed
+[+  4m 12s] make[1]: *** [tmp_moby_bin.tar] Error 2
+[+  4m 12s] make[1]: *** Waiting for unfinished jobs....
+[+  4m 51s] make[1]: Leaving directory '/tmp/build'
+[+  4m 51s] Makefile:56: recipe for target 'test-cross' failed
+[+  4m 51s] make: *** [test-cross] Error 2[2017-07-06 15:20.38] Fetching results
+[2017-07-06 15:20.38] Running "scp" "-r" "-i" "/run/secrets/builder-ssh" "-o" "StrictHostKeyChecking=no" "root@146.148.31.207:/tmp/build/test/_results" "."
+[2017-07-06 15:20.38] Removing test VM...
+[2017-07-06 15:20.38] Running "/gcloud/destroy.py" "linuxkit-ci-1"
+INFO:root:Destroying VM
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+[2017-07-06 15:21.22] Failed: recipe for target 'test-cross' failed
