@@ -1,0 +1,843 @@
+=== Build LinuxKit
+[2017-07-11 08:55.24] Starting...
+Cloning into '/tmp/with_clone1c3fa95'...
+done.
+HEAD is now at 3876bb01 RM64: Adapt the kernel Dockerfile to multiarch support
+[2017-07-11 08:55.26] Running "cp" "-p" "--" "/gcloud/ci-setup.sh" "/tmp/with_clone1c3fa95/ci-setup.sh"
+[2017-07-11 08:55.26] Building with timeout of 120 minutes
+[2017-07-11 08:55.26] Running "/gcloud/create.py" "linuxkit-ci-1"
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Using source disk image https://www.googleapis.com/compute/v1/projects/moby-datakit-ci/global/images/linuxkit-ci-builder-4
+INFO:root:Creating VM
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Getting VM details
+[2017-07-11 08:55.45] Created new VM linuxkit-ci-1
+[2017-07-11 08:55.45] Running "ssh" "-i" "/run/secrets/builder-ssh" "-o" "StrictHostKeyChecking=no" "root@104.199.17.172" "/usr/local/bin/test.sh"
+
+[+  0m 51s] Warning: Permanently added '104.199.17.172' (ECDSA) to the list of known hosts.
+[+  0m 51s] + rm -rf /tmp/build
+[+  0m 51s] + mkdir /tmp/build
+[+  0m 51s] + cd /tmp/build
+[+  0m 51s] + tar xf -
+[+  1m 00s] + '[' -x ci-setup.sh ']'
+[+  1m 00s] + ./ci-setup.sh
+[+  1m 00s] + mkdir -p /tmp/build/test/_results /tmp/build/artifacts
+[+  1m 00s] + sysctl vm.overcommit_memory=1
+[+  1m 00s] vm.overcommit_memory = 1
+[+  1m 00s] + make ci-pr
+[+  1m 00s] make clean
+[+  1m 00s] make[1]: Entering directory '/tmp/build'
+[+  1m 00s] rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar *.raw
+[+  1m 00s] make[1]: Leaving directory '/tmp/build'
+[+  1m 00s] make -j 3 GOOS=darwin tmp_moby_bin.tar tmp_rtf_bin.tar tmp_linuxkit_bin.tar
+[+  1m 00s] make[1]: Entering directory '/tmp/build'
+[+  1m 00s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy= -e GOOS=darwin linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86 --clone-path github.com/moby/tool --clone https://github.com/moby/tool.git --commit d8cc1b3f08df02ad563d3f548ac2527931a925a6 --package github.com/moby/tool/cmd/moby --ldflags "-X main.GitCommit=d8cc1b3f08df02ad563d3f548ac2527931a925a6 -X main.Version=0.0" -o bin/moby > tmp_moby_bin.tar
+[+  1m 00s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy= -e GOOS=darwin linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86 --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 1268bd2ef979bd840dc35dcb8d5dc0a5c75ba129 --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=1268bd2ef979bd840dc35dcb8d5dc0a5c75ba129 -X github.com/linuxkit/rtf/cmd.Version=0.0" -o bin/rtf > tmp_rtf_bin.tar
+[+  1m 00s] tar cf - vendor -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i -e GOOS=darwin linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86 --package github.com/linuxkit/linuxkit --ldflags "-X main.GitCommit=3876bb01c6e4a11092579004b9de94b23953beec -X main.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+[+  1m 01s] Unable to find image 'linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86' locally
+[+  1m 01s] Unable to find image 'linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86' locally
+[+  1m 01s] Unable to find image 'linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86' locally
+[+  1m 02s] f68574b165475cff908190e0f1e86cbbb1884f86: Pulling from linuxkit/go-compile
+[+  1m 02s] f68574b165475cff908190e0f1e86cbbb1884f86: Pulling from linuxkit/go-compile
+[+  1m 02s] f68574b165475cff908190e0f1e86cbbb1884f86: Pulling from linuxkit/go-compile
+[+  1m 02s] c8dca307cb17: Pulling fs layer
+[+  1m 02s] 687979a0778c: Pulling fs layer
+[+  1m 02s] ec7650567b6e: Pulling fs layer
+[+  1m 02s] c8dca307cb17: Pulling fs layer
+[+  1m 02s] 687979a0778c: Pulling fs layer
+[+  1m 02s] ec7650567b6e: Pulling fs layer
+[+  1m 02s] c8dca307cb17: Pulling fs layer
+[+  1m 02s] 687979a0778c: Pulling fs layer
+[+  1m 02s] ec7650567b6e: Pulling fs layer
+[+  1m 03s] ec7650567b6e: Download complete
+[+  1m 03s] ec7650567b6e: Download complete
+[+  1m 03s] ec7650567b6e: Download complete
+[+  1m 03s] 687979a0778c: Verifying Checksum
+[+  1m 03s] 687979a0778c: Verifying Checksum
+[+  1m 03s] 687979a0778c: Download complete
+[+  1m 03s] 687979a0778c: Download complete
+[+  1m 03s] 687979a0778c: Download complete
+[+  1m 07s] c8dca307cb17: Verifying Checksum
+[+  1m 07s] c8dca307cb17: Verifying Checksum
+[+  1m 07s] c8dca307cb17: Download complete
+[+  1m 07s] c8dca307cb17: Download complete
+[+  1m 07s] c8dca307cb17: Verifying Checksum
+[+  1m 07s] c8dca307cb17: Download complete
+[+  1m 14s] c8dca307cb17: c8dca307cb17: Pull complete
+[+  1m 14s] Pull complete
+[+  1m 14s] c8dca307cb17: Pull complete
+[+  1m 15s] 687979a0778c: Pull complete
+[+  1m 15s] 687979a0778c: Pull complete
+[+  1m 15s] 687979a0778c: Pull complete
+[+  1m 15s] ec7650567b6e: ec7650567b6e: Pull complete
+[+  1m 15s] Pull complete
+[+  1m 15s] ec7650567b6e: Pull complete
+[+  1m 15s] Digest: sha256:5f7fc89d133e082d683e70b873111b88f793c946b08d77a0f8ff880970a434e4
+[+  1m 15s] Digest: sha256:5f7fc89d133e082d683e70b873111b88f793c946b08d77a0f8ff880970a434e4
+[+  1m 15s] Status: Image is up to date for linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86
+[+  1m 15s] Digest: sha256:5f7fc89d133e082d683e70b873111b88f793c946b08d77a0f8ff880970a434e4
+[+  1m 15s] Status: Downloaded newer image for linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86
+[+  1m 15s] Status: Downloaded newer image for linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86
+[+  1m 16s] Cloning into '.'...
+[+  1m 16s] Cloning into '.'...
+[+  1m 16s] gofmt...
+[+  1m 17s] Note: checking out '1268bd2ef979bd840dc35dcb8d5dc0a5c75ba129'.
+[+  1m 17s] 
+[+  1m 17s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  1m 17s] changes and commit them, and you can discard any commits you make in this
+[+  1m 17s] state without impacting any branches by performing another checkout.
+[+  1m 17s] 
+[+  1m 17s] If you want to create a new branch to retain commits you create, you may
+[+  1m 17s] do so (now or later) by using -b with the checkout command again. Example:
+[+  1m 17s] 
+[+  1m 17s]   git checkout -b <new-branch-name>
+[+  1m 17s] 
+[+  1m 17s] HEAD is now at 1268bd2... Merge pull request #20 from dave-tucker/fix-sort
+[+  1m 17s] gofmt...
+[+  1m 18s] Note: checking out 'd8cc1b3f08df02ad563d3f548ac2527931a925a6'.
+[+  1m 18s] 
+[+  1m 18s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  1m 18s] changes and commit them, and you can discard any commits you make in this
+[+  1m 18s] state without impacting any branches by performing another checkout.
+[+  1m 18s] 
+[+  1m 18s] If you want to create a new branch to retain commits you create, you may
+[+  1m 18s] do so (now or later) by using -b with the checkout command again. Example:
+[+  1m 18s] 
+[+  1m 18s]   git checkout -b <new-branch-name>
+[+  1m 18s] 
+[+  1m 18s] HEAD is now at d8cc1b3... Merge pull request #82 from justincormack/source-ifpresent
+[+  1m 18s] gofmt...
+[+  1m 18s] govet...
+[+  1m 19s] golint...
+[+  1m 19s] ineffassign...
+[+  1m 19s] go build...
+[+  1m 21s] govet...
+[+  1m 24s] govet...
+[+  1m 24s] golint...
+[+  1m 24s] ineffassign...
+[+  1m 24s] go build...
+[+  1m 33s] golint...
+[+  1m 34s] ineffassign...
+[+  1m 34s] go build...
+[+  2m 57s] make[1]: Leaving directory '/tmp/build'
+[+  2m 57s] make clean
+[+  2m 57s] make[1]: Entering directory '/tmp/build'
+[+  2m 57s] rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar *.raw
+[+  2m 57s] make[1]: Leaving directory '/tmp/build'
+[+  2m 57s] make -j 3 GOOS=windows tmp_moby_bin.tar tmp_rtf_bin.tar tmp_linuxkit_bin.tar
+[+  2m 57s] make[1]: Entering directory '/tmp/build'
+[+  2m 57s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy= -e GOOS=windows linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86 --clone-path github.com/moby/tool --clone https://github.com/moby/tool.git --commit d8cc1b3f08df02ad563d3f548ac2527931a925a6 --package github.com/moby/tool/cmd/moby --ldflags "-X main.GitCommit=d8cc1b3f08df02ad563d3f548ac2527931a925a6 -X main.Version=0.0" -o bin/moby > tmp_moby_bin.tar
+[+  2m 57s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy= -e GOOS=windows linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86 --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 1268bd2ef979bd840dc35dcb8d5dc0a5c75ba129 --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=1268bd2ef979bd840dc35dcb8d5dc0a5c75ba129 -X github.com/linuxkit/rtf/cmd.Version=0.0" -o bin/rtf > tmp_rtf_bin.tar
+[+  2m 57s] tar cf - vendor -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i -e GOOS=windows linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86 --package github.com/linuxkit/linuxkit --ldflags "-X main.GitCommit=3876bb01c6e4a11092579004b9de94b23953beec -X main.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+[+  2m 57s] Cloning into '.'...
+[+  2m 57s] Cloning into '.'...
+[+  2m 58s] gofmt...
+[+  2m 59s] Note: checking out '1268bd2ef979bd840dc35dcb8d5dc0a5c75ba129'.
+[+  2m 59s] 
+[+  2m 59s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  2m 59s] changes and commit them, and you can discard any commits you make in this
+[+  2m 59s] state without impacting any branches by performing another checkout.
+[+  2m 59s] 
+[+  2m 59s] If you want to create a new branch to retain commits you create, you may
+[+  2m 59s] do so (now or later) by using -b with the checkout command again. Example:
+[+  2m 59s] 
+[+  2m 59s]   git checkout -b <new-branch-name>
+[+  2m 59s] 
+[+  2m 59s] HEAD is now at 1268bd2... Merge pull request #20 from dave-tucker/fix-sort
+[+  2m 59s] gofmt...
+[+  2m 59s] Note: checking out 'd8cc1b3f08df02ad563d3f548ac2527931a925a6'.
+[+  2m 59s] 
+[+  2m 59s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  2m 59s] changes and commit them, and you can discard any commits you make in this
+[+  2m 59s] state without impacting any branches by performing another checkout.
+[+  2m 59s] 
+[+  2m 59s] If you want to create a new branch to retain commits you create, you may
+[+  2m 59s] do so (now or later) by using -b with the checkout command again. Example:
+[+  2m 59s] 
+[+  2m 59s]   git checkout -b <new-branch-name>
+[+  2m 59s] 
+[+  2m 59s] HEAD is now at d8cc1b3... Merge pull request #82 from justincormack/source-ifpresent
+[+  2m 59s] gofmt...
+[+  2m 59s] govet...
+[+  3m 00s] golint...
+[+  3m 00s] ineffassign...
+[+  3m 00s] go build...
+[+  3m 03s] govet...
+[+  3m 04s] govet...
+[+  3m 06s] golint...
+[+  3m 06s] ineffassign...
+[+  3m 07s] go build...
+[+  3m 14s] golint...
+[+  3m 14s] ineffassign...
+[+  3m 14s] go build...
+[+  4m 40s] make[1]: Leaving directory '/tmp/build'
+[+  4m 40s] make clean
+[+  4m 40s] make[1]: Entering directory '/tmp/build'
+[+  4m 40s] rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar *.raw
+[+  4m 40s] make[1]: Leaving directory '/tmp/build'
+[+  4m 40s] make -j 3 GOOS=linux tmp_moby_bin.tar tmp_rtf_bin.tar tmp_linuxkit_bin.tar
+[+  4m 40s] make[1]: Entering directory '/tmp/build'
+[+  4m 40s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy=  linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86 --clone-path github.com/moby/tool --clone https://github.com/moby/tool.git --commit d8cc1b3f08df02ad563d3f548ac2527931a925a6 --package github.com/moby/tool/cmd/moby --ldflags "-X main.GitCommit=d8cc1b3f08df02ad563d3f548ac2527931a925a6 -X main.Version=0.0" -o bin/moby > tmp_moby_bin.tar
+[+  4m 40s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy=  linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86 --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 1268bd2ef979bd840dc35dcb8d5dc0a5c75ba129 --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=1268bd2ef979bd840dc35dcb8d5dc0a5c75ba129 -X github.com/linuxkit/rtf/cmd.Version=0.0" -o bin/rtf > tmp_rtf_bin.tar
+[+  4m 40s] tar cf - vendor -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i  linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86 --package github.com/linuxkit/linuxkit --ldflags "-X main.GitCommit=3876bb01c6e4a11092579004b9de94b23953beec -X main.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+[+  4m 41s] gofmt...
+[+  4m 41s] Cloning into '.'...
+[+  4m 41s] Cloning into '.'...
+[+  4m 42s] Note: checking out '1268bd2ef979bd840dc35dcb8d5dc0a5c75ba129'.
+[+  4m 42s] 
+[+  4m 42s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  4m 42s] changes and commit them, and you can discard any commits you make in this
+[+  4m 42s] state without impacting any branches by performing another checkout.
+[+  4m 42s] 
+[+  4m 42s] If you want to create a new branch to retain commits you create, you may
+[+  4m 42s] do so (now or later) by using -b with the checkout command again. Example:
+[+  4m 42s] 
+[+  4m 42s]   git checkout -b <new-branch-name>
+[+  4m 42s] 
+[+  4m 42s] HEAD is now at 1268bd2... Merge pull request #20 from dave-tucker/fix-sort
+[+  4m 42s] gofmt...
+[+  4m 43s] Note: checking out 'd8cc1b3f08df02ad563d3f548ac2527931a925a6'.
+[+  4m 43s] 
+[+  4m 43s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  4m 43s] changes and commit them, and you can discard any commits you make in this
+[+  4m 43s] state without impacting any branches by performing another checkout.
+[+  4m 43s] 
+[+  4m 43s] If you want to create a new branch to retain commits you create, you may
+[+  4m 43s] do so (now or later) by using -b with the checkout command again. Example:
+[+  4m 43s] 
+[+  4m 43s]   git checkout -b <new-branch-name>
+[+  4m 43s] 
+[+  4m 43s] HEAD is now at d8cc1b3... Merge pull request #82 from justincormack/source-ifpresent
+[+  4m 43s] gofmt...
+[+  4m 43s] govet...
+[+  4m 43s] golint...
+[+  4m 44s] ineffassign...
+[+  4m 44s] go build...
+[+  4m 47s] govet...
+[+  4m 47s] govet...
+[+  4m 49s] golint...
+[+  4m 50s] ineffassign...
+[+  4m 50s] go build...
+[+  4m 57s] golint...
+[+  4m 58s] ineffassign...
+[+  4m 59s] go build...
+[+  6m 24s] make[1]: Leaving directory '/tmp/build'
+[+  6m 24s] make clean
+[+  6m 24s] make[1]: Entering directory '/tmp/build'
+[+  6m 24s] rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar *.raw
+[+  6m 24s] make[1]: Leaving directory '/tmp/build'
+[+  6m 24s] make
+[+  6m 24s] make[1]: Entering directory '/tmp/build'
+[+  6m 24s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy=  linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86 --clone-path github.com/moby/tool --clone https://github.com/moby/tool.git --commit d8cc1b3f08df02ad563d3f548ac2527931a925a6 --package github.com/moby/tool/cmd/moby --ldflags "-X main.GitCommit=d8cc1b3f08df02ad563d3f548ac2527931a925a6 -X main.Version=0.0" -o bin/moby > tmp_moby_bin.tar
+[+  6m 24s] Cloning into '.'...
+[+  6m 26s] Note: checking out 'd8cc1b3f08df02ad563d3f548ac2527931a925a6'.
+[+  6m 26s] 
+[+  6m 26s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  6m 26s] changes and commit them, and you can discard any commits you make in this
+[+  6m 26s] state without impacting any branches by performing another checkout.
+[+  6m 26s] 
+[+  6m 26s] If you want to create a new branch to retain commits you create, you may
+[+  6m 26s] do so (now or later) by using -b with the checkout command again. Example:
+[+  6m 26s] 
+[+  6m 26s]   git checkout -b <new-branch-name>
+[+  6m 26s] 
+[+  6m 26s] HEAD is now at d8cc1b3... Merge pull request #82 from justincormack/source-ifpresent
+[+  6m 26s] gofmt...
+[+  6m 26s] govet...
+[+  6m 26s] golint...
+[+  6m 26s] ineffassign...
+[+  6m 26s] go build...
+[+  6m 48s] mkdir -p bin
+[+  6m 48s] tar xf tmp_moby_bin.tar
+[+  6m 48s] rm tmp_moby_bin.tar
+[+  6m 48s] touch bin/moby
+[+  6m 48s] tar cf - vendor -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i  linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86 --package github.com/linuxkit/linuxkit --ldflags "-X main.GitCommit=3876bb01c6e4a11092579004b9de94b23953beec -X main.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+[+  6m 49s] gofmt...
+[+  6m 52s] govet...
+[+  6m 56s] golint...
+[+  6m 56s] ineffassign...
+[+  6m 56s] go build...
+[+  7m 49s] tar xf tmp_linuxkit_bin.tar
+[+  7m 49s] rm tmp_linuxkit_bin.tar
+[+  7m 49s] touch bin/linuxkit
+[+  7m 49s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy=  linuxkit/go-compile:f68574b165475cff908190e0f1e86cbbb1884f86 --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 1268bd2ef979bd840dc35dcb8d5dc0a5c75ba129 --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=1268bd2ef979bd840dc35dcb8d5dc0a5c75ba129 -X github.com/linuxkit/rtf/cmd.Version=0.0" -o bin/rtf > tmp_rtf_bin.tar
+[+  7m 50s] Cloning into '.'...
+[+  7m 51s] Note: checking out '1268bd2ef979bd840dc35dcb8d5dc0a5c75ba129'.
+[+  7m 51s] 
+[+  7m 51s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  7m 51s] changes and commit them, and you can discard any commits you make in this
+[+  7m 51s] state without impacting any branches by performing another checkout.
+[+  7m 51s] 
+[+  7m 51s] If you want to create a new branch to retain commits you create, you may
+[+  7m 51s] do so (now or later) by using -b with the checkout command again. Example:
+[+  7m 51s] 
+[+  7m 51s]   git checkout -b <new-branch-name>
+[+  7m 51s] 
+[+  7m 51s] HEAD is now at 1268bd2... Merge pull request #20 from dave-tucker/fix-sort
+[+  7m 51s] gofmt...
+[+  7m 52s] govet...
+[+  7m 53s] golint...
+[+  7m 53s] ineffassign...
+[+  7m 53s] go build...
+[+  8m 11s] tar xf tmp_rtf_bin.tar
+[+  8m 11s] rm tmp_rtf_bin.tar
+[+  8m 11s] touch bin/rtf
+[+  8m 11s] make[1]: Leaving directory '/tmp/build'
+[+  8m 11s] make install
+[+  8m 11s] make[1]: Entering directory '/tmp/build'
+[+  8m 11s] cp -R ./bin/* /usr/local//bin
+[+  8m 11s] make[1]: Leaving directory '/tmp/build'
+[+  8m 11s] make -C test pr
+[+  8m 11s] make[1]: Entering directory '/tmp/build/test'
+[+  8m 11s] rm -rf ../artifacts
+[+  8m 11s] mkdir -p ../artifacts
+[+  8m 11s] /usr/local/bin/moby build -output gcp -pull -name ../artifacts/test hack/test.yml
+[+  8m 11s] Extract kernel image: linuxkit/kernel:4.9.36
+[+  8m 13s] Pull image: docker.io/linuxkit/kernel:4.9.36@sha256:4b7187c0ec59a14a732f65d9e3a310ba69262cfa22c76c7ad8dbbe66a433e5fc
+[+  8m 19s] Add init containers:
+[+  8m 19s] Process init image: linuxkit/init:14a38303ee9dcb4541c00e2b87404befc1ba2083
+[+  8m 20s] Pull image: docker.io/linuxkit/init:14a38303ee9dcb4541c00e2b87404befc1ba2083@sha256:4ac0b604594afa7d96e3580cbf96ba9049657b80f9b339ffe43088716eb0e72d
+[+  8m 23s] Process init image: linuxkit/runc:2310ad9d266cf5d9c4d07613bd2135ed7eb8a21f
+[+  8m 25s] Pull image: docker.io/linuxkit/runc:2310ad9d266cf5d9c4d07613bd2135ed7eb8a21f@sha256:1bb930d2b5534be79ec32f892a780c8e7243810d2983f6eb778358a9a4931627
+[+  8m 28s] Process init image: linuxkit/containerd:c977f27c234d55b85172813b8451f67ea86be4a3
+[+  8m 30s] Pull image: docker.io/linuxkit/containerd:c977f27c234d55b85172813b8451f67ea86be4a3@sha256:832e594338c46c94d28d20ea66425d1e96258e8bb06ebb3f2851da54fae9a7e1
+[+  8m 35s] Add onboot containers:
+[+  8m 35s]   Create OCI config for linuxkit/dhcpcd:4b7b8bb024cebb1bbb9c8026d44d7cbc8e202c41
+[+  8m 37s] Pull image: docker.io/linuxkit/dhcpcd:4b7b8bb024cebb1bbb9c8026d44d7cbc8e202c41@sha256:8f84de55b29772482e932fa42e7052e659bf56dc0b61b54d510345d30dace340
+[+  8m 40s] Pull image: docker.io/linuxkit/dhcpcd:4b7b8bb024cebb1bbb9c8026d44d7cbc8e202c41@sha256:8f84de55b29772482e932fa42e7052e659bf56dc0b61b54d510345d30dace340
+[+  8m 41s]   Create OCI config for linuxkit/test-kernel-config:9f08e3b99f8ac2f422251b3e8c94ce874ee34119
+[+  8m 41s] Pull image: linuxkit/test-kernel-config:9f08e3b99f8ac2f422251b3e8c94ce874ee34119
+[+  8m 44s] Pull image: linuxkit/test-kernel-config:9f08e3b99f8ac2f422251b3e8c94ce874ee34119
+[+  8m 46s]   Create OCI config for linuxkit/poweroff:bce51402e293da0b653923a43c3c7be6e0effa05
+[+  8m 46s] Pull image: linuxkit/poweroff:bce51402e293da0b653923a43c3c7be6e0effa05
+[+  8m 49s] Pull image: linuxkit/poweroff:bce51402e293da0b653923a43c3c7be6e0effa05
+[+  8m 50s] Create outputs:
+[+  8m 58s]   ../artifacts/test.img.tar.gz
+[+ 10m 17s] LABELS: build, linux, Debian, 8.7, amd64
+[+ 10m 17s] ID: 08c45370-fa74-48e9-80a0-ac11c65000e8
+[+ 16m 23s] [PASS    ] linuxkit.build.outputs 366.61s
+[+ 16m 45s] [PASS    ] linuxkit.build.examples.minimal 21.69s
+[+ 18m 09s] [PASS    ] linuxkit.build.examples.docker 83.47s
+[+ 18m 36s] [PASS    ] linuxkit.build.examples.sshd 27.71s
+[+ 19m 02s] [PASS    ] linuxkit.build.examples.redis 25.76s
+[+ 19m 45s] [PASS    ] linuxkit.build.examples.swap 42.92s
+[+ 20m 11s] [PASS    ] linuxkit.build.examples.node_exporter 25.79s
+[+ 21m 26s] [PASS    ] linuxkit.build.blueprints.docker_for_mac 75.63s
+[+ 21m 58s] [PASS    ] linuxkit.platforms.qemu.run_kernel 31.59s
+[+ 22m 38s] [PASS    ] linuxkit.platforms.qemu.run_iso 40.53s
+[+ 22m 38s] [CANCEL  ] linuxkit.platforms.qemu.run_efi 0.01s
+[+ 24m 39s] [PASS    ] linuxkit.platforms.qemu.run_qcow 120.09s
+[+ 26m 34s] [PASS    ] linuxkit.platforms.qemu.run_raw 115.94s
+[+ 26m 35s] [CANCEL  ] linuxkit.platforms.qemu.container 0.01s
+[+ 27m 42s] [PASS    ] linuxkit.kernel.config_4.4.x 67.00s
+[+ 28m 45s] [PASS    ] linuxkit.kernel.config_4.9.x 63.16s
+[+ 29m 55s] [PASS    ] linuxkit.kernel.config_4.11.x 70.67s
+[+ 30m 59s] [PASS    ] linuxkit.kernel.kmod_4.9.x 64.05s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.4.x.tcp4_veth 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.4.x.tcp4_veth_reverse 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.4.x.tcp6_veth 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.4.x.tcp6_veth_reverse 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.4.x.tcp4_loopback 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.4.x.tcp6_loopback 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.4.x.udp4_veth 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.4.x.udp4_veth_reverse 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.4.x.udp6_veth 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.4.x.udp6_veth_reverse 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.4.x.udp4_loopback 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.4.x.udp6_loopback 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.9.x.tcp4_veth 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.9.x.tcp4_veth_reverse 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.9.x.tcp6_veth 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.9.x.tcp6_veth_reverse 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.9.x.tcp4_loopback 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.9.x.tcp6_loopback 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.9.x.udp4_veth 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.9.x.udp4_veth_reverse 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.9.x.udp6_veth 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.9.x.udp6_veth_reverse 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.9.x.udp4_loopback 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.9.x.udp6_loopback 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.11.x.tcp4_veth 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.11.x.tcp4_veth_reverse 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.11.x.tcp6_veth 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.11.x.tcp6_veth_reverse 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.11.x.tcp4_loopback 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.11.x.tcp6_loopback 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.11.x.udp4_veth 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.11.x.udp4_veth_reverse 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.11.x.udp6_veth 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.11.x.udp6_veth_reverse 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.11.x.udp4_loopback 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.kernel.netns.4.11.x.udp6_loopback 0.00s
+[+ 30m 59s] [SKIP    ] linuxkit.security.docker-bench 0.00s
+[+ 31m 45s] [PASS    ] linuxkit.security.ports 45.14s
+[+ 32m 35s] [PASS    ] linuxkit.packages.binfmt 50.06s
+[+ 33m 22s] [PASS    ] linuxkit.packages.ca-certificates 47.26s
+[+ 41m 12s] [PASS    ] linuxkit.packages.containerd 469.72s
+[+ 42m 05s] [PASS    ] linuxkit.packages.dhcpcd 53.90s
+[+ 43m 31s] [PASS    ] linuxkit.packages.getty-containerd 85.99s
+[+ 46m 23s] [PASS    ] linuxkit.packages.mkimage 171.20s
+[+ 47m 12s] [PASS    ] linuxkit.packages.sysctl 49.24s
+[+ 47m 12s] [SUMMARY ] LogDir: 08c45370-fa74-48e9-80a0-ac11c65000e8
+[+ 47m 12s] [SUMMARY ] Version: 8.7
+[+ 47m 12s] [SUMMARY ] Passed: 24
+[+ 47m 12s] [SUMMARY ] Failed: 0
+[+ 47m 12s] [SUMMARY ] Cancelled: 2
+[+ 47m 12s] [SUMMARY ] Skipped: 39
+[+ 47m 12s] [SUMMARY ] Duration: 2215.18s
+[+ 47m 12s] make[1]: Leaving directory '/tmp/build/test'
+[+ 47m 12s] make -C pkg tag
+[+ 47m 12s] make[1]: Entering directory '/tmp/build/pkg'
+[+ 47m 12s] make[2]: Entering directory '/tmp/build/pkg/containerd'
+[+ 47m 16s] docker pull linuxkit/containerd:c977f27c234d55b85172813b8451f67ea86be4a3 || docker build  -t linuxkit/containerd:c977f27c234d55b85172813b8451f67ea86be4a3 .
+[+ 47m 20s] Pull (1 of 1): linuxkit/containerd:c977f27c234d55b85172813b8451f67ea86be4a3@sha256:832e594338c46c94d28d20ea66425d1e96258e8bb06ebb3f2851da54fae9a7e1
+[+ 47m 21s] sha256:832e594338c46c94d28d20ea66425d1e96258e8bb06ebb3f2851da54fae9a7e1: Pulling from linuxkit/containerd
+[+ 47m 21s] Digest: sha256:832e594338c46c94d28d20ea66425d1e96258e8bb06ebb3f2851da54fae9a7e1
+[+ 47m 21s] Status: Image is up to date for linuxkit/containerd@sha256:832e594338c46c94d28d20ea66425d1e96258e8bb06ebb3f2851da54fae9a7e1
+[+ 47m 21s] Tagging linuxkit/containerd@sha256:832e594338c46c94d28d20ea66425d1e96258e8bb06ebb3f2851da54fae9a7e1 as linuxkit/containerd:c977f27c234d55b85172813b8451f67ea86be4a3
+[+ 47m 21s] make[2]: Leaving directory '/tmp/build/pkg/containerd'
+[+ 47m 21s] make[2]: Entering directory '/tmp/build/pkg/binfmt'
+[+ 47m 21s] docker pull linuxkit/binfmt:0bde4ebd422099f45c5ee03217413523ad2223e5 || docker build --network=none -t linuxkit/binfmt:0bde4ebd422099f45c5ee03217413523ad2223e5 .
+[+ 47m 24s] Pull (1 of 1): linuxkit/binfmt:0bde4ebd422099f45c5ee03217413523ad2223e5@sha256:9826929684ef7cf517362b4d98ec9762a8aca4de05dfe0257e63d2b202f4a2bf
+[+ 47m 26s] sha256:9826929684ef7cf517362b4d98ec9762a8aca4de05dfe0257e63d2b202f4a2bf: Pulling from linuxkit/binfmt
+[+ 47m 26s] Digest: sha256:9826929684ef7cf517362b4d98ec9762a8aca4de05dfe0257e63d2b202f4a2bf
+[+ 47m 26s] Status: Image is up to date for linuxkit/binfmt@sha256:9826929684ef7cf517362b4d98ec9762a8aca4de05dfe0257e63d2b202f4a2bf
+[+ 47m 26s] Tagging linuxkit/binfmt@sha256:9826929684ef7cf517362b4d98ec9762a8aca4de05dfe0257e63d2b202f4a2bf as linuxkit/binfmt:0bde4ebd422099f45c5ee03217413523ad2223e5
+[+ 47m 26s] make[2]: Leaving directory '/tmp/build/pkg/binfmt'
+[+ 47m 26s] make[2]: Entering directory '/tmp/build/pkg/host-timesync-daemon'
+[+ 47m 26s] docker pull linuxkit/host-timesync-daemon:e6c15e6ef75d302c1c22827bac249598fb365a83 || docker build  -t linuxkit/host-timesync-daemon:e6c15e6ef75d302c1c22827bac249598fb365a83 .
+[+ 47m 28s] Pull (1 of 1): linuxkit/host-timesync-daemon:e6c15e6ef75d302c1c22827bac249598fb365a83@sha256:3fbfa8a659745885369d737ddd32a0e98b24b01a035729b518a9f70e1ff987c8
+[+ 47m 30s] sha256:3fbfa8a659745885369d737ddd32a0e98b24b01a035729b518a9f70e1ff987c8: Pulling from linuxkit/host-timesync-daemon
+[+ 47m 30s] Digest: sha256:3fbfa8a659745885369d737ddd32a0e98b24b01a035729b518a9f70e1ff987c8
+[+ 47m 30s] Status: Image is up to date for linuxkit/host-timesync-daemon@sha256:3fbfa8a659745885369d737ddd32a0e98b24b01a035729b518a9f70e1ff987c8
+[+ 47m 30s] Tagging linuxkit/host-timesync-daemon@sha256:3fbfa8a659745885369d737ddd32a0e98b24b01a035729b518a9f70e1ff987c8 as linuxkit/host-timesync-daemon:e6c15e6ef75d302c1c22827bac249598fb365a83
+[+ 47m 30s] make[2]: Leaving directory '/tmp/build/pkg/host-timesync-daemon'
+[+ 47m 30s] make[2]: Entering directory '/tmp/build/pkg/auditd'
+[+ 47m 30s] docker pull linuxkit/auditd:8d375b0fd488dc10f6e8a8f1e34f2e8cc1308e41 || docker build  -t linuxkit/auditd:8d375b0fd488dc10f6e8a8f1e34f2e8cc1308e41 .
+[+ 47m 33s] Pull (1 of 1): linuxkit/auditd:8d375b0fd488dc10f6e8a8f1e34f2e8cc1308e41@sha256:a924e1fdf4bc1745d8295ca28ae7ba67c3bd2f2880a23069628acdfd9ceb79be
+[+ 47m 34s] sha256:a924e1fdf4bc1745d8295ca28ae7ba67c3bd2f2880a23069628acdfd9ceb79be: Pulling from linuxkit/auditd
+[+ 47m 34s] e792e2955ce0: Pulling fs layer
+[+ 47m 34s] 192ada8f3cd8: Pulling fs layer
+[+ 47m 34s] a1232c4046bd: Pulling fs layer
+[+ 47m 34s] a0c8f369af0a: Pulling fs layer
+[+ 47m 34s] a0c8f369af0a: Waiting
+[+ 47m 35s] 192ada8f3cd8: Verifying Checksum
+[+ 47m 35s] 192ada8f3cd8: Download complete
+[+ 47m 35s] e792e2955ce0: Verifying Checksum
+[+ 47m 35s] e792e2955ce0: Download complete
+[+ 47m 35s] a1232c4046bd: Verifying Checksum
+[+ 47m 35s] a1232c4046bd: Download complete
+[+ 47m 35s] e792e2955ce0: Pull complete
+[+ 47m 35s] 192ada8f3cd8: Pull complete
+[+ 47m 35s] a1232c4046bd: Pull complete
+[+ 47m 35s] a0c8f369af0a: Download complete
+[+ 47m 36s] a0c8f369af0a: Pull complete
+[+ 47m 36s] Digest: sha256:a924e1fdf4bc1745d8295ca28ae7ba67c3bd2f2880a23069628acdfd9ceb79be
+[+ 47m 36s] Status: Downloaded newer image for linuxkit/auditd@sha256:a924e1fdf4bc1745d8295ca28ae7ba67c3bd2f2880a23069628acdfd9ceb79be
+[+ 47m 36s] Tagging linuxkit/auditd@sha256:a924e1fdf4bc1745d8295ca28ae7ba67c3bd2f2880a23069628acdfd9ceb79be as linuxkit/auditd:8d375b0fd488dc10f6e8a8f1e34f2e8cc1308e41
+[+ 47m 36s] make[2]: Leaving directory '/tmp/build/pkg/auditd'
+[+ 47m 36s] make[2]: Entering directory '/tmp/build/pkg/docker-ce'
+[+ 47m 36s] docker pull linuxkit/docker-ce:9b937df179bdbebbc70243779978057df0b54190 || docker build  -t linuxkit/docker-ce:9b937df179bdbebbc70243779978057df0b54190 .
+[+ 47m 39s] Pull (1 of 1): linuxkit/docker-ce:9b937df179bdbebbc70243779978057df0b54190@sha256:f501e61639703354b708ec38944a426d88ed6aab75c34e6dcc0015774675e9b0
+[+ 47m 40s] sha256:f501e61639703354b708ec38944a426d88ed6aab75c34e6dcc0015774675e9b0: Pulling from linuxkit/docker-ce
+[+ 47m 40s] Digest: sha256:f501e61639703354b708ec38944a426d88ed6aab75c34e6dcc0015774675e9b0
+[+ 47m 40s] Status: Image is up to date for linuxkit/docker-ce@sha256:f501e61639703354b708ec38944a426d88ed6aab75c34e6dcc0015774675e9b0
+[+ 47m 40s] Tagging linuxkit/docker-ce@sha256:f501e61639703354b708ec38944a426d88ed6aab75c34e6dcc0015774675e9b0 as linuxkit/docker-ce:9b937df179bdbebbc70243779978057df0b54190
+[+ 47m 40s] make[2]: Leaving directory '/tmp/build/pkg/docker-ce'
+[+ 47m 40s] make[2]: Entering directory '/tmp/build/pkg/getty'
+[+ 47m 41s] docker pull linuxkit/getty:2fdb663a594704052444bd43c44135b32f8571c5 || docker build --network=none -t linuxkit/getty:2fdb663a594704052444bd43c44135b32f8571c5 .
+[+ 47m 45s] No trust data for 2fdb663a594704052444bd43c44135b32f8571c5
+[+ 47m 48s] Sending build context to Docker daemon  17.92kB
+[+ 47m 48s] Step 1/14 : FROM linuxkit/alpine@sha256:1de96f57d89b1f81dc0ad269ad3765fb2d3e2ceb3149d54ddad6cf8b826f5acd AS mirror
+[+ 47m 49s] sha256:1de96f57d89b1f81dc0ad269ad3765fb2d3e2ceb3149d54ddad6cf8b826f5acd: Pulling from linuxkit/alpine
+[+ 47m 49s] 88286f41530e: Already exists
+[+ 47m 50s] 8317bd684db1: Pulling fs layer
+[+ 47m 50s] 8a1b105fb0a6: Pulling fs layer
+[+ 47m 50s] 0cbd973180fd: Pulling fs layer
+[+ 47m 50s] 0cc138338599: Pulling fs layer
+[+ 47m 50s] 7a9f9289d39a: Pulling fs layer
+[+ 47m 50s] 210dc743ebda: Pulling fs layer
+[+ 47m 50s] 6928aa4071e9: Pulling fs layer
+[+ 47m 50s] 925184781fb6: Pulling fs layer
+[+ 47m 50s] a4b535a7851b: Pulling fs layer
+[+ 47m 50s] 0cc138338599: Waiting
+[+ 47m 50s] 7a9f9289d39a: Waiting
+[+ 47m 50s] 210dc743ebda: Waiting
+[+ 47m 50s] 6928aa4071e9: Waiting
+[+ 47m 50s] 925184781fb6: Waiting
+[+ 47m 50s] a4b535a7851b: Waiting
+[+ 47m 50s] 8a1b105fb0a6: Verifying Checksum
+[+ 47m 50s] 8a1b105fb0a6: Download complete
+[+ 47m 50s] 8317bd684db1: Download complete
+[+ 47m 51s] 8317bd684db1: Pull complete
+[+ 47m 51s] 8a1b105fb0a6: Pull complete
+[+ 47m 53s] 7a9f9289d39a: Verifying Checksum
+[+ 47m 53s] 7a9f9289d39a: Download complete
+[+ 47m 53s] 210dc743ebda: Verifying Checksum
+[+ 47m 53s] 210dc743ebda: Download complete
+[+ 47m 54s] 0cc138338599: Verifying Checksum
+[+ 47m 54s] 0cc138338599: Download complete
+[+ 47m 54s] 6928aa4071e9: Verifying Checksum
+[+ 47m 54s] 6928aa4071e9: Download complete
+[+ 47m 55s] a4b535a7851b: Verifying Checksum
+[+ 47m 55s] a4b535a7851b: Download complete
+[+ 47m 56s] 925184781fb6: Verifying Checksum
+[+ 47m 56s] 925184781fb6: Download complete
+[+ 47m 58s] 0cbd973180fd: Verifying Checksum
+[+ 47m 58s] 0cbd973180fd: Download complete
+[+ 48m 03s] 0cbd973180fd: Pull complete
+[+ 48m 03s] 0cc138338599: Pull complete
+[+ 48m 04s] 7a9f9289d39a: Pull complete
+[+ 48m 04s] 210dc743ebda: Pull complete
+[+ 48m 04s] 6928aa4071e9: Pull complete
+[+ 48m 04s] 925184781fb6: Pull complete
+[+ 48m 04s] a4b535a7851b: Pull complete
+[+ 48m 04s] Digest: sha256:1de96f57d89b1f81dc0ad269ad3765fb2d3e2ceb3149d54ddad6cf8b826f5acd
+[+ 48m 04s] Status: Downloaded newer image for linuxkit/alpine@sha256:1de96f57d89b1f81dc0ad269ad3765fb2d3e2ceb3149d54ddad6cf8b826f5acd
+[+ 48m 04s]  ---> 3555ace68697
+[+ 48m 04s] Step 2/14 : RUN mkdir -p /out/etc/apk && cp -r /etc/apk/* /out/etc/apk/
+[+ 48m 04s]  ---> Running in aa95c8b41bec
+[+ 48m 05s]  ---> 75fa24e3b8bb
+[+ 48m 05s] Removing intermediate container aa95c8b41bec
+[+ 48m 05s] Step 3/14 : RUN apk add --no-cache --initdb -p /out     alpine-baselayout     busybox     ca-certificates     musl     tini     util-linux     && true
+[+ 48m 05s]  ---> Running in 65b76ccfbf71
+[+ 48m 05s] (1/17) Installing musl (1.1.16-r10)
+[+ 48m 05s] (2/17) Installing busybox (1.26.2-r5)
+[+ 48m 05s] Executing busybox-1.26.2-r5.post-install
+[+ 48m 05s] (3/17) Installing alpine-baselayout (3.0.4-r0)
+[+ 48m 05s] Executing alpine-baselayout-3.0.4-r0.pre-install
+[+ 48m 05s] Executing alpine-baselayout-3.0.4-r0.post-install
+[+ 48m 05s] (4/17) Installing libressl2.5-libcrypto (2.5.4-r0)
+[+ 48m 05s] (5/17) Installing ca-certificates (20161130-r2)
+[+ 48m 05s] (6/17) Installing tini (0.14.0-r0)
+[+ 48m 05s] (7/17) Installing libuuid (2.28.2-r2)
+[+ 48m 05s] (8/17) Installing libblkid (2.28.2-r2)
+[+ 48m 05s] (9/17) Installing libmount (2.28.2-r2)
+[+ 48m 05s] (10/17) Installing libsmartcols (2.28.2-r2)
+[+ 48m 05s] (11/17) Installing findmnt (2.28.2-r2)
+[+ 48m 05s] (12/17) Installing libfdisk (2.28.2-r2)
+[+ 48m 05s] (13/17) Installing ncurses-terminfo-base (6.0-r7)
+[+ 48m 05s] (14/17) Installing ncurses-terminfo (6.0-r7)
+[+ 48m 05s] (15/17) Installing ncurses-libs (6.0-r7)
+[+ 48m 05s] (16/17) Installing zlib (1.2.11-r0)
+[+ 48m 05s] (17/17) Installing util-linux (2.28.2-r2)
+[+ 48m 05s] Executing busybox-1.26.2-r5.trigger
+[+ 48m 05s] Executing ca-certificates-20161130-r2.trigger
+[+ 48m 06s] OK: 15 MiB in 17 packages
+[+ 48m 06s]  ---> 89f4360b84d6
+[+ 48m 06s] Removing intermediate container 65b76ccfbf71
+[+ 48m 06s] Step 4/14 : RUN rm -rf /out/etc/apk /out/lib/apk /out/var/cache
+[+ 48m 07s]  ---> Running in 2dbb21f472e5
+[+ 48m 08s]  ---> 6eff74dbd089
+[+ 48m 08s] Removing intermediate container 2dbb21f472e5
+[+ 48m 08s] Step 5/14 : RUN cp /out/usr/bin/setsid /out/usr/bin/setsid.getty
+[+ 48m 08s]  ---> Running in 619821daa781
+[+ 48m 09s]  ---> e7ec8a9b8433
+[+ 48m 09s] Removing intermediate container 619821daa781
+[+ 48m 09s] Step 6/14 : RUN rm -rf /out/etc/inittab
+[+ 48m 09s]  ---> Running in 75f1405930e1
+[+ 48m 10s]  ---> 7e0dcacbd3b8
+[+ 48m 10s] Removing intermediate container 75f1405930e1
+[+ 48m 10s] Step 7/14 : FROM scratch
+[+ 48m 10s]  ---> 
+[+ 48m 10s] Step 8/14 : ENTRYPOINT /sbin/tini -s -v --
+[+ 48m 10s]  ---> Running in d743d479cf15
+[+ 48m 10s]  ---> 2b343f85925c
+[+ 48m 10s] Removing intermediate container d743d479cf15
+[+ 48m 10s] Step 9/14 : WORKDIR /
+[+ 48m 10s]  ---> 890362dbcb5b
+[+ 48m 10s] Removing intermediate container f63fa705a20f
+[+ 48m 10s] Step 10/14 : COPY --from=mirror /out/ /
+[+ 48m 11s]  ---> 88ac090a77ff
+[+ 48m 11s] Removing intermediate container 9c96e344dc85
+[+ 48m 11s] Step 11/14 : COPY usr/ /usr/
+[+ 48m 12s]  ---> 76f783577962
+[+ 48m 12s] Removing intermediate container d8d1b844b523
+[+ 48m 12s] Step 12/14 : COPY etc/ /etc/
+[+ 48m 12s]  ---> 2b8ed9234213
+[+ 48m 12s] Removing intermediate container 9c45630c6d0e
+[+ 48m 12s] Step 13/14 : CMD /usr/bin/rungetty.sh
+[+ 48m 12s]  ---> Running in 1bc5df35686d
+[+ 48m 12s]  ---> 2bc20aa11cf1
+[+ 48m 12s] Removing intermediate container 1bc5df35686d
+[+ 48m 12s] Step 14/14 : LABEL org.mobyproject.config '{"pid": "host", "net":"host", "binds": ["/run:/run", "/tmp:/tmp", "/etc:/hostroot/etc", "/usr/bin/ctr:/usr/bin/ctr", "/usr/bin/runc:/usr/bin/runc", "/usr/bin/dist:/usr/bin/dist", "/var:/var","/containers:/containers","/dev:/dev","/sys:/sys"], "capabilities": ["all"]}'
+[+ 48m 13s]  ---> Running in 99ac93c0e003
+[+ 48m 13s]  ---> 682cd7ca76ef
+[+ 48m 13s] Removing intermediate container 99ac93c0e003
+[+ 48m 13s] Successfully built 682cd7ca76ef
+[+ 48m 13s] Successfully tagged linuxkit/getty:2fdb663a594704052444bd43c44135b32f8571c5
+[+ 48m 13s] Tagging linuxkit/alpine@sha256:1de96f57d89b1f81dc0ad269ad3765fb2d3e2ceb3149d54ddad6cf8b826f5acd as linuxkit/alpine:9bcf61f605ef0ce36cc94d59b8eac307862de6e1
+[+ 48m 13s] make[2]: Leaving directory '/tmp/build/pkg/getty'
+[+ 48m 13s] make[2]: Entering directory '/tmp/build/pkg/vpnkit-expose-port'
+[+ 48m 13s] docker pull linuxkit/vpnkit-expose-port:e2b49a6c56fbf876ea24f0a5ce4ccae5f940d1be || docker build  -t linuxkit/vpnkit-expose-port:e2b49a6c56fbf876ea24f0a5ce4ccae5f940d1be .
+[+ 48m 16s] Pull (1 of 1): linuxkit/vpnkit-expose-port:e2b49a6c56fbf876ea24f0a5ce4ccae5f940d1be@sha256:129b3b8e3525f58bd0d864ddc79fa5d083fcb006bcf76330cada730261c53ff0
+[+ 48m 17s] sha256:129b3b8e3525f58bd0d864ddc79fa5d083fcb006bcf76330cada730261c53ff0: Pulling from linuxkit/vpnkit-expose-port
+[+ 48m 17s] Digest: sha256:129b3b8e3525f58bd0d864ddc79fa5d083fcb006bcf76330cada730261c53ff0
+[+ 48m 17s] Status: Image is up to date for linuxkit/vpnkit-expose-port@sha256:129b3b8e3525f58bd0d864ddc79fa5d083fcb006bcf76330cada730261c53ff0
+[+ 48m 17s] Tagging linuxkit/vpnkit-expose-port@sha256:129b3b8e3525f58bd0d864ddc79fa5d083fcb006bcf76330cada730261c53ff0 as linuxkit/vpnkit-expose-port:e2b49a6c56fbf876ea24f0a5ce4ccae5f940d1be
+[+ 48m 17s] make[2]: Leaving directory '/tmp/build/pkg/vpnkit-expose-port'
+[+ 48m 17s] make[2]: Entering directory '/tmp/build/pkg/mount'
+[+ 48m 17s] docker pull linuxkit/mount:b24bd97ae43397b469dbaadd80f17f291c817bdf || docker build --network=none -t linuxkit/mount:b24bd97ae43397b469dbaadd80f17f291c817bdf .
+[+ 48m 21s] Pull (1 of 1): linuxkit/mount:b24bd97ae43397b469dbaadd80f17f291c817bdf@sha256:2b95cf8fa62232191f6b6d028116103dfb4436214f3ab173de725d7efd6b8375
+[+ 48m 23s] sha256:2b95cf8fa62232191f6b6d028116103dfb4436214f3ab173de725d7efd6b8375: Pulling from linuxkit/mount
+[+ 48m 23s] Digest: sha256:2b95cf8fa62232191f6b6d028116103dfb4436214f3ab173de725d7efd6b8375
+[+ 48m 23s] Status: Image is up to date for linuxkit/mount@sha256:2b95cf8fa62232191f6b6d028116103dfb4436214f3ab173de725d7efd6b8375
+[+ 48m 23s] Tagging linuxkit/mount@sha256:2b95cf8fa62232191f6b6d028116103dfb4436214f3ab173de725d7efd6b8375 as linuxkit/mount:b24bd97ae43397b469dbaadd80f17f291c817bdf
+[+ 48m 23s] make[2]: Leaving directory '/tmp/build/pkg/mount'
+[+ 48m 23s] make[2]: Entering directory '/tmp/build/pkg/trim-after-delete'
+[+ 48m 23s] docker pull linuxkit/trim-after-delete:2a5fcbe080cd4a45bd75c2ea3856c069475d706d || docker build --network=none -t linuxkit/trim-after-delete:2a5fcbe080cd4a45bd75c2ea3856c069475d706d .
+[+ 48m 26s] Pull (1 of 1): linuxkit/trim-after-delete:2a5fcbe080cd4a45bd75c2ea3856c069475d706d@sha256:aaca9d90378bf01bdacdefd57db5d88152de60bf4f636c62dd708b1979e3a16d
+[+ 48m 28s] sha256:aaca9d90378bf01bdacdefd57db5d88152de60bf4f636c62dd708b1979e3a16d: Pulling from linuxkit/trim-after-delete
+[+ 48m 28s] Digest: sha256:aaca9d90378bf01bdacdefd57db5d88152de60bf4f636c62dd708b1979e3a16d
+[+ 48m 28s] Status: Image is up to date for linuxkit/trim-after-delete@sha256:aaca9d90378bf01bdacdefd57db5d88152de60bf4f636c62dd708b1979e3a16d
+[+ 48m 28s] Tagging linuxkit/trim-after-delete@sha256:aaca9d90378bf01bdacdefd57db5d88152de60bf4f636c62dd708b1979e3a16d as linuxkit/trim-after-delete:2a5fcbe080cd4a45bd75c2ea3856c069475d706d
+[+ 48m 28s] make[2]: Leaving directory '/tmp/build/pkg/trim-after-delete'
+[+ 48m 28s] make[2]: Entering directory '/tmp/build/pkg/metadata'
+[+ 48m 28s] docker pull linuxkit/metadata:f122f1b4e873f1d08cd67bd9105385fd923af0cb || docker build --network=none -t linuxkit/metadata:f122f1b4e873f1d08cd67bd9105385fd923af0cb .
+[+ 48m 31s] Pull (1 of 1): linuxkit/metadata:f122f1b4e873f1d08cd67bd9105385fd923af0cb@sha256:4f30544ce00c1460f8e4b9b3655b9947bf19dd55c77970685d5ce5fa0a924eee
+[+ 48m 32s] sha256:4f30544ce00c1460f8e4b9b3655b9947bf19dd55c77970685d5ce5fa0a924eee: Pulling from linuxkit/metadata
+[+ 48m 32s] Digest: sha256:4f30544ce00c1460f8e4b9b3655b9947bf19dd55c77970685d5ce5fa0a924eee
+[+ 48m 32s] Status: Image is up to date for linuxkit/metadata@sha256:4f30544ce00c1460f8e4b9b3655b9947bf19dd55c77970685d5ce5fa0a924eee
+[+ 48m 32s] Tagging linuxkit/metadata@sha256:4f30544ce00c1460f8e4b9b3655b9947bf19dd55c77970685d5ce5fa0a924eee as linuxkit/metadata:f122f1b4e873f1d08cd67bd9105385fd923af0cb
+[+ 48m 32s] make[2]: Leaving directory '/tmp/build/pkg/metadata'
+[+ 48m 32s] make[2]: Entering directory '/tmp/build/pkg/rngd'
+[+ 48m 32s] docker pull linuxkit/rngd:1516d5d70683a5d925fe475eb1b6164a2f67ac3b || docker build  -t linuxkit/rngd:1516d5d70683a5d925fe475eb1b6164a2f67ac3b .
+[+ 48m 36s] Pull (1 of 1): linuxkit/rngd:1516d5d70683a5d925fe475eb1b6164a2f67ac3b@sha256:56a7ffbc6d111a99cf40be583d2506a5db1050e2a417a1b13c30991cd9299c72
+[+ 48m 37s] sha256:56a7ffbc6d111a99cf40be583d2506a5db1050e2a417a1b13c30991cd9299c72: Pulling from linuxkit/rngd
+[+ 48m 37s] Digest: sha256:56a7ffbc6d111a99cf40be583d2506a5db1050e2a417a1b13c30991cd9299c72
+[+ 48m 37s] Status: Image is up to date for linuxkit/rngd@sha256:56a7ffbc6d111a99cf40be583d2506a5db1050e2a417a1b13c30991cd9299c72
+[+ 48m 37s] Tagging linuxkit/rngd@sha256:56a7ffbc6d111a99cf40be583d2506a5db1050e2a417a1b13c30991cd9299c72 as linuxkit/rngd:1516d5d70683a5d925fe475eb1b6164a2f67ac3b
+[+ 48m 37s] make[2]: Leaving directory '/tmp/build/pkg/rngd'
+[+ 48m 37s] make[2]: Entering directory '/tmp/build/pkg/qemu-ga'
+[+ 48m 37s] docker pull linuxkit/qemu-ga:585e4f0161a4df7583d5e0479d7621040c1ee140 || docker build --network=none -t linuxkit/qemu-ga:585e4f0161a4df7583d5e0479d7621040c1ee140 .
+[+ 48m 40s] Pull (1 of 1): linuxkit/qemu-ga:585e4f0161a4df7583d5e0479d7621040c1ee140@sha256:b2620067a0cb3862f2fabf047295cb3c734ddb6651d53e881bca30345cc4e658
+[+ 48m 41s] sha256:b2620067a0cb3862f2fabf047295cb3c734ddb6651d53e881bca30345cc4e658: Pulling from linuxkit/qemu-ga
+[+ 48m 41s] c67030f24361: Pulling fs layer
+[+ 48m 42s] c67030f24361: Verifying Checksum
+[+ 48m 42s] c67030f24361: Download complete
+[+ 48m 43s] c67030f24361: Pull complete
+[+ 48m 43s] Digest: sha256:b2620067a0cb3862f2fabf047295cb3c734ddb6651d53e881bca30345cc4e658
+[+ 48m 43s] Status: Downloaded newer image for linuxkit/qemu-ga@sha256:b2620067a0cb3862f2fabf047295cb3c734ddb6651d53e881bca30345cc4e658
+[+ 48m 43s] Tagging linuxkit/qemu-ga@sha256:b2620067a0cb3862f2fabf047295cb3c734ddb6651d53e881bca30345cc4e658 as linuxkit/qemu-ga:585e4f0161a4df7583d5e0479d7621040c1ee140
+[+ 48m 43s] make[2]: Leaving directory '/tmp/build/pkg/qemu-ga'
+[+ 48m 43s] make[2]: Entering directory '/tmp/build/pkg/runc'
+[+ 48m 43s] docker pull linuxkit/runc:2310ad9d266cf5d9c4d07613bd2135ed7eb8a21f || docker build  -t linuxkit/runc:2310ad9d266cf5d9c4d07613bd2135ed7eb8a21f .
+[+ 48m 46s] Pull (1 of 1): linuxkit/runc:2310ad9d266cf5d9c4d07613bd2135ed7eb8a21f@sha256:1bb930d2b5534be79ec32f892a780c8e7243810d2983f6eb778358a9a4931627
+[+ 48m 47s] sha256:1bb930d2b5534be79ec32f892a780c8e7243810d2983f6eb778358a9a4931627: Pulling from linuxkit/runc
+[+ 48m 47s] Digest: sha256:1bb930d2b5534be79ec32f892a780c8e7243810d2983f6eb778358a9a4931627
+[+ 48m 47s] Status: Image is up to date for linuxkit/runc@sha256:1bb930d2b5534be79ec32f892a780c8e7243810d2983f6eb778358a9a4931627
+[+ 48m 47s] Tagging linuxkit/runc@sha256:1bb930d2b5534be79ec32f892a780c8e7243810d2983f6eb778358a9a4931627 as linuxkit/runc:2310ad9d266cf5d9c4d07613bd2135ed7eb8a21f
+[+ 48m 47s] make[2]: Leaving directory '/tmp/build/pkg/runc'
+[+ 48m 47s] make[2]: Entering directory '/tmp/build/pkg/sysctl'
+[+ 48m 47s] docker pull linuxkit/sysctl:d1a43c7c91e92374766f962dc8534cf9508756b0 || docker build --network=none -t linuxkit/sysctl:d1a43c7c91e92374766f962dc8534cf9508756b0 .
+[+ 48m 51s] Pull (1 of 1): linuxkit/sysctl:d1a43c7c91e92374766f962dc8534cf9508756b0@sha256:3a1095711fcf00193405f4fa26af908f00952d2a2966d1e87fb060f4b4eb675f
+[+ 48m 52s] sha256:3a1095711fcf00193405f4fa26af908f00952d2a2966d1e87fb060f4b4eb675f: Pulling from linuxkit/sysctl
+[+ 48m 52s] Digest: sha256:3a1095711fcf00193405f4fa26af908f00952d2a2966d1e87fb060f4b4eb675f
+[+ 48m 52s] Status: Image is up to date for linuxkit/sysctl@sha256:3a1095711fcf00193405f4fa26af908f00952d2a2966d1e87fb060f4b4eb675f
+[+ 48m 52s] Tagging linuxkit/sysctl@sha256:3a1095711fcf00193405f4fa26af908f00952d2a2966d1e87fb060f4b4eb675f as linuxkit/sysctl:d1a43c7c91e92374766f962dc8534cf9508756b0
+[+ 48m 52s] make[2]: Leaving directory '/tmp/build/pkg/sysctl'
+[+ 48m 52s] make[2]: Entering directory '/tmp/build/pkg/format'
+[+ 48m 52s] docker pull linuxkit/format:84a997e69051a1bf05b7c1926ab785bb07932954 || docker build --network=none -t linuxkit/format:84a997e69051a1bf05b7c1926ab785bb07932954 .
+[+ 48m 55s] Pull (1 of 1): linuxkit/format:84a997e69051a1bf05b7c1926ab785bb07932954@sha256:efdc29b80eac3c22688bf093b77af2ae4cf3907edea4a3f6cb1eee8385859fc0
+[+ 48m 56s] sha256:efdc29b80eac3c22688bf093b77af2ae4cf3907edea4a3f6cb1eee8385859fc0: Pulling from linuxkit/format
+[+ 48m 56s] Digest: sha256:efdc29b80eac3c22688bf093b77af2ae4cf3907edea4a3f6cb1eee8385859fc0
+[+ 48m 56s] Status: Image is up to date for linuxkit/format@sha256:efdc29b80eac3c22688bf093b77af2ae4cf3907edea4a3f6cb1eee8385859fc0
+[+ 48m 56s] Tagging linuxkit/format@sha256:efdc29b80eac3c22688bf093b77af2ae4cf3907edea4a3f6cb1eee8385859fc0 as linuxkit/format:84a997e69051a1bf05b7c1926ab785bb07932954
+[+ 48m 56s] make[2]: Leaving directory '/tmp/build/pkg/format'
+[+ 48m 56s] make[2]: Entering directory '/tmp/build/pkg/openntpd'
+[+ 48m 56s] docker pull linuxkit/openntpd:19370f5d9bec84eb91073b7196b732f1301d9c90 || docker build --network=none -t linuxkit/openntpd:19370f5d9bec84eb91073b7196b732f1301d9c90 .
+[+ 49m 00s] Pull (1 of 1): linuxkit/openntpd:19370f5d9bec84eb91073b7196b732f1301d9c90@sha256:9047490e9d401b15d1c7edde14167f90fb820b6279484b2d1d8a2c2b24be881c
+[+ 49m 01s] sha256:9047490e9d401b15d1c7edde14167f90fb820b6279484b2d1d8a2c2b24be881c: Pulling from linuxkit/openntpd
+[+ 49m 01s] Digest: sha256:9047490e9d401b15d1c7edde14167f90fb820b6279484b2d1d8a2c2b24be881c
+[+ 49m 01s] Status: Image is up to date for linuxkit/openntpd@sha256:9047490e9d401b15d1c7edde14167f90fb820b6279484b2d1d8a2c2b24be881c
+[+ 49m 01s] Tagging linuxkit/openntpd@sha256:9047490e9d401b15d1c7edde14167f90fb820b6279484b2d1d8a2c2b24be881c as linuxkit/openntpd:19370f5d9bec84eb91073b7196b732f1301d9c90
+[+ 49m 01s] make[2]: Leaving directory '/tmp/build/pkg/openntpd'
+[+ 49m 01s] make[2]: Entering directory '/tmp/build/pkg/vsudd'
+[+ 49m 01s] docker pull linuxkit/vsudd:adad4b6ab7529b6b95339eb0752b0c81a218d185 || docker build  -t linuxkit/vsudd:adad4b6ab7529b6b95339eb0752b0c81a218d185 .
+[+ 49m 05s] Pull (1 of 1): linuxkit/vsudd:adad4b6ab7529b6b95339eb0752b0c81a218d185@sha256:667babcdc0974cda32017ae6f024d4a6f30ad88df3d71d8a3d98cc776c53e180
+[+ 49m 06s] sha256:667babcdc0974cda32017ae6f024d4a6f30ad88df3d71d8a3d98cc776c53e180: Pulling from linuxkit/vsudd
+[+ 49m 06s] Digest: sha256:667babcdc0974cda32017ae6f024d4a6f30ad88df3d71d8a3d98cc776c53e180
+[+ 49m 06s] Status: Image is up to date for linuxkit/vsudd@sha256:667babcdc0974cda32017ae6f024d4a6f30ad88df3d71d8a3d98cc776c53e180
+[+ 49m 06s] Tagging linuxkit/vsudd@sha256:667babcdc0974cda32017ae6f024d4a6f30ad88df3d71d8a3d98cc776c53e180 as linuxkit/vsudd:adad4b6ab7529b6b95339eb0752b0c81a218d185
+[+ 49m 06s] make[2]: Leaving directory '/tmp/build/pkg/vsudd'
+[+ 49m 06s] make[2]: Entering directory '/tmp/build/pkg/sshd'
+[+ 49m 06s] docker pull linuxkit/sshd:89b2e91d7d1bf2f40220be0e3ed586e74746cceb || docker build --network=none -t linuxkit/sshd:89b2e91d7d1bf2f40220be0e3ed586e74746cceb .
+[+ 49m 09s] Pull (1 of 1): linuxkit/sshd:89b2e91d7d1bf2f40220be0e3ed586e74746cceb@sha256:dc6d18cc03ea690c229739788e0a5421990ffee2ea99c2b40610b7425d75d22a
+[+ 49m 11s] sha256:dc6d18cc03ea690c229739788e0a5421990ffee2ea99c2b40610b7425d75d22a: Pulling from linuxkit/sshd
+[+ 49m 11s] Digest: sha256:dc6d18cc03ea690c229739788e0a5421990ffee2ea99c2b40610b7425d75d22a
+[+ 49m 11s] Status: Image is up to date for linuxkit/sshd@sha256:dc6d18cc03ea690c229739788e0a5421990ffee2ea99c2b40610b7425d75d22a
+[+ 49m 11s] Tagging linuxkit/sshd@sha256:dc6d18cc03ea690c229739788e0a5421990ffee2ea99c2b40610b7425d75d22a as linuxkit/sshd:89b2e91d7d1bf2f40220be0e3ed586e74746cceb
+[+ 49m 11s] make[2]: Leaving directory '/tmp/build/pkg/sshd'
+[+ 49m 11s] make[2]: Entering directory '/tmp/build/pkg/node_exporter'
+[+ 49m 11s] docker pull linuxkit/node_exporter:a058fe1c6a4440a9689022a9fd7cffdcfd56d52c || docker build --network=none -t linuxkit/node_exporter:a058fe1c6a4440a9689022a9fd7cffdcfd56d52c .
+[+ 49m 14s] Pull (1 of 1): linuxkit/node_exporter:a058fe1c6a4440a9689022a9fd7cffdcfd56d52c@sha256:3090317598b2abb0a1a8b0392b457f356e02c347452d442020bdb72e6e826946
+[+ 49m 15s] sha256:3090317598b2abb0a1a8b0392b457f356e02c347452d442020bdb72e6e826946: Pulling from linuxkit/node_exporter
+[+ 49m 15s] Digest: sha256:3090317598b2abb0a1a8b0392b457f356e02c347452d442020bdb72e6e826946
+[+ 49m 15s] Status: Image is up to date for linuxkit/node_exporter@sha256:3090317598b2abb0a1a8b0392b457f356e02c347452d442020bdb72e6e826946
+[+ 49m 15s] Tagging linuxkit/node_exporter@sha256:3090317598b2abb0a1a8b0392b457f356e02c347452d442020bdb72e6e826946 as linuxkit/node_exporter:a058fe1c6a4440a9689022a9fd7cffdcfd56d52c
+[+ 49m 15s] make[2]: Leaving directory '/tmp/build/pkg/node_exporter'
+[+ 49m 15s] make[2]: Entering directory '/tmp/build/pkg/init'
+[+ 49m 15s] docker pull linuxkit/init:14a38303ee9dcb4541c00e2b87404befc1ba2083 || docker build --network=none -t linuxkit/init:14a38303ee9dcb4541c00e2b87404befc1ba2083 .
+[+ 49m 19s] Pull (1 of 1): linuxkit/init:14a38303ee9dcb4541c00e2b87404befc1ba2083@sha256:4ac0b604594afa7d96e3580cbf96ba9049657b80f9b339ffe43088716eb0e72d
+[+ 49m 20s] sha256:4ac0b604594afa7d96e3580cbf96ba9049657b80f9b339ffe43088716eb0e72d: Pulling from linuxkit/init
+[+ 49m 20s] Digest: sha256:4ac0b604594afa7d96e3580cbf96ba9049657b80f9b339ffe43088716eb0e72d
+[+ 49m 20s] Status: Image is up to date for linuxkit/init@sha256:4ac0b604594afa7d96e3580cbf96ba9049657b80f9b339ffe43088716eb0e72d
+[+ 49m 20s] Tagging linuxkit/init@sha256:4ac0b604594afa7d96e3580cbf96ba9049657b80f9b339ffe43088716eb0e72d as linuxkit/init:14a38303ee9dcb4541c00e2b87404befc1ba2083
+[+ 49m 20s] make[2]: Leaving directory '/tmp/build/pkg/init'
+[+ 49m 20s] make[2]: Entering directory '/tmp/build/pkg/swap'
+[+ 49m 20s] docker pull linuxkit/swap:9ba1aa74250d99b22871e105ec56937dca2f53b8 || docker build --network=none -t linuxkit/swap:9ba1aa74250d99b22871e105ec56937dca2f53b8 .
+[+ 49m 24s] No trust data for 9ba1aa74250d99b22871e105ec56937dca2f53b8
+[+ 49m 25s] Sending build context to Docker daemon  11.78kB
+[+ 49m 25s] Step 1/12 : FROM linuxkit/alpine@sha256:1de96f57d89b1f81dc0ad269ad3765fb2d3e2ceb3149d54ddad6cf8b826f5acd AS mirror
+[+ 49m 25s]  ---> 3555ace68697
+[+ 49m 25s] Step 2/12 : RUN mkdir -p /out/etc/apk && cp -r /etc/apk/* /out/etc/apk/
+[+ 49m 25s]  ---> Using cache
+[+ 49m 25s]  ---> 75fa24e3b8bb
+[+ 49m 25s] Step 3/12 : RUN apk add --no-cache --initdb -p /out     alpine-baselayout     busybox     cryptsetup     musl     util-linux
+[+ 49m 25s]  ---> Running in 817c7d056724
+[+ 49m 25s] (1/19) Installing musl (1.1.16-r10)
+[+ 49m 25s] (2/19) Installing busybox (1.26.2-r5)
+[+ 49m 25s] Executing busybox-1.26.2-r5.post-install
+[+ 49m 25s] (3/19) Installing alpine-baselayout (3.0.4-r0)
+[+ 49m 25s] Executing alpine-baselayout-3.0.4-r0.pre-install
+[+ 49m 25s] Executing alpine-baselayout-3.0.4-r0.post-install
+[+ 49m 25s] (4/19) Installing libressl2.5-libcrypto (2.5.4-r0)
+[+ 49m 25s] (5/19) Installing device-mapper-libs (2.02.168-r3)
+[+ 49m 25s] (6/19) Installing libuuid (2.28.2-r2)
+[+ 49m 25s] (7/19) Installing cryptsetup-libs (1.7.5-r0)
+[+ 49m 25s] (8/19) Installing popt (1.16-r6)
+[+ 49m 25s] (9/19) Installing cryptsetup (1.7.5-r0)
+[+ 49m 25s] (10/19) Installing libblkid (2.28.2-r2)
+[+ 49m 25s] (11/19) Installing libmount (2.28.2-r2)
+[+ 49m 25s] (12/19) Installing libsmartcols (2.28.2-r2)
+[+ 49m 25s] (13/19) Installing findmnt (2.28.2-r2)
+[+ 49m 25s] (14/19) Installing libfdisk (2.28.2-r2)
+[+ 49m 25s] (15/19) Installing ncurses-terminfo-base (6.0-r7)
+[+ 49m 25s] (16/19) Installing ncurses-terminfo (6.0-r7)
+[+ 49m 25s] (17/19) Installing ncurses-libs (6.0-r7)
+[+ 49m 25s] (18/19) Installing zlib (1.2.11-r0)
+[+ 49m 25s] (19/19) Installing util-linux (2.28.2-r2)
+[+ 49m 25s] Executing busybox-1.26.2-r5.trigger
+[+ 49m 25s] OK: 14 MiB in 19 packages
+[+ 49m 26s]  ---> 96da8d7f2118
+[+ 49m 26s] Removing intermediate container 817c7d056724
+[+ 49m 26s] Step 4/12 : RUN rm -rf /out/etc/apk /out/lib/apk /out/var/cache
+[+ 49m 26s]  ---> Running in 93c8e73d0f91
+[+ 49m 27s]  ---> 747d1cbab078
+[+ 49m 27s] Removing intermediate container 93c8e73d0f91
+[+ 49m 27s] Step 5/12 : FROM scratch
+[+ 49m 27s]  ---> 
+[+ 49m 27s] Step 6/12 : ENTRYPOINT 
+[+ 49m 27s]  ---> Running in d9523db3809d
+[+ 49m 27s]  ---> 914bef1177cd
+[+ 49m 27s] Removing intermediate container d9523db3809d
+[+ 49m 27s] Step 7/12 : CMD 
+[+ 49m 27s]  ---> Running in 02842db52608
+[+ 49m 27s]  ---> 1cff7951c0b9
+[+ 49m 27s] Removing intermediate container 02842db52608
+[+ 49m 27s] Step 8/12 : WORKDIR /
+[+ 49m 27s]  ---> 995b7e14a848
+[+ 49m 27s] Removing intermediate container d09ee7c91aef
+[+ 49m 27s] Step 9/12 : COPY --from=mirror /out/ /
+[+ 49m 29s]  ---> 7fa83772b418
+[+ 49m 29s] Removing intermediate container 034d8c93857e
+[+ 49m 29s] Step 10/12 : COPY /swap.sh .
+[+ 49m 29s]  ---> cd4b274a2b84
+[+ 49m 29s] Removing intermediate container a2fa4f7bdbc8
+[+ 49m 29s] Step 11/12 : ENTRYPOINT swap.sh
+[+ 49m 29s]  ---> Running in 1b25fee8bc9f
+[+ 49m 29s]  ---> e084e0ef7da2
+[+ 49m 29s] Removing intermediate container 1b25fee8bc9f
+[+ 49m 29s] Step 12/12 : LABEL org.mobyproject.config '{"binds": ["/dev:/dev", "/var:/var"], "capabilities": ["CAP_SYS_ADMIN", "CAP_MKNOD"], "net": "new", "ipc": "new"}'
+[+ 49m 29s]  ---> Running in bfecb9c0f239
+[+ 49m 30s]  ---> 7e2b54a2525e
+[+ 49m 30s] Removing intermediate container bfecb9c0f239
+[+ 49m 30s] Successfully built 7e2b54a2525e
+[+ 49m 30s] Successfully tagged linuxkit/swap:9ba1aa74250d99b22871e105ec56937dca2f53b8
+[+ 49m 30s] Tagging linuxkit/alpine@sha256:1de96f57d89b1f81dc0ad269ad3765fb2d3e2ceb3149d54ddad6cf8b826f5acd as linuxkit/alpine:9bcf61f605ef0ce36cc94d59b8eac307862de6e1
+[+ 49m 30s] make[2]: Leaving directory '/tmp/build/pkg/swap'
+[+ 49m 30s] make[2]: Entering directory '/tmp/build/pkg/ca-certificates'
+[+ 49m 30s] docker pull linuxkit/ca-certificates:67acf038c44bb191ebb704ec7bb39a1524052cdf || docker build --network=none -t linuxkit/ca-certificates:67acf038c44bb191ebb704ec7bb39a1524052cdf .
+[+ 49m 33s] Pull (1 of 1): linuxkit/ca-certificates:67acf038c44bb191ebb704ec7bb39a1524052cdf@sha256:cb9bfb6f6023bc1c5f195875665c1a3b9d3ddc9926ea226d10e7448b6cb79da5
+[+ 49m 34s] sha256:cb9bfb6f6023bc1c5f195875665c1a3b9d3ddc9926ea226d10e7448b6cb79da5: Pulling from linuxkit/ca-certificates
+[+ 49m 34s] Digest: sha256:cb9bfb6f6023bc1c5f195875665c1a3b9d3ddc9926ea226d10e7448b6cb79da5
+[+ 49m 34s] Status: Image is up to date for linuxkit/ca-certificates@sha256:cb9bfb6f6023bc1c5f195875665c1a3b9d3ddc9926ea226d10e7448b6cb79da5
+[+ 49m 34s] Tagging linuxkit/ca-certificates@sha256:cb9bfb6f6023bc1c5f195875665c1a3b9d3ddc9926ea226d10e7448b6cb79da5 as linuxkit/ca-certificates:67acf038c44bb191ebb704ec7bb39a1524052cdf
+[+ 49m 34s] make[2]: Leaving directory '/tmp/build/pkg/ca-certificates'
+[+ 49m 34s] make[2]: Entering directory '/tmp/build/pkg/dhcpcd'
+[+ 49m 34s] docker pull linuxkit/dhcpcd:4b7b8bb024cebb1bbb9c8026d44d7cbc8e202c41 || docker build --network=none -t linuxkit/dhcpcd:4b7b8bb024cebb1bbb9c8026d44d7cbc8e202c41 .
+[+ 49m 37s] Pull (1 of 1): linuxkit/dhcpcd:4b7b8bb024cebb1bbb9c8026d44d7cbc8e202c41@sha256:8f84de55b29772482e932fa42e7052e659bf56dc0b61b54d510345d30dace340
+[+ 49m 39s] sha256:8f84de55b29772482e932fa42e7052e659bf56dc0b61b54d510345d30dace340: Pulling from linuxkit/dhcpcd
+[+ 49m 39s] Digest: sha256:8f84de55b29772482e932fa42e7052e659bf56dc0b61b54d510345d30dace340
+[+ 49m 39s] Status: Image is up to date for linuxkit/dhcpcd@sha256:8f84de55b29772482e932fa42e7052e659bf56dc0b61b54d510345d30dace340
+[+ 49m 39s] Tagging linuxkit/dhcpcd@sha256:8f84de55b29772482e932fa42e7052e659bf56dc0b61b54d510345d30dace340 as linuxkit/dhcpcd:4b7b8bb024cebb1bbb9c8026d44d7cbc8e202c41
+[+ 49m 39s] make[2]: Leaving directory '/tmp/build/pkg/dhcpcd'
+[+ 49m 39s] make[2]: Entering directory '/tmp/build/pkg/acpid'
+[+ 49m 39s] docker pull linuxkit/acpid:1966310cb75e28ffc668863a6577ee991327f918 || docker build --network=none -t linuxkit/acpid:1966310cb75e28ffc668863a6577ee991327f918 .
+[+ 49m 42s] Pull (1 of 1): linuxkit/acpid:1966310cb75e28ffc668863a6577ee991327f918@sha256:81c979d1c9889a8252d81d4100b0a390a7f68c3462d98245f6cac12f9c32b111
+[+ 49m 43s] sha256:81c979d1c9889a8252d81d4100b0a390a7f68c3462d98245f6cac12f9c32b111: Pulling from linuxkit/acpid
+[+ 49m 43s] Digest: sha256:81c979d1c9889a8252d81d4100b0a390a7f68c3462d98245f6cac12f9c32b111
+[+ 49m 43s] Status: Image is up to date for linuxkit/acpid@sha256:81c979d1c9889a8252d81d4100b0a390a7f68c3462d98245f6cac12f9c32b111
+[+ 49m 43s] Tagging linuxkit/acpid@sha256:81c979d1c9889a8252d81d4100b0a390a7f68c3462d98245f6cac12f9c32b111 as linuxkit/acpid:1966310cb75e28ffc668863a6577ee991327f918
+[+ 49m 43s] make[2]: Leaving directory '/tmp/build/pkg/acpid'
+[+ 49m 43s] make[2]: Entering directory '/tmp/build/pkg/sysfs'
+[+ 49m 43s] docker pull linuxkit/sysfs:006a65b30cfdd9d751d7ab042fde7eca2c3bc9dc || docker build --network=none -t linuxkit/sysfs:006a65b30cfdd9d751d7ab042fde7eca2c3bc9dc .
+[+ 49m 46s] Pull (1 of 1): linuxkit/sysfs:006a65b30cfdd9d751d7ab042fde7eca2c3bc9dc@sha256:96c683429315ed246a81cc4ed7a683c65f12c86962b9d4db7c508b5d9fd7c5dd
+[+ 49m 47s] sha256:96c683429315ed246a81cc4ed7a683c65f12c86962b9d4db7c508b5d9fd7c5dd: Pulling from linuxkit/sysfs
+[+ 49m 47s] Digest: sha256:96c683429315ed246a81cc4ed7a683c65f12c86962b9d4db7c508b5d9fd7c5dd
+[+ 49m 47s] Status: Image is up to date for linuxkit/sysfs@sha256:96c683429315ed246a81cc4ed7a683c65f12c86962b9d4db7c508b5d9fd7c5dd
+[+ 49m 47s] Tagging linuxkit/sysfs@sha256:96c683429315ed246a81cc4ed7a683c65f12c86962b9d4db7c508b5d9fd7c5dd as linuxkit/sysfs:006a65b30cfdd9d751d7ab042fde7eca2c3bc9dc
+[+ 49m 47s] make[2]: Leaving directory '/tmp/build/pkg/sysfs'
+[+ 49m 47s] make[2]: Entering directory '/tmp/build/pkg/mkimage'
+[+ 49m 47s] docker pull linuxkit/mkimage:a63b8ee4c5de335afc32ba850e0af319b25b96c0 || docker build --network=none -t linuxkit/mkimage:a63b8ee4c5de335afc32ba850e0af319b25b96c0 .
+[+ 49m 51s] Pull (1 of 1): linuxkit/mkimage:a63b8ee4c5de335afc32ba850e0af319b25b96c0@sha256:7a35c6e7248b5c508bacd129071f96c085f61acdcdacf3d8fa48348d94dcb4db
+[+ 49m 52s] sha256:7a35c6e7248b5c508bacd129071f96c085f61acdcdacf3d8fa48348d94dcb4db: Pulling from linuxkit/mkimage
+[+ 49m 52s] Digest: sha256:7a35c6e7248b5c508bacd129071f96c085f61acdcdacf3d8fa48348d94dcb4db
+[+ 49m 52s] Status: Image is up to date for linuxkit/mkimage@sha256:7a35c6e7248b5c508bacd129071f96c085f61acdcdacf3d8fa48348d94dcb4db
+[+ 49m 52s] Tagging linuxkit/mkimage@sha256:7a35c6e7248b5c508bacd129071f96c085f61acdcdacf3d8fa48348d94dcb4db as linuxkit/mkimage:a63b8ee4c5de335afc32ba850e0af319b25b96c0
+[+ 49m 52s] make[2]: Leaving directory '/tmp/build/pkg/mkimage'
+[+ 49m 52s] make[2]: Entering directory '/tmp/build/pkg/vpnkit-forwarder'
+[+ 49m 52s] docker pull linuxkit/vpnkit-forwarder:9c1545e7b093d1210118de7661d7346393ec195b || docker build  -t linuxkit/vpnkit-forwarder:9c1545e7b093d1210118de7661d7346393ec195b .
+[+ 49m 55s] Pull (1 of 1): linuxkit/vpnkit-forwarder:9c1545e7b093d1210118de7661d7346393ec195b@sha256:96357e8122a357dafb1af0be714f940bc7a42bde7e0261ee27926e0fe173ff6a
+[+ 49m 56s] sha256:96357e8122a357dafb1af0be714f940bc7a42bde7e0261ee27926e0fe173ff6a: Pulling from linuxkit/vpnkit-forwarder
+[+ 49m 56s] Digest: sha256:96357e8122a357dafb1af0be714f940bc7a42bde7e0261ee27926e0fe173ff6a
+[+ 49m 56s] Status: Image is up to date for linuxkit/vpnkit-forwarder@sha256:96357e8122a357dafb1af0be714f940bc7a42bde7e0261ee27926e0fe173ff6a
+[+ 49m 56s] Tagging linuxkit/vpnkit-forwarder@sha256:96357e8122a357dafb1af0be714f940bc7a42bde7e0261ee27926e0fe173ff6a as linuxkit/vpnkit-forwarder:9c1545e7b093d1210118de7661d7346393ec195b
+[+ 49m 56s] make[2]: Leaving directory '/tmp/build/pkg/vpnkit-forwarder'
+[+ 49m 56s] make[2]: Entering directory '/tmp/build/pkg/open-vm-tools'
+[+ 49m 56s] docker pull linuxkit/open-vm-tools:1a7566742748bec0c1e0171705b77ef5ac947bba || docker build --network=none -t linuxkit/open-vm-tools:1a7566742748bec0c1e0171705b77ef5ac947bba .
+[+ 50m 00s] Pull (1 of 1): linuxkit/open-vm-tools:1a7566742748bec0c1e0171705b77ef5ac947bba@sha256:3b30863219f26b0f994352a1494c3cb6d9ef731e1d8e5ea42859108f47e8d964
+[+ 50m 01s] sha256:3b30863219f26b0f994352a1494c3cb6d9ef731e1d8e5ea42859108f47e8d964: Pulling from linuxkit/open-vm-tools
+[+ 50m 01s] d4ac1bdf4d7e: Pulling fs layer
+[+ 50m 03s] d4ac1bdf4d7e: Verifying Checksum
+[+ 50m 03s] d4ac1bdf4d7e: Download complete
+[+ 50m 04s] d4ac1bdf4d7e: Pull complete
+[+ 50m 04s] Digest: sha256:3b30863219f26b0f994352a1494c3cb6d9ef731e1d8e5ea42859108f47e8d964
+[+ 50m 04s] Status: Downloaded newer image for linuxkit/open-vm-tools@sha256:3b30863219f26b0f994352a1494c3cb6d9ef731e1d8e5ea42859108f47e8d964
+[+ 50m 04s] Tagging linuxkit/open-vm-tools@sha256:3b30863219f26b0f994352a1494c3cb6d9ef731e1d8e5ea42859108f47e8d964 as linuxkit/open-vm-tools:1a7566742748bec0c1e0171705b77ef5ac947bba
+[+ 50m 04s] make[2]: Leaving directory '/tmp/build/pkg/open-vm-tools'
+[+ 50m 04s] make[1]: Leaving directory '/tmp/build/pkg'[2017-07-11 09:45.30] Fetching results
+[2017-07-11 09:45.30] Running "scp" "-r" "-i" "/run/secrets/builder-ssh" "-o" "StrictHostKeyChecking=no" "root@104.199.17.172:/tmp/build/test/_results" "root@104.199.17.172:/tmp/build/artifacts" "."
+[2017-07-11 09:45.35] Removing test VM...
+[2017-07-11 09:45.35] Running "/gcloud/destroy.py" "linuxkit-ci-1"
+INFO:root:Destroying VM
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+[2017-07-11 09:46.35] Saved build result test.img.tar.gz (aed48bb97f1404597721fc2ae0ba1ec4955fd59eece67a3fbbfe9983eed31840)
+[2017-07-11 09:46.35] Success
