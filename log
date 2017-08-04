@@ -1,0 +1,87 @@
+=== Docker build CI.Dockerfile
+[2017-08-04 10:52.30] Starting...
+Cloning into '/tmp/with_clone18c36b3a'...
+done.
+HEAD is now at 7d481ce Use a clearer pool name for fixed-build-node
+Sending build context to Docker daemon  85.5 kB
+Step 1/19 : FROM datakit/ci@sha256:daecb5fa1e017c39323d39bebfc0e6f94762452f46c29aafe115e7270166d692 AS build-env
+sha256:daecb5fa1e017c39323d39bebfc0e6f94762452f46c29aafe115e7270166d692: Pulling from datakit/ci
+Digest: sha256:daecb5fa1e017c39323d39bebfc0e6f94762452f46c29aafe115e7270166d692
+Status: Image is up to date for datakit/ci@sha256:daecb5fa1e017c39323d39bebfc0e6f94762452f46c29aafe115e7270166d692
+ ---> f16cddfd6f02
+Step 2/19 : ARG CONFIG=dkciCI
+ ---> Using cache
+ ---> b02aad95a630
+Step 3/19 : ADD . /src
+ ---> b429cc0223ee
+Removing intermediate container 4e40a54ff372
+Step 4/19 : WORKDIR /src
+ ---> 906c9fd57b42
+Removing intermediate container 2aead02a0d75
+Step 5/19 : RUN sudo chown -R opam /src
+ ---> Running in bb3c35800133
+ ---> 8f2d5023e44e
+Removing intermediate container bb3c35800133
+Step 6/19 : RUN opam config exec make
+ ---> Running in 48b00a6f39f6
+jbuilder build --dev src/ci.exe
+[91m    ocamldep src/ci.depends.ocamldep-output
+[0m[91m    ocamldep src/ci.dependsi.ocamldep-output
+[0m[91m      ocamlc src/ci.{cmi,cmti}
+[0m[91m      ocamlc src/hash.{cmi,cmti}
+[0m[91m      ocamlc src/gcp.{cmi,cmti}
+[0m[91m      ocamlc src/disk_cache.{cmi,cmti}
+[0m[91m      ocamlc src/linuxkit_test.{cmi,cmti}
+[0m[91m      ocamlc src/linuxkit_build.{cmi,cmti}
+[0m[91m    ocamlopt src/hash.{cmx,o}
+[0m[91m    ocamlopt src/disk_cache.{cmx,o}
+[0m[91m    ocamlopt src/gcp.{cmx,o}
+[0m[91m    ocamlopt src/linuxkit_test.{cmx,o}
+[0m[91m    ocamlopt src/linuxkit_build.{cmx,o}
+[0m[91m    ocamlopt src/ci.{cmx,o}
+[0m[91m    ocamlopt src/ci.exe
+[0m ---> 5b46a455a447
+Removing intermediate container 48b00a6f39f6
+Step 7/19 : FROM alpine:3.5
+3.5: Pulling from library/alpine
+Digest: sha256:af2a5bd2f8de8fc1ecabf1c76611cdc6a5f1ada1a2bdd7d3816e121b70300308
+Status: Image is up to date for alpine:3.5
+ ---> 074d602a59d7
+Step 8/19 : ENV REQUESTS_CA_BUNDLE /etc/ssl/certs/ca-certificates.crt
+ ---> Using cache
+ ---> 1c34fabcd6f4
+Step 9/19 : RUN apk update && apk add 	libev 	docker 	py-pip 	py-setuptools 	tar 	tzdata 	ca-certificates 	openssl 	wget 	bash 	gmp 	openssh-client 	make 	curl 	expect 	qemu-img 	qemu-system-x86_64
+ ---> Using cache
+ ---> b4e43233d197
+Step 10/19 : RUN pip install google-api-python-client
+ ---> Using cache
+ ---> 9cdcf0a431ae
+Step 11/19 : RUN pip install google-cloud-storage
+ ---> Using cache
+ ---> 5547351f6902
+Step 12/19 : RUN wget https://github.com/docker/notary/releases/download/v0.4.3/notary-Linux-amd64 -O /usr/local/bin/notary
+ ---> Using cache
+ ---> d7e1a64f16ae
+Step 13/19 : RUN echo '06cd02c4c2e7a3b1ad9899b03b3d4dde5392d964c675247d32f604a24661f839 */usr/local/bin/notary' | sha256sum -w -c -
+ ---> Using cache
+ ---> 8cdaaf2df28c
+Step 14/19 : RUN chmod a+x /usr/local/bin/notary
+ ---> Using cache
+ ---> 831f5b9b54ad
+Step 15/19 : USER root
+ ---> Using cache
+ ---> 84f68ca5e65a
+Step 16/19 : ENTRYPOINT /usr/local/bin/ci
+ ---> Using cache
+ ---> 4f5f39ecde0e
+Step 17/19 : CMD 
+ ---> Using cache
+ ---> 7ee95be47f29
+Step 18/19 : ADD run-files/gcloud /gcloud
+ ---> Using cache
+ ---> 996f23242279
+Step 19/19 : COPY --from=build-env /src/_build/default/src/ci.exe /usr/local/bin/ci
+ ---> 4f837e8e3a02
+Removing intermediate container 55fa57fef814
+Successfully built 4f837e8e3a02
+[2017-08-04 10:52.40] Success
