@@ -1,0 +1,35 @@
+=== Test LinuxKit on GCP
+[2017-10-16 14:00.17] Starting...
+INFO:root:Connecting to storage
+INFO:root:Getting bucket
+INFO:root:Uploading /build-cache/acfecefbe25f0370e4754681e80623f2d786cb6b280b3c3cadd0a7b94fd27518 -> linuxkit-ci-6.tar.gz
+INFO:root:Removing old image
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Waiting for global operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Creating image: {'name': 'linuxkit-ci-6-test-image', 'rawDisk': {'source': u'https://www.googleapis.com/storage/v1/b/linuxkit-gcp-test-bucket/o/linuxkit-ci-6.tar.gz'}}
+INFO:root:Waiting for global operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+Traceback (most recent call last):
+  File "/gcloud/test.py", line 52, in <module>
+    common.wait_for_global_operation(operation = image_response['name'])
+  File "/gcloud/common.py", line 43, in wait_for_global_operation
+    raise Exception(result['error'])
+Exception: {u'errors': [{u'message': u'The tar archive is not a valid image.', u'code': u'INVALID_IMAGE_TAR'}]}
+[2017-10-16 14:00.41] Removing test VM...
+[2017-10-16 14:00.41] Running "/gcloud/destroy.py" "linuxkit-ci-6"
+INFO:root:Destroying VM
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+Traceback (most recent call last):
+  File "/gcloud/destroy.py", line 12, in <module>
+    resp = common.compute.instances().delete(instance=name, project=common.project, zone=common.zone).execute()
+  File "/usr/lib/python2.7/site-packages/oauth2client/_helpers.py", line 133, in positional_wrapper
+    return wrapped(*args, **kwargs)
+  File "/usr/lib/python2.7/site-packages/googleapiclient/http.py", line 840, in execute
+    raise HttpError(resp, content, uri=self.uri)
+googleapiclient.errors.HttpError: <HttpError 404 when requesting https://www.googleapis.com/compute/v1/projects/moby-datakit-ci/zones/europe-west1-b/instances/linuxkit-ci-6?alt=json returned "The resource 'projects/moby-datakit-ci/zones/europe-west1-b/instances/linuxkit-ci-6' was not found">
+[2017-10-16 14:00.42] Failed: Command "/gcloud/test.py" "/build-cache/acfecefbe25f0370e4754681e80623f2d786cb6b280b3c3cadd0a7b94fd27518" "linuxkit-ci-6" exited with status 1
