@@ -1,0 +1,297 @@
+=== Build LinuxKit
+[2017-12-01 20:16.04] Starting...
+Cloning into '/tmp/with_clone37b8c87e'...
+done.
+HEAD is now at 1b59c4d24 Add VirtualBox support to linuxkit run
+[2017-12-01 20:16.04] Running "cp" "-p" "--" "/gcloud/ci-setup.sh" "/tmp/with_clone37b8c87e/ci-setup.sh"
+[2017-12-01 20:16.04] Building with timeout of 120 minutes
+[2017-12-01 20:16.04] Running "/gcloud/create.py" "linuxkit-ci-1"
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Using source disk image https://www.googleapis.com/compute/v1/projects/moby-datakit-ci/global/images/linuxkit-ci-builder-4
+INFO:root:Creating VM
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Getting VM details
+[2017-12-01 20:16.23] Waiting for SSH service to start...
+[2017-12-01 20:16.23] Running "ssh" "-i" "/run/secrets/builder-ssh" "-o" "UserKnownHostsFile=/dev/null" "-o" "StrictHostKeyChecking=no" "root@35.205.222.211" "uname" "-a"
+ssh: connect to host 35.205.222.211 port 22: Connection refused
+[2017-12-01 20:16.26] SSH not ready ((Failure
+  "Command \"ssh\" \"-i\" \"/run/secrets/builder-ssh\" \"-o\" \"UserKnownHostsFile=/dev/null\" \"-o\" \"StrictHostKeyChecking=no\" \"root@35.205.222.211\" \"uname\" \"-a\" exited with status 255"))
+[2017-12-01 20:16.28] Running "ssh" "-i" "/run/secrets/builder-ssh" "-o" "UserKnownHostsFile=/dev/null" "-o" "StrictHostKeyChecking=no" "root@35.205.222.211" "uname" "-a"
+ssh: connect to host 35.205.222.211 port 22: Connection refused
+[2017-12-01 20:16.28] SSH not ready ((Failure
+  "Command \"ssh\" \"-i\" \"/run/secrets/builder-ssh\" \"-o\" \"UserKnownHostsFile=/dev/null\" \"-o\" \"StrictHostKeyChecking=no\" \"root@35.205.222.211\" \"uname\" \"-a\" exited with status 255"))
+[2017-12-01 20:16.32] Running "ssh" "-i" "/run/secrets/builder-ssh" "-o" "UserKnownHostsFile=/dev/null" "-o" "StrictHostKeyChecking=no" "root@35.205.222.211" "uname" "-a"
+Warning: Permanently added '35.205.222.211' (ECDSA) to the list of known hosts.
+Linux linuxkit-ci-1 3.16.0-4-amd64 #1 SMP Debian 3.16.39-1+deb8u2 (2017-03-07) x86_64 GNU/Linux
+[2017-12-01 20:16.33] Created new VM linuxkit-ci-1
+[2017-12-01 20:16.33] Running "ssh" "-i" "/run/secrets/builder-ssh" "-o" "UserKnownHostsFile=/dev/null" "-o" "StrictHostKeyChecking=no" "root@35.205.222.211" "/usr/local/bin/test.sh"
+
+[+  0m 28s] Warning: Permanently added '35.205.222.211' (ECDSA) to the list of known hosts.
+[+  0m 28s] + rm -rf /tmp/build
+[+  0m 28s] + mkdir /tmp/build
+[+  0m 28s] + cd /tmp/build
+[+  0m 28s] + tar xf -
+[+  0m 40s] + '[' -x ci-setup.sh ']'
+[+  0m 40s] + ./ci-setup.sh
+[+  0m 40s] + mkdir -p /tmp/build/test/_results /tmp/build/artifacts
+[+  0m 40s] + sysctl vm.overcommit_memory=1
+[+  0m 40s] vm.overcommit_memory = 1
+[+  0m 40s] + rm /tmp/build/ci-setup.sh
+[+  0m 40s] + make ci-pr
+[+  0m 40s] make clean
+[+  0m 40s] make[1]: Entering directory '/tmp/build'
+[+  0m 40s] rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar *.raw
+[+  0m 40s] make[1]: Leaving directory '/tmp/build'
+[+  0m 40s] make -j 3 GOOS=darwin tmp_rtf_bin.tar tmp_mt_bin.tar tmp_linuxkit_bin.tar
+[+  0m 40s] make[1]: Entering directory '/tmp/build'
+[+  0m 40s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy= -e GOOS=darwin linuxkit/go-compile:fb53f01a669de5e91ec855b4f67a57b514b4f6ed --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 3e8ed35ca934259cb644c2492bf9b181954a07e1 --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=3e8ed35ca934259cb644c2492bf9b181954a07e1 -X github.com/linuxkit/rtf/cmd.Version=0.0" -o bin/rtf > tmp_rtf_bin.tar
+[+  0m 40s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy= -e GOOS=darwin linuxkit/go-compile:fb53f01a669de5e91ec855b4f67a57b514b4f6ed --clone-path github.com/estesp/manifest-tool --clone https://github.com/estesp/manifest-tool --commit bfbd11963b8e0eb5f6e400afaebeaf39820b4e90 --package github.com/estesp/manifest-tool --ldflags "-X main.gitCommit=bfbd11963b8e0eb5f6e400afaebeaf39820b4e90" -o bin/manifest-tool > tmp_mt_bin.tar
+[+  0m 41s] tar cf - -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i -e GOOS=darwin linuxkit/go-compile:fb53f01a669de5e91ec855b4f67a57b514b4f6ed --package github.com/linuxkit/linuxkit/src/cmd/linuxkit --ldflags "-X main.GitCommit=1b59c4d24396be10f084ada1a7852b77d4b3d616 -X main.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+[+  0m 42s] Unable to find image 'linuxkit/go-compile:fb53f01a669de5e91ec855b4f67a57b514b4f6ed' locally
+[+  0m 42s] Unable to find image 'linuxkit/go-compile:fb53f01a669de5e91ec855b4f67a57b514b4f6ed' locally
+[+  0m 42s] Unable to find image 'linuxkit/go-compile:fb53f01a669de5e91ec855b4f67a57b514b4f6ed' locally
+[+  0m 43s] fb53f01a669de5e91ec855b4f67a57b514b4f6ed: Pulling from linuxkit/go-compile
+[+  0m 43s] fb53f01a669de5e91ec855b4f67a57b514b4f6ed: Pulling from linuxkit/go-compile
+[+  0m 43s] fb53f01a669de5e91ec855b4f67a57b514b4f6ed: Pulling from linuxkit/go-compile
+[+  0m 43s] 88286f41530e: Pulling fs layer
+[+  0m 43s] 8220cf4da066: 88286f41530e: Pulling fs layer
+[+  0m 43s] Pulling fs layer
+[+  0m 43s] 3bff734fd026: 8220cf4da066: Pulling fs layer
+[+  0m 43s] Pulling fs layer
+[+  0m 43s] 3bff734fd026: Pulling fs layer
+[+  0m 43s] c0b39000552e: Pulling fs layer
+[+  0m 43s] 3c9fec7409dd: Pulling fs layer
+[+  0m 43s] 3fbba4481d26: Pulling fs layer
+[+  0m 43s] 6163a1aa1481: Pulling fs layer
+[+  0m 43s] c0b39000552e: a67eb8d5485a: Pulling fs layer
+[+  0m 43s] Pulling fs layer
+[+  0m 43s] 3c9fec7409dd: Pulling fs layer
+[+  0m 43s] 3f3f308e5304: Pulling fs layer
+[+  0m 43s] 3fbba4481d26: Pulling fs layer
+[+  0m 43s] ef5814179a21: Pulling fs layer
+[+  0m 43s] 6163a1aa1481: Pulling fs layer
+[+  0m 43s] b3fdb5762ded: Pulling fs layer
+[+  0m 43s] a67eb8d5485a: Pulling fs layer
+[+  0m 43s] 14f7543235c3: Pulling fs layer
+[+  0m 43s] 3f3f308e5304: Pulling fs layer
+[+  0m 43s] 14f7543235c3: Waiting
+[+  0m 43s] ef5814179a21: Pulling fs layer
+[+  0m 43s] b3fdb5762ded: Pulling fs layer
+[+  0m 43s] 6163a1aa1481: Waiting
+[+  0m 43s] 14f7543235c3: Pulling fs layer
+[+  0m 43s] a67eb8d5485a: Waiting
+[+  0m 43s] 6163a1aa1481: Waiting
+[+  0m 43s] 3f3f308e5304: Waiting
+[+  0m 43s] a67eb8d5485a: Waiting
+[+  0m 43s] ef5814179a21: Waiting
+[+  0m 43s] 3f3f308e5304: Waiting
+[+  0m 43s] b3fdb5762ded: ef5814179a21: Waiting
+[+  0m 43s] Waiting
+[+  0m 43s] 3c9fec7409dd: b3fdb5762ded: Waiting
+[+  0m 43s] Waiting
+[+  0m 43s] 14f7543235c3: 3fbba4481d26: Waiting
+[+  0m 43s] Waiting
+[+  0m 43s] 3c9fec7409dd: c0b39000552e: Waiting
+[+  0m 43s] Waiting
+[+  0m 43s] 3fbba4481d26: Waiting
+[+  0m 43s] c0b39000552e: Waiting
+[+  0m 43s] 88286f41530e: Pulling fs layer
+[+  0m 43s] 8220cf4da066: Pulling fs layer
+[+  0m 43s] 3bff734fd026: Pulling fs layer
+[+  0m 43s] c0b39000552e: Pulling fs layer
+[+  0m 43s] 3c9fec7409dd: Pulling fs layer
+[+  0m 43s] 3fbba4481d26: Pulling fs layer
+[+  0m 43s] 6163a1aa1481: Pulling fs layer
+[+  0m 43s] a67eb8d5485a: Pulling fs layer
+[+  0m 43s] 3f3f308e5304: Pulling fs layer
+[+  0m 43s] ef5814179a21: Pulling fs layer
+[+  0m 43s] b3fdb5762ded: Pulling fs layer
+[+  0m 43s] 14f7543235c3: Pulling fs layer
+[+  0m 43s] 14f7543235c3: Waiting
+[+  0m 43s] c0b39000552e: Waiting
+[+  0m 43s] 3c9fec7409dd: Waiting
+[+  0m 43s] 3fbba4481d26: Waiting
+[+  0m 43s] 6163a1aa1481: Waiting
+[+  0m 43s] a67eb8d5485a: Waiting
+[+  0m 43s] 3f3f308e5304: Waiting
+[+  0m 43s] ef5814179a21: Waiting
+[+  0m 43s] b3fdb5762ded: Waiting
+[+  0m 44s] 3bff734fd026: Download complete
+[+  0m 44s] 3bff734fd026: Download complete
+[+  0m 44s] 3bff734fd026: Download complete
+[+  0m 44s] 8220cf4da066: Verifying Checksum
+[+  0m 44s] 8220cf4da066: Verifying Checksum
+[+  0m 44s] 8220cf4da066: Download complete
+[+  0m 44s] 8220cf4da066: Download complete
+[+  0m 44s] 8220cf4da066: Verifying Checksum
+[+  0m 44s] 8220cf4da066: Download complete
+[+  0m 44s] 88286f41530e: Verifying Checksum
+[+  0m 44s] 88286f41530e: Verifying Checksum
+[+  0m 44s] 88286f41530e: Download complete
+[+  0m 44s] 88286f41530e: Download complete
+[+  0m 44s] 88286f41530e: Download complete
+[+  0m 44s] 88286f41530e: Pull complete
+[+  0m 44s] 88286f41530e: Pull complete
+[+  0m 44s] 88286f41530e: Pull complete
+[+  0m 44s] c0b39000552e: Download complete
+[+  0m 44s] c0b39000552e: Download complete
+[+  0m 44s] c0b39000552e: Download complete
+[+  0m 44s] 8220cf4da066: 8220cf4da066: Pull complete
+[+  0m 44s] Pull complete
+[+  0m 44s] 8220cf4da066: Pull complete
+[+  0m 44s] 3bff734fd026: Pull complete
+[+  0m 44s] 3bff734fd026: Pull complete
+[+  0m 44s] 3bff734fd026: Pull complete
+[+  0m 44s] 3fbba4481d26: Verifying Checksum
+[+  0m 44s] 3fbba4481d26: Verifying Checksum
+[+  0m 44s] 3fbba4481d26: Download complete
+[+  0m 44s] 3fbba4481d26: Verifying Checksum
+[+  0m 44s] 3fbba4481d26: Download complete
+[+  0m 44s] 3fbba4481d26: Download complete
+[+  0m 44s] c0b39000552e: Pull complete
+[+  0m 44s] c0b39000552e: Pull complete
+[+  0m 44s] c0b39000552e: Pull complete
+[+  0m 44s] 6163a1aa1481: Download complete
+[+  0m 44s] 6163a1aa1481: Download complete
+[+  0m 44s] 6163a1aa1481: Download complete
+[+  0m 45s] 3f3f308e5304: Verifying Checksum
+[+  0m 45s] 3f3f308e5304: Verifying Checksum
+[+  0m 45s] 3f3f308e5304: Verifying Checksum
+[+  0m 45s] 3f3f308e5304: Download complete
+[+  0m 45s] 3f3f308e5304: Download complete
+[+  0m 45s] 3f3f308e5304: Download complete
+[+  0m 48s] a67eb8d5485a: Verifying Checksum
+[+  0m 48s] a67eb8d5485a: Verifying Checksum
+[+  0m 48s] a67eb8d5485a: Verifying Checksum
+[+  0m 48s] a67eb8d5485a: Download complete
+[+  0m 48s] a67eb8d5485a: Download complete
+[+  0m 48s] a67eb8d5485a: Download complete
+[+  0m 51s] ef5814179a21: Verifying Checksum
+[+  0m 51s] ef5814179a21: Verifying Checksum
+[+  0m 51s] ef5814179a21: Verifying Checksum
+[+  0m 51s] ef5814179a21: Download complete
+[+  0m 51s] ef5814179a21: Download complete
+[+  0m 51s] ef5814179a21: Download complete
+[+  0m 51s] 14f7543235c3: Verifying Checksum
+[+  0m 51s] 14f7543235c3: Download complete
+[+  0m 51s] 14f7543235c3: Download complete
+[+  0m 51s] 14f7543235c3: Verifying Checksum
+[+  0m 51s] 14f7543235c3: Download complete
+[+  0m 52s] b3fdb5762ded: b3fdb5762ded: Verifying Checksum
+[+  0m 52s] Verifying Checksum
+[+  0m 52s] b3fdb5762ded: Verifying Checksum
+[+  0m 52s] b3fdb5762ded: Download complete
+[+  0m 52s] b3fdb5762ded: Download complete
+[+  0m 52s] b3fdb5762ded: Download complete
+[+  0m 56s] 3c9fec7409dd: 3c9fec7409dd: Verifying Checksum
+[+  0m 56s] Verifying Checksum
+[+  0m 56s] 3c9fec7409dd: Download complete
+[+  0m 56s] 3c9fec7409dd: Download complete
+[+  0m 56s] 3c9fec7409dd: Download complete
+[+  1m 01s] 3c9fec7409dd: 3c9fec7409dd: Pull complete
+[+  1m 01s] Pull complete
+[+  1m 01s] 3c9fec7409dd: Pull complete
+[+  1m 02s] 3fbba4481d26: 3fbba4481d26: Pull complete
+[+  1m 02s] Pull complete
+[+  1m 02s] 3fbba4481d26: Pull complete
+[+  1m 02s] 6163a1aa1481: 6163a1aa1481: Pull complete
+[+  1m 02s] Pull complete
+[+  1m 02s] 6163a1aa1481: Pull complete
+[+  1m 05s] a67eb8d5485a: Pull complete
+[+  1m 05s] a67eb8d5485a: Pull complete
+[+  1m 05s] a67eb8d5485a: Pull complete
+[+  1m 06s] 3f3f308e5304: 3f3f308e5304: Pull complete
+[+  1m 06s] Pull complete
+[+  1m 06s] 3f3f308e5304: Pull complete
+[+  1m 14s] ef5814179a21: ef5814179a21: Pull complete
+[+  1m 14s] Pull complete
+[+  1m 14s] ef5814179a21: Pull complete
+[+  1m 14s] b3fdb5762ded: b3fdb5762ded: Pull complete
+[+  1m 14s] Pull complete
+[+  1m 14s] b3fdb5762ded: Pull complete
+[+  1m 14s] 14f7543235c3: 14f7543235c3: Pull complete
+[+  1m 14s] Pull complete
+[+  1m 14s] 14f7543235c3: Pull complete
+[+  1m 14s] Digest: sha256:dcff9af6e4538875ff1930d7c84c336738e6b95d3dfaef963377a7f073080a9d
+[+  1m 14s] Status: Image is up to date for linuxkit/go-compile:fb53f01a669de5e91ec855b4f67a57b514b4f6ed
+[+  1m 14s] Digest: sha256:dcff9af6e4538875ff1930d7c84c336738e6b95d3dfaef963377a7f073080a9d
+[+  1m 14s] Status: Downloaded newer image for linuxkit/go-compile:fb53f01a669de5e91ec855b4f67a57b514b4f6ed
+[+  1m 14s] Digest: sha256:dcff9af6e4538875ff1930d7c84c336738e6b95d3dfaef963377a7f073080a9d
+[+  1m 14s] Status: Image is up to date for linuxkit/go-compile:fb53f01a669de5e91ec855b4f67a57b514b4f6ed
+[+  1m 15s] Cloning into '.'...
+[+  1m 15s] Cloning into '.'...
+[+  1m 15s] gofmt...
+[+  1m 16s] run_vbox.go
+[+  1m 17s] Note: checking out '3e8ed35ca934259cb644c2492bf9b181954a07e1'.
+[+  1m 17s] 
+[+  1m 17s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  1m 17s] changes and commit them, and you can discard any commits you make in this
+[+  1m 17s] state without impacting any branches by performing another checkout.
+[+  1m 17s] 
+[+  1m 17s] If you want to create a new branch to retain commits you create, you may
+[+  1m 17s] do so (now or later) by using -b with the checkout command again. Example:
+[+  1m 17s] 
+[+  1m 17s]   git checkout -b <new-branch-name>
+[+  1m 17s] 
+[+  1m 17s] HEAD is now at 3e8ed35... Merge pull request #25 from rn/fix
+[+  1m 17s] gofmt...
+[+  1m 17s] Note: checking out 'bfbd11963b8e0eb5f6e400afaebeaf39820b4e90'.
+[+  1m 17s] 
+[+  1m 17s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  1m 17s] changes and commit them, and you can discard any commits you make in this
+[+  1m 17s] state without impacting any branches by performing another checkout.
+[+  1m 17s] 
+[+  1m 17s] If you want to create a new branch to retain commits you create, you may
+[+  1m 17s] do so (now or later) by using -b with the checkout command again. Example:
+[+  1m 17s] 
+[+  1m 17s]   git checkout -b <new-branch-name>
+[+  1m 17s] 
+[+  1m 17s] HEAD is now at bfbd119... Merge pull request #44 from tianon/readme-tags
+[+  1m 17s] gofmt...
+[+  1m 21s] govet...
+[+  1m 22s] govet...
+[+  1m 23s] golint...
+[+  1m 24s] ineffassign...
+[+  1m 24s] go build...
+[+  1m 25s] golint...
+[+  1m 25s] ineffassign...
+[+  1m 25s] go build...
+[+  1m 26s] Makefile:53: recipe for target 'tmp_linuxkit_bin.tar' failed
+[+  1m 26s] make[1]: *** [tmp_linuxkit_bin.tar] Error 1
+[+  1m 26s] make[1]: *** Deleting file 'tmp_linuxkit_bin.tar'
+[+  1m 26s] make[1]: *** Waiting for unfinished jobs....
+[+  2m 03s] make[1]: Leaving directory '/tmp/build'
+[+  2m 03s] Makefile:57: recipe for target 'test-cross' failed
+[+  2m 03s] make: *** [test-cross] Error 2[2017-12-01 20:18.08] Fetching results
+[2017-12-01 20:18.08] Running "scp" "-r" "-i" "/run/secrets/builder-ssh" "-o" "StrictHostKeyChecking=no" "root@35.205.222.211:/tmp/build/test/_results" "."
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!
+Someone could be eavesdropping on you right now (man-in-the-middle attack)!
+It is also possible that a host key has just been changed.
+The fingerprint for the ECDSA key sent by the remote host is
+SHA256:SjX0W6NToYA9462vZk2KKX+QvIyGOSNXxyhqTEl6mEQ.
+Please contact your system administrator.
+Add correct host key in /root/.ssh/known_hosts to get rid of this message.
+Offending ECDSA key in /root/.ssh/known_hosts:42
+Password authentication is disabled to avoid man-in-the-middle attacks.
+Keyboard-interactive authentication is disabled to avoid man-in-the-middle attacks.
+[2017-12-01 20:18.08] Removing test VM...
+[2017-12-01 20:18.08] Running "/gcloud/destroy.py" "linuxkit-ci-1"
+INFO:root:Destroying VM
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+[2017-12-01 20:18.46] Failed: recipe for target 'test-cross' failed
