@@ -1,0 +1,544 @@
+=== Build LinuxKit
+[2018-01-09 07:40.20] Starting...
+Cloning into '/tmp/with_clone19256a47'...
+done.
+HEAD is now at 58eeb6570 cli: introduce `linuxkit bake`
+[2018-01-09 07:40.21] Running "cp" "-p" "--" "/gcloud/ci-setup.sh" "/tmp/with_clone19256a47/ci-setup.sh"
+[2018-01-09 07:40.21] Building with timeout of 120 minutes
+[2018-01-09 07:40.21] Running "/gcloud/create.py" "linuxkit-ci-1"
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Using source disk image https://www.googleapis.com/compute/v1/projects/moby-datakit-ci/global/images/linuxkit-ci-builder-4
+INFO:root:Creating VM
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Getting VM details
+[2018-01-09 07:40.40] Waiting for SSH service to start...
+[2018-01-09 07:40.40] Running "ssh" "-i" "/run/secrets/builder-ssh" "-o" "UserKnownHostsFile=/dev/null" "-o" "StrictHostKeyChecking=no" "root@35.190.203.182" "uname" "-a"
+ssh: connect to host 35.190.203.182 port 22: Connection refused
+[2018-01-09 07:40.47] SSH not ready ((Failure
+  "Command \"ssh\" \"-i\" \"/run/secrets/builder-ssh\" \"-o\" \"UserKnownHostsFile=/dev/null\" \"-o\" \"StrictHostKeyChecking=no\" \"root@35.190.203.182\" \"uname\" \"-a\" exited with status 255"))
+[2018-01-09 07:40.49] Running "ssh" "-i" "/run/secrets/builder-ssh" "-o" "UserKnownHostsFile=/dev/null" "-o" "StrictHostKeyChecking=no" "root@35.190.203.182" "uname" "-a"
+Warning: Permanently added '35.190.203.182' (ECDSA) to the list of known hosts.
+Linux linuxkit-ci-1 3.16.0-4-amd64 #1 SMP Debian 3.16.39-1+deb8u2 (2017-03-07) x86_64 GNU/Linux
+[2018-01-09 07:40.49] Created new VM linuxkit-ci-1
+[2018-01-09 07:40.49] Running "ssh" "-i" "/run/secrets/builder-ssh" "-o" "UserKnownHostsFile=/dev/null" "-o" "StrictHostKeyChecking=no" "root@35.190.203.182" "/usr/local/bin/test.sh"
+
+[+  0m 28s] Warning: Permanently added '35.190.203.182' (ECDSA) to the list of known hosts.
+[+  0m 28s] + rm -rf /tmp/build
+[+  0m 28s] + mkdir /tmp/build
+[+  0m 28s] + cd /tmp/build
+[+  0m 28s] + tar xf -
+[+  0m 35s] + '[' -x ci-setup.sh ']'
+[+  0m 35s] + ./ci-setup.sh
+[+  0m 35s] + mkdir -p /tmp/build/test/_results /tmp/build/artifacts
+[+  0m 35s] + sysctl vm.overcommit_memory=1
+[+  0m 35s] vm.overcommit_memory = 1
+[+  0m 35s] + rm /tmp/build/ci-setup.sh
+[+  0m 35s] + make ci-pr
+[+  0m 35s] make clean
+[+  0m 35s] make[1]: Entering directory '/tmp/build'
+[+  0m 35s] rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar *.raw
+[+  0m 35s] make[1]: Leaving directory '/tmp/build'
+[+  0m 35s] make -j 3 GOOS=darwin tmp_rtf_bin.tar tmp_mt_bin.tar tmp_linuxkit_bin.tar
+[+  0m 35s] make[1]: Entering directory '/tmp/build'
+[+  0m 35s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy= -e GOOS=darwin linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 3e8ed35ca934259cb644c2492bf9b181954a07e1 --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=3e8ed35ca934259cb644c2492bf9b181954a07e1 -X github.com/linuxkit/rtf/cmd.Version=0.0" -o bin/rtf > tmp_rtf_bin.tar
+[+  0m 35s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy= -e GOOS=darwin linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df --clone-path github.com/estesp/manifest-tool --clone https://github.com/estesp/manifest-tool --commit bfbd11963b8e0eb5f6e400afaebeaf39820b4e90 --package github.com/estesp/manifest-tool --ldflags "-X main.gitCommit=bfbd11963b8e0eb5f6e400afaebeaf39820b4e90" -o bin/manifest-tool > tmp_mt_bin.tar
+[+  0m 35s] tar cf - -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i -e GOOS=darwin linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df --package github.com/linuxkit/linuxkit/src/cmd/linuxkit --ldflags "-X github.com/linuxkit/linuxkit/src/cmd/linuxkit/version.GitCommit=58eeb657042f858252ab06269867a79c858e15d8 -X github.com/linuxkit/linuxkit/src/cmd/linuxkit/version.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+[+  0m 36s] Unable to find image 'linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df' locally
+[+  0m 36s] Unable to find image 'linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df' locally
+[+  0m 36s] Unable to find image 'linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df' locally
+[+  0m 37s] bb0c6ae2f12a1b55df24ebce2067784a931285df: Pulling from linuxkit/go-compile
+[+  0m 37s] bb0c6ae2f12a1b55df24ebce2067784a931285df: Pulling from linuxkit/go-compile
+[+  0m 37s] bb0c6ae2f12a1b55df24ebce2067784a931285df: Pulling from linuxkit/go-compile
+[+  0m 38s] 2fdfe1cd78c2: Pulling fs layer
+[+  0m 38s] 2fdfe1cd78c2: Pulling fs layer
+[+  0m 38s] 619f8576a0fb: Pulling fs layer
+[+  0m 38s] 619f8576a0fb: Pulling fs layer
+[+  0m 38s] 90206da39b99: Pulling fs layer
+[+  0m 38s] 4d2cc8a061bf: Pulling fs layer
+[+  0m 38s] 8dae134962f2: Pulling fs layer
+[+  0m 38s] afd0649e644e: Pulling fs layer
+[+  0m 38s] c2df66bd4ecd: Pulling fs layer
+[+  0m 38s] d778f644203f: Pulling fs layer
+[+  0m 38s] 55e08888de00: Pulling fs layer
+[+  0m 38s] a73c135b512a: Pulling fs layer
+[+  0m 38s] 7af3ec2ce582: Pulling fs layer
+[+  0m 38s] b7b55e6ce8ff: Pulling fs layer
+[+  0m 38s] d778f644203f: Waiting
+[+  0m 38s] 55e08888de00: Waiting
+[+  0m 38s] 4d2cc8a061bf: Waiting
+[+  0m 38s] 8dae134962f2: Waiting
+[+  0m 38s] c2df66bd4ecd: Waiting
+[+  0m 38s] afd0649e644e: Waiting
+[+  0m 38s] a73c135b512a: Waiting
+[+  0m 38s] 7af3ec2ce582: Waiting
+[+  0m 38s] 90206da39b99: Pulling fs layer
+[+  0m 38s] 4d2cc8a061bf: Pulling fs layer
+[+  0m 38s] 8dae134962f2: Pulling fs layer
+[+  0m 38s] afd0649e644e: Pulling fs layer
+[+  0m 38s] c2df66bd4ecd: Pulling fs layer
+[+  0m 38s] d778f644203f: Pulling fs layer
+[+  0m 38s] 55e08888de00: Pulling fs layer
+[+  0m 38s] a73c135b512a: Pulling fs layer
+[+  0m 38s] 7af3ec2ce582: Pulling fs layer
+[+  0m 38s] b7b55e6ce8ff: Pulling fs layer
+[+  0m 38s] afd0649e644e: Waiting
+[+  0m 38s] 4d2cc8a061bf: Waiting
+[+  0m 38s] 8dae134962f2: Waiting
+[+  0m 38s] c2df66bd4ecd: Waiting
+[+  0m 38s] 7af3ec2ce582: Waiting
+[+  0m 38s] d778f644203f: Waiting
+[+  0m 38s] b7b55e6ce8ff: Waiting
+[+  0m 38s] 55e08888de00: Waiting
+[+  0m 38s] a73c135b512a: Waiting
+[+  0m 38s] b7b55e6ce8ff: Waiting
+[+  0m 38s] 619f8576a0fb: Verifying Checksum
+[+  0m 38s] 619f8576a0fb: Download complete
+[+  0m 38s] 619f8576a0fb: Verifying Checksum
+[+  0m 38s] 619f8576a0fb: Download complete
+[+  0m 38s] 90206da39b99: Verifying Checksum
+[+  0m 38s] 90206da39b99: Download complete
+[+  0m 38s] 90206da39b99: Verifying Checksum
+[+  0m 38s] 90206da39b99: Download complete
+[+  0m 38s] 2fdfe1cd78c2: 2fdfe1cd78c2: Verifying Checksum
+[+  0m 38s] Verifying Checksum
+[+  0m 38s] 2fdfe1cd78c2: Pulling fs layer
+[+  0m 38s] 619f8576a0fb: Pulling fs layer
+[+  0m 38s] 90206da39b99: Pulling fs layer
+[+  0m 38s] 4d2cc8a061bf: Pulling fs layer
+[+  0m 38s] 8dae134962f2: Pulling fs layer
+[+  0m 38s] afd0649e644e: Pulling fs layer
+[+  0m 38s] c2df66bd4ecd: Pulling fs layer
+[+  0m 38s] d778f644203f: Pulling fs layer
+[+  0m 38s] 55e08888de00: Pulling fs layer
+[+  0m 38s] a73c135b512a: Pulling fs layer
+[+  0m 38s] 7af3ec2ce582: Pulling fs layer
+[+  0m 38s] b7b55e6ce8ff: Pulling fs layer
+[+  0m 38s] b7b55e6ce8ff: Waiting
+[+  0m 38s] 619f8576a0fb: Download complete
+[+  0m 38s] 90206da39b99: Download complete
+[+  0m 38s] 4d2cc8a061bf: Waiting
+[+  0m 38s] 8dae134962f2: Waiting
+[+  0m 38s] afd0649e644e: Waiting
+[+  0m 38s] c2df66bd4ecd: Waiting
+[+  0m 38s] d778f644203f: Waiting
+[+  0m 38s] 55e08888de00: Waiting
+[+  0m 38s] a73c135b512a: Waiting
+[+  0m 38s] 7af3ec2ce582: Waiting
+[+  0m 39s] 4d2cc8a061bf: Download complete
+[+  0m 39s] 4d2cc8a061bf: Download complete
+[+  0m 39s] 4d2cc8a061bf: Download complete
+[+  0m 39s] 2fdfe1cd78c2: 2fdfe1cd78c2: Pull complete
+[+  0m 39s] Pull complete
+[+  0m 39s] 2fdfe1cd78c2: Pull complete
+[+  0m 39s] 619f8576a0fb: Pull complete
+[+  0m 39s] 619f8576a0fb: Pull complete
+[+  0m 39s] 619f8576a0fb: Pull complete
+[+  0m 39s] afd0649e644e: Verifying Checksum
+[+  0m 39s] afd0649e644e: Download complete
+[+  0m 39s] afd0649e644e: Download complete
+[+  0m 39s] afd0649e644e: Verifying Checksum
+[+  0m 39s] afd0649e644e: Download complete
+[+  0m 39s] 90206da39b99: 90206da39b99: Pull complete
+[+  0m 39s] Pull complete
+[+  0m 39s] 90206da39b99: Pull complete
+[+  0m 39s] 4d2cc8a061bf: Pull complete
+[+  0m 39s] 4d2cc8a061bf: Pull complete
+[+  0m 39s] 4d2cc8a061bf: Pull complete
+[+  0m 39s] c2df66bd4ecd: Verifying Checksum
+[+  0m 39s] c2df66bd4ecd: Verifying Checksum
+[+  0m 39s] c2df66bd4ecd: Verifying Checksum
+[+  0m 39s] c2df66bd4ecd: Download complete
+[+  0m 39s] c2df66bd4ecd: Download complete
+[+  0m 39s] c2df66bd4ecd: Download complete
+[+  0m 39s] 55e08888de00: Verifying Checksum
+[+  0m 39s] 55e08888de00: Verifying Checksum
+[+  0m 39s] 55e08888de00: Verifying Checksum
+[+  0m 39s] 55e08888de00: Download complete
+[+  0m 39s] 55e08888de00: Download complete
+[+  0m 39s] 55e08888de00: Download complete
+[+  0m 40s] d778f644203f: Verifying Checksum
+[+  0m 40s] d778f644203f: Verifying Checksum
+[+  0m 40s] d778f644203f: Download complete
+[+  0m 40s] d778f644203f: Download complete
+[+  0m 40s] d778f644203f: Verifying Checksum
+[+  0m 40s] d778f644203f: Download complete
+[+  0m 41s] 7af3ec2ce582: Verifying Checksum
+[+  0m 41s] 7af3ec2ce582: Verifying Checksum
+[+  0m 41s] 7af3ec2ce582: Verifying Checksum
+[+  0m 41s] 7af3ec2ce582: Download complete
+[+  0m 41s] 7af3ec2ce582: Download complete
+[+  0m 41s] 7af3ec2ce582: Download complete
+[+  0m 42s] b7b55e6ce8ff: Verifying Checksum
+[+  0m 42s] b7b55e6ce8ff: b7b55e6ce8ff: Verifying Checksum
+[+  0m 42s] Verifying Checksum
+[+  0m 42s] b7b55e6ce8ff: Download complete
+[+  0m 42s] b7b55e6ce8ff: Download complete
+[+  0m 42s] b7b55e6ce8ff: Download complete
+[+  0m 42s] a73c135b512a: a73c135b512a: Verifying Checksum
+[+  0m 42s] Verifying Checksum
+[+  0m 42s] a73c135b512a: Verifying Checksum
+[+  0m 42s] a73c135b512a: Download complete
+[+  0m 42s] a73c135b512a: Download complete
+[+  0m 42s] a73c135b512a: Download complete
+[+  0m 43s] 8dae134962f2: Verifying Checksum
+[+  0m 43s] 8dae134962f2: Download complete
+[+  0m 43s] 8dae134962f2: Download complete
+[+  0m 43s] 8dae134962f2: Download complete
+[+  0m 48s] 8dae134962f2: Pull complete
+[+  0m 48s] 8dae134962f2: Pull complete
+[+  0m 48s] 8dae134962f2: Pull complete
+[+  0m 49s] afd0649e644e: afd0649e644e: Pull complete
+[+  0m 49s] Pull complete
+[+  0m 49s] afd0649e644e: Pull complete
+[+  0m 49s] c2df66bd4ecd: c2df66bd4ecd: Pull complete
+[+  0m 49s] Pull complete
+[+  0m 49s] c2df66bd4ecd: Pull complete
+[+  0m 51s] d778f644203f: d778f644203f: Pull complete
+[+  0m 51s] Pull complete
+[+  0m 51s] d778f644203f: Pull complete
+[+  0m 51s] 55e08888de00: 55e08888de00: Pull complete
+[+  0m 51s] Pull complete
+[+  0m 51s] 55e08888de00: Pull complete
+[+  0m 59s] a73c135b512a: a73c135b512a: Pull complete
+[+  0m 59s] Pull complete
+[+  0m 59s] a73c135b512a: Pull complete
+[+  1m 01s] 7af3ec2ce582: 7af3ec2ce582: Pull complete
+[+  1m 01s] Pull complete
+[+  1m 01s] 7af3ec2ce582: Pull complete
+[+  1m 01s] b7b55e6ce8ff: Pull complete
+[+  1m 01s] b7b55e6ce8ff: Pull complete
+[+  1m 01s] b7b55e6ce8ff: Pull complete
+[+  1m 01s] Digest: sha256:de6950bc03cbc2e10aadee188ce19119386c312c53d195a55be6f4e39ee5db2d
+[+  1m 01s] Status: Image is up to date for linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df
+[+  1m 01s] Digest: sha256:de6950bc03cbc2e10aadee188ce19119386c312c53d195a55be6f4e39ee5db2d
+[+  1m 01s] Status: Downloaded newer image for linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df
+[+  1m 01s] Digest: sha256:de6950bc03cbc2e10aadee188ce19119386c312c53d195a55be6f4e39ee5db2d
+[+  1m 01s] Status: Image is up to date for linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df
+[+  1m 01s] Cloning into '.'...
+[+  1m 01s] Cloning into '.'...
+[+  1m 02s] gofmt...
+[+  1m 03s] Note: checking out '3e8ed35ca934259cb644c2492bf9b181954a07e1'.
+[+  1m 03s] 
+[+  1m 03s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  1m 03s] changes and commit them, and you can discard any commits you make in this
+[+  1m 03s] state without impacting any branches by performing another checkout.
+[+  1m 03s] 
+[+  1m 03s] If you want to create a new branch to retain commits you create, you may
+[+  1m 03s] do so (now or later) by using -b with the checkout command again. Example:
+[+  1m 03s] 
+[+  1m 03s]   git checkout -b <new-branch-name>
+[+  1m 03s] 
+[+  1m 03s] HEAD is now at 3e8ed35... Merge pull request #25 from rn/fix
+[+  1m 03s] gofmt...
+[+  1m 03s] Note: checking out 'bfbd11963b8e0eb5f6e400afaebeaf39820b4e90'.
+[+  1m 03s] 
+[+  1m 03s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  1m 03s] changes and commit them, and you can discard any commits you make in this
+[+  1m 03s] state without impacting any branches by performing another checkout.
+[+  1m 03s] 
+[+  1m 03s] If you want to create a new branch to retain commits you create, you may
+[+  1m 03s] do so (now or later) by using -b with the checkout command again. Example:
+[+  1m 03s] 
+[+  1m 03s]   git checkout -b <new-branch-name>
+[+  1m 03s] 
+[+  1m 03s] HEAD is now at bfbd119... Merge pull request #44 from tianon/readme-tags
+[+  1m 03s] gofmt...
+[+  1m 08s] govet...
+[+  1m 08s] govet...
+[+  1m 10s] golint...
+[+  1m 11s] ineffassign...
+[+  1m 11s] go build...
+[+  1m 11s] golint...
+[+  1m 11s] ineffassign...
+[+  1m 11s] go build...
+[+  1m 14s] govet...
+[+  1m 28s] golint...
+[+  1m 29s] ineffassign...
+[+  1m 29s] go build...
+[+  2m 56s] make[1]: Leaving directory '/tmp/build'
+[+  2m 56s] make clean
+[+  2m 56s] make[1]: Entering directory '/tmp/build'
+[+  2m 56s] rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar *.raw
+[+  2m 56s] make[1]: Leaving directory '/tmp/build'
+[+  2m 56s] make -j 3 GOOS=windows tmp_rtf_bin.tar tmp_mt_bin.tar tmp_linuxkit_bin.tar
+[+  2m 56s] make[1]: Entering directory '/tmp/build'
+[+  2m 56s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy= -e GOOS=windows linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 3e8ed35ca934259cb644c2492bf9b181954a07e1 --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=3e8ed35ca934259cb644c2492bf9b181954a07e1 -X github.com/linuxkit/rtf/cmd.Version=0.0" -o bin/rtf > tmp_rtf_bin.tar
+[+  2m 56s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy= -e GOOS=windows linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df --clone-path github.com/estesp/manifest-tool --clone https://github.com/estesp/manifest-tool --commit bfbd11963b8e0eb5f6e400afaebeaf39820b4e90 --package github.com/estesp/manifest-tool --ldflags "-X main.gitCommit=bfbd11963b8e0eb5f6e400afaebeaf39820b4e90" -o bin/manifest-tool > tmp_mt_bin.tar
+[+  2m 56s] tar cf - -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i -e GOOS=windows linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df --package github.com/linuxkit/linuxkit/src/cmd/linuxkit --ldflags "-X github.com/linuxkit/linuxkit/src/cmd/linuxkit/version.GitCommit=58eeb657042f858252ab06269867a79c858e15d8 -X github.com/linuxkit/linuxkit/src/cmd/linuxkit/version.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+[+  2m 57s] Cloning into '.'...
+[+  2m 57s] Cloning into '.'...
+[+  2m 57s] gofmt...
+[+  2m 58s] Note: checking out '3e8ed35ca934259cb644c2492bf9b181954a07e1'.
+[+  2m 58s] 
+[+  2m 58s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  2m 58s] changes and commit them, and you can discard any commits you make in this
+[+  2m 58s] state without impacting any branches by performing another checkout.
+[+  2m 58s] 
+[+  2m 58s] If you want to create a new branch to retain commits you create, you may
+[+  2m 58s] do so (now or later) by using -b with the checkout command again. Example:
+[+  2m 58s] 
+[+  2m 58s]   git checkout -b <new-branch-name>
+[+  2m 58s] 
+[+  2m 58s] HEAD is now at 3e8ed35... Merge pull request #25 from rn/fix
+[+  2m 58s] gofmt...
+[+  2m 58s] Note: checking out 'bfbd11963b8e0eb5f6e400afaebeaf39820b4e90'.
+[+  2m 58s] 
+[+  2m 58s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  2m 58s] changes and commit them, and you can discard any commits you make in this
+[+  2m 58s] state without impacting any branches by performing another checkout.
+[+  2m 58s] 
+[+  2m 58s] If you want to create a new branch to retain commits you create, you may
+[+  2m 58s] do so (now or later) by using -b with the checkout command again. Example:
+[+  2m 58s] 
+[+  2m 58s]   git checkout -b <new-branch-name>
+[+  2m 58s] 
+[+  2m 58s] HEAD is now at bfbd119... Merge pull request #44 from tianon/readme-tags
+[+  2m 58s] gofmt...
+[+  3m 03s] govet...
+[+  3m 03s] govet...
+[+  3m 05s] golint...
+[+  3m 05s] ineffassign...
+[+  3m 05s] go build...
+[+  3m 06s] golint...
+[+  3m 06s] ineffassign...
+[+  3m 06s] go build...
+[+  3m 09s] govet...
+[+  3m 24s] golint...
+[+  3m 24s] ineffassign...
+[+  3m 25s] go build...
+[+  4m 52s] make[1]: Leaving directory '/tmp/build'
+[+  4m 52s] make clean
+[+  4m 52s] make[1]: Entering directory '/tmp/build'
+[+  4m 52s] rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar *.raw
+[+  4m 52s] make[1]: Leaving directory '/tmp/build'
+[+  4m 52s] make -j 3 GOOS=linux tmp_rtf_bin.tar tmp_mt_bin.tar tmp_linuxkit_bin.tar
+[+  4m 52s] make[1]: Entering directory '/tmp/build'
+[+  4m 52s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy=  linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 3e8ed35ca934259cb644c2492bf9b181954a07e1 --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=3e8ed35ca934259cb644c2492bf9b181954a07e1 -X github.com/linuxkit/rtf/cmd.Version=0.0" -o bin/rtf > tmp_rtf_bin.tar
+[+  4m 52s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy=  linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df --clone-path github.com/estesp/manifest-tool --clone https://github.com/estesp/manifest-tool --commit bfbd11963b8e0eb5f6e400afaebeaf39820b4e90 --package github.com/estesp/manifest-tool --ldflags "-X main.gitCommit=bfbd11963b8e0eb5f6e400afaebeaf39820b4e90" -o bin/manifest-tool > tmp_mt_bin.tar
+[+  4m 52s] tar cf - -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i  linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df --package github.com/linuxkit/linuxkit/src/cmd/linuxkit --ldflags "-X github.com/linuxkit/linuxkit/src/cmd/linuxkit/version.GitCommit=58eeb657042f858252ab06269867a79c858e15d8 -X github.com/linuxkit/linuxkit/src/cmd/linuxkit/version.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+[+  4m 53s] Cloning into '.'...
+[+  4m 53s] Cloning into '.'...
+[+  4m 53s] gofmt...
+[+  4m 54s] Note: checking out '3e8ed35ca934259cb644c2492bf9b181954a07e1'.
+[+  4m 54s] 
+[+  4m 54s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  4m 54s] changes and commit them, and you can discard any commits you make in this
+[+  4m 54s] state without impacting any branches by performing another checkout.
+[+  4m 54s] 
+[+  4m 54s] If you want to create a new branch to retain commits you create, you may
+[+  4m 54s] do so (now or later) by using -b with the checkout command again. Example:
+[+  4m 54s] 
+[+  4m 54s]   git checkout -b <new-branch-name>
+[+  4m 54s] 
+[+  4m 54s] HEAD is now at 3e8ed35... Merge pull request #25 from rn/fix
+[+  4m 54s] gofmt...
+[+  4m 54s] Note: checking out 'bfbd11963b8e0eb5f6e400afaebeaf39820b4e90'.
+[+  4m 54s] 
+[+  4m 54s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  4m 54s] changes and commit them, and you can discard any commits you make in this
+[+  4m 54s] state without impacting any branches by performing another checkout.
+[+  4m 54s] 
+[+  4m 54s] If you want to create a new branch to retain commits you create, you may
+[+  4m 54s] do so (now or later) by using -b with the checkout command again. Example:
+[+  4m 54s] 
+[+  4m 54s]   git checkout -b <new-branch-name>
+[+  4m 54s] 
+[+  4m 54s] HEAD is now at bfbd119... Merge pull request #44 from tianon/readme-tags
+[+  4m 54s] gofmt...
+[+  4m 59s] govet...
+[+  4m 59s] govet...
+[+  5m 01s] golint...
+[+  5m 02s] golint...
+[+  5m 02s] ineffassign...
+[+  5m 02s] go build...
+[+  5m 03s] ineffassign...
+[+  5m 03s] go build...
+[+  5m 05s] govet...
+[+  5m 19s] golint...
+[+  5m 21s] ineffassign...
+[+  5m 22s] go build...
+[+  6m 50s] make[1]: Leaving directory '/tmp/build'
+[+  6m 50s] make clean
+[+  6m 50s] make[1]: Entering directory '/tmp/build'
+[+  6m 50s] rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar *.raw
+[+  6m 50s] make[1]: Leaving directory '/tmp/build'
+[+  6m 50s] make
+[+  6m 50s] make[1]: Entering directory '/tmp/build'
+[+  6m 50s] tar cf - -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i  linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df --package github.com/linuxkit/linuxkit/src/cmd/linuxkit --ldflags "-X github.com/linuxkit/linuxkit/src/cmd/linuxkit/version.GitCommit=58eeb657042f858252ab06269867a79c858e15d8 -X github.com/linuxkit/linuxkit/src/cmd/linuxkit/version.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+[+  6m 50s] gofmt...
+[+  6m 55s] govet...
+[+  7m 00s] golint...
+[+  7m 01s] ineffassign...
+[+  7m 01s] go build...
+[+  8m 04s] tar xf tmp_linuxkit_bin.tar
+[+  8m 04s] rm tmp_linuxkit_bin.tar
+[+  8m 04s] touch bin/linuxkit
+[+  8m 04s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy=  linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 3e8ed35ca934259cb644c2492bf9b181954a07e1 --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=3e8ed35ca934259cb644c2492bf9b181954a07e1 -X github.com/linuxkit/rtf/cmd.Version=0.0" -o bin/rtf > tmp_rtf_bin.tar
+[+  8m 04s] Cloning into '.'...
+[+  8m 05s] Note: checking out '3e8ed35ca934259cb644c2492bf9b181954a07e1'.
+[+  8m 05s] 
+[+  8m 05s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  8m 05s] changes and commit them, and you can discard any commits you make in this
+[+  8m 05s] state without impacting any branches by performing another checkout.
+[+  8m 05s] 
+[+  8m 05s] If you want to create a new branch to retain commits you create, you may
+[+  8m 05s] do so (now or later) by using -b with the checkout command again. Example:
+[+  8m 05s] 
+[+  8m 05s]   git checkout -b <new-branch-name>
+[+  8m 05s] 
+[+  8m 05s] HEAD is now at 3e8ed35... Merge pull request #25 from rn/fix
+[+  8m 05s] gofmt...
+[+  8m 07s] govet...
+[+  8m 08s] golint...
+[+  8m 08s] ineffassign...
+[+  8m 08s] go build...
+[+  8m 25s] tar xf tmp_rtf_bin.tar
+[+  8m 25s] rm tmp_rtf_bin.tar
+[+  8m 25s] touch bin/rtf
+[+  8m 25s] make[1]: Leaving directory '/tmp/build'
+[+  8m 25s] make install
+[+  8m 25s] make[1]: Entering directory '/tmp/build'
+[+  8m 25s] cp -R ./bin/* /usr/local//bin
+[+  8m 26s] make[1]: Leaving directory '/tmp/build'
+[+  8m 26s] make -C test pr
+[+  8m 26s] make[1]: Entering directory '/tmp/build/test'
+[+  8m 26s] rm -rf ../artifacts
+[+  8m 26s] mkdir -p ../artifacts
+[+  8m 26s] /usr/local/bin/linuxkit build -format gcp -pull -name ../artifacts/test hack/test.yml
+[+  8m 26s] Extract kernel image: linuxkit/kernel:4.9.75
+[+  8m 28s] time="2018-01-09T07:48:49Z" level=warning msg="certificate with CN  is near expiry"
+[+  8m 28s] time="2018-01-09T07:48:49Z" level=warning msg="certificate with CN  is near expiry"
+[+  8m 28s] time="2018-01-09T07:48:49Z" level=warning msg="certificate with CN Justin Cormack is near expiry"
+[+  8m 28s] time="2018-01-09T07:48:50Z" level=warning msg="certificate with CN Justin Cormack is near expiry"
+[+  8m 28s] Pull image: docker.io/linuxkit/kernel:4.9.75@sha256:49b8e2b4c3c9e50d4fc301ca0fc702bb06b1389308ba8116fbc147bf16bff690
+[+  8m 34s] Add init containers:
+[+  8m 34s] Process init image: linuxkit/init:5a577d070817b4f17821657823082651baafd4ed
+[+  8m 35s] time="2018-01-09T07:48:57Z" level=warning msg="certificate with CN  is near expiry"
+[+  8m 35s] time="2018-01-09T07:48:57Z" level=warning msg="certificate with CN Justin Cormack is near expiry"
+[+  8m 35s] time="2018-01-09T07:48:57Z" level=warning msg="certificate with CN  is near expiry"
+[+  8m 36s] time="2018-01-09T07:48:57Z" level=warning msg="certificate with CN Justin Cormack is near expiry"
+[+  8m 36s] time="2018-01-09T07:48:57Z" level=warning msg="certificate with CN  is near expiry"
+[+  8m 36s] Pull image: docker.io/linuxkit/init:5a577d070817b4f17821657823082651baafd4ed@sha256:8aaa542f2d589a602eca70927bb0be6b5dd8c1461556d5ed5fd9672029d8b7a3
+[+  8m 39s] Process init image: linuxkit/runc:abc3f292653e64a2fd488e9675ace19a55ec7023
+[+  8m 41s] time="2018-01-09T07:49:02Z" level=warning msg="certificate with CN  is near expiry"
+[+  8m 41s] time="2018-01-09T07:49:02Z" level=warning msg="certificate with CN Justin Cormack is near expiry"
+[+  8m 41s] time="2018-01-09T07:49:02Z" level=warning msg="certificate with CN  is near expiry"
+[+  8m 41s] time="2018-01-09T07:49:02Z" level=warning msg="certificate with CN Justin Cormack is near expiry"
+[+  8m 41s] time="2018-01-09T07:49:03Z" level=warning msg="certificate with CN  is near expiry"
+[+  8m 41s] Pull image: docker.io/linuxkit/runc:abc3f292653e64a2fd488e9675ace19a55ec7023@sha256:08861d1745149bb5cfac94914443d3a042c43cc7a2dc89612ca1cfca0d58c188
+[+  8m 44s] Process init image: linuxkit/containerd:e58a382c33bb509ba3e0e8170dfaa5a100504c5b
+[+  8m 46s] time="2018-01-09T07:49:07Z" level=warning msg="certificate with CN  is near expiry"
+[+  8m 46s] time="2018-01-09T07:49:07Z" level=warning msg="certificate with CN  is near expiry"
+[+  8m 46s] time="2018-01-09T07:49:07Z" level=warning msg="certificate with CN  is near expiry"
+[+  8m 46s] time="2018-01-09T07:49:07Z" level=warning msg="certificate with CN Justin Cormack is near expiry"
+[+  8m 46s] time="2018-01-09T07:49:07Z" level=warning msg="certificate with CN Justin Cormack is near expiry"
+[+  8m 46s] time="2018-01-09T07:49:07Z" level=warning msg="certificate with CN  is near expiry"
+[+  8m 46s] Pull image: docker.io/linuxkit/containerd:e58a382c33bb509ba3e0e8170dfaa5a100504c5b@sha256:d4915af59dae7c3253f587e342e1c1bdede4feab30c43d90411b509aacfa9ddf
+[+  8m 50s] Add onboot containers:
+[+  8m 50s]   Create OCI config for linuxkit/dhcpcd:0d59a6cc03412289ef4313f2491ec666c1715cc9
+[+  8m 51s] time="2018-01-09T07:49:13Z" level=warning msg="certificate with CN  is near expiry"
+[+  8m 51s] time="2018-01-09T07:49:13Z" level=warning msg="certificate with CN  is near expiry"
+[+  8m 51s] time="2018-01-09T07:49:13Z" level=warning msg="certificate with CN Justin Cormack is near expiry"
+[+  8m 51s] time="2018-01-09T07:49:13Z" level=warning msg="certificate with CN Justin Cormack is near expiry"
+[+  8m 51s] time="2018-01-09T07:49:13Z" level=warning msg="certificate with CN  is near expiry"
+[+  8m 51s] Pull image: docker.io/linuxkit/dhcpcd:0d59a6cc03412289ef4313f2491ec666c1715cc9@sha256:181211d5fac4f2a40f9559be99aa61ee53a5b2c78375ce5750c2b29f0a9eb870
+[+  8m 54s] Pull image: docker.io/linuxkit/dhcpcd:0d59a6cc03412289ef4313f2491ec666c1715cc9@sha256:181211d5fac4f2a40f9559be99aa61ee53a5b2c78375ce5750c2b29f0a9eb870
+[+  8m 55s]   Create OCI config for linuxkit/test-kernel-config:9c3668b834540d2e776d0bf4aff661b3bcc35616
+[+  8m 55s] Pull image: linuxkit/test-kernel-config:9c3668b834540d2e776d0bf4aff661b3bcc35616
+[+  8m 58s] Pull image: linuxkit/test-kernel-config:9c3668b834540d2e776d0bf4aff661b3bcc35616
+[+  9m 00s]   Create OCI config for linuxkit/poweroff:bccfe1cb04fc7bb9f03613d2314f38abd2620f29
+[+  9m 00s] Pull image: linuxkit/poweroff:bccfe1cb04fc7bb9f03613d2314f38abd2620f29
+[+  9m 02s] Pull image: linuxkit/poweroff:bccfe1cb04fc7bb9f03613d2314f38abd2620f29
+[+  9m 04s] Create outputs:
+[+  9m 11s]   ../artifacts/test.img.tar.gz
+[+ 10m 23s] LABELS: build, linux, Debian, 8.7, amd64
+[+ 10m 23s] ID: 2def649a-0dc2-4b41-8521-29a265680f97
+[+ 10m 33s] [PASS    ] linuxkit.build.formats.kernel+initrd 9.48s
+[+ 11m 05s] [PASS    ] linuxkit.build.formats.iso-bios 32.60s
+[+ 11m 42s] [PASS    ] linuxkit.build.formats.iso-efi 37.06s
+[+ 12m 38s] [PASS    ] linuxkit.build.formats.gcp 55.42s
+[+ 14m 34s] [PASS    ] linuxkit.build.formats.aws 115.95s
+[+ 14m 34s] [SKIP    ] linuxkit.build.formats.vhd 0.00s
+[+ 15m 24s] [PASS    ] linuxkit.build.formats.vmdk 50.68s
+[+ 15m 46s] [PASS    ] linuxkit.build.formats.raw_bios 21.52s
+[+ 16m 07s] [PASS    ] linuxkit.build.formats.raw_efi 21.50s
+[+ 17m 36s] [PASS    ] linuxkit.build.formats.qcow2_bios 88.71s
+[+ 17m 56s] [PASS    ] linuxkit.build.examples.minimal 19.73s
+[+ 19m 00s] [PASS    ] linuxkit.build.examples.docker 63.67s
+[+ 19m 26s] [PASS    ] linuxkit.build.examples.sshd 26.28s
+[+ 19m 48s] [PASS    ] linuxkit.build.examples.redis 21.70s
+[+ 20m 19s] [PASS    ] linuxkit.build.examples.swap 31.97s
+[+ 20m 42s] [PASS    ] linuxkit.build.examples.node_exporter 22.17s
+[+ 21m 12s] [PASS    ] linuxkit.build.examples.tpm 30.02s
+[+ 21m 44s] [PASS    ] linuxkit.build.examples.wireguard 32.42s
+[+ 22m 31s] [PASS    ] linuxkit.build.examples.cadvisor 46.72s
+[+ 23m 50s] [PASS    ] linuxkit.build.blueprints.docker_for_mac 79.24s
+[+ 24m 11s] [PASS    ] linuxkit.platforms.qemu.run_kernel 20.55s
+[+ 24m 33s] [PASS    ] linuxkit.platforms.qemu.run_iso 22.50s
+[+ 24m 33s] [CANCEL  ] linuxkit.platforms.qemu.run_efi 0.01s
+[+ 26m 14s] [PASS    ] linuxkit.platforms.qemu.run_qcow_bios 100.45s
+[+ 26m 44s] [PASS    ] linuxkit.platforms.qemu.run_raw_bios 30.38s
+[+ 28m 22s] [PASS    ] linuxkit.platforms.qemu.run_aws 98.22s
+[+ 28m 22s] [SKIP    ] linuxkit.platforms.qemu.container 0.00s
+[+ 29m 12s] [PASS    ] linuxkit.kernel.config_4.4.x 50.17s
+[+ 29m 59s] [PASS    ] linuxkit.kernel.config_4.9.x 46.20s
+[+ 31m 04s] [PASS    ] linuxkit.kernel.config_4.14.x 65.48s
+[+ 32m 06s] [PASS    ] linuxkit.kernel.kmod_4.4.x 62.28s
+[+ 32m 49s] [PASS    ] linuxkit.kernel.kmod_4.9.x 42.25s
+[+ 33m 40s] [PASS    ] linuxkit.kernel.kmod_4.14.x 51.20s
+[+ 33m 40s] [SKIP    ] linuxkit.security.docker-bench 0.00s
+[+ 34m 19s] [PASS    ] linuxkit.security.ports 38.89s
+[+ 35m 01s] [PASS    ] linuxkit.packages.binfmt 41.92s
+[+ 35m 40s] [PASS    ] linuxkit.packages.ca-certificates 39.18s
+[+ 46m 23s] [PASS    ] linuxkit.packages.containerd 643.43s
+[+ 47m 08s] [PASS    ] linuxkit.packages.dhcpcd 44.84s
+[+ 49m 06s] [PASS    ] linuxkit.packages.extend.ext4 117.72s
+[+ 51m 17s] [PASS    ] linuxkit.packages.extend.btrfs 130.89s
+[+ 53m 12s] [PASS    ] linuxkit.packages.extend.xfs 114.94s
+[+ 54m 10s] [PASS    ] linuxkit.packages.format_mount.auto 57.88s
+[+ 55m 06s] [PASS    ] linuxkit.packages.format_mount.by_label 56.84s
+[+ 56m 04s] [PASS    ] linuxkit.packages.format_mount.by_name 57.90s
+[+ 57m 07s] [PASS    ] linuxkit.packages.format_mount.btrfs 62.43s
+[+ 58m 03s] [PASS    ] linuxkit.packages.format_mount.xfs 55.75s
+[+ 59m 32s] [PASS    ] linuxkit.packages.format_mount.by_device_force 89.88s
+[+ 60m 51s] [PASS    ] linuxkit.packages.format_mount.multiple 79.06s
+[+ 61m 54s] [PASS    ] linuxkit.packages.getty-containerd 62.32s
+[+ 64m 20s] [PASS    ] linuxkit.packages.mkimage 146.63s
+[+ 65m 01s] [PASS    ] linuxkit.packages.sysctl 40.28s
+[+ 66m 46s] [PASS    ] linuxkit.packages.wireguard 104.94s
+[+ 66m 46s] [SUMMARY ] LogDir: 2def649a-0dc2-4b41-8521-29a265680f97
+[+ 66m 46s] [SUMMARY ] Version: 8.7
+[+ 66m 46s] [SUMMARY ] Passed: 49
+[+ 66m 46s] [SUMMARY ] Failed: 0
+[+ 66m 46s] [SUMMARY ] Cancelled: 1
+[+ 66m 46s] [SUMMARY ] Skipped: 6
+[+ 66m 46s] [SUMMARY ] Duration: 3382.46s
+[+ 66m 46s] make[1]: Leaving directory '/tmp/build/test'
+[+ 66m 46s] make -C pkg build
+[+ 66m 46s] make[1]: Entering directory '/tmp/build/pkg'
+[+ 66m 53s] Building "linuxkit/containerd:e58a382c33bb509ba3e0e8170dfaa5a100504c5b"
+[+ 66m 53s] Cannot build from commit hash != HEAD
+[+ 66m 53s] Makefile:11: recipe for target 'build' failed
+[+ 66m 53s] make[1]: Leaving directory '/tmp/build/pkg'
+[+ 66m 53s] make[1]: *** [build] Error 1
+[+ 66m 53s] Makefile:115: recipe for target 'ci-pr' failed
+[+ 66m 53s] make: *** [ci-pr] Error 2[2018-01-09 08:47.15] Fetching results
+[2018-01-09 08:47.15] Running "scp" "-r" "-i" "/run/secrets/builder-ssh" "-o" "StrictHostKeyChecking=no" "root@35.190.203.182:/tmp/build/test/_results" "."
+Warning: Permanently added '35.190.203.182' (ECDSA) to the list of known hosts.
+[2018-01-09 08:47.18] Removing test VM...
+[2018-01-09 08:47.18] Running "/gcloud/destroy.py" "linuxkit-ci-1"
+INFO:root:Destroying VM
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+[2018-01-09 08:47.53] Failed: recipe for target 'ci-pr' failed
