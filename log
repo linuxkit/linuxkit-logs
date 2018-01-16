@@ -1,0 +1,1029 @@
+=== Build LinuxKit
+[2018-01-16 15:25.18] Starting...
+Cloning into '/tmp/with_clone383fef30'...
+done.
+HEAD is now at 72257c61e pkg/firmware-all: Add package containing all Linux Firmware blobs
+[2018-01-16 15:25.22] Running "cp" "-p" "--" "/gcloud/ci-setup.sh" "/tmp/with_clone383fef30/ci-setup.sh"
+[2018-01-16 15:25.22] Building with timeout of 120 minutes
+[2018-01-16 15:25.22] Running "/gcloud/create.py" "linuxkit-ci-3"
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Using source disk image https://www.googleapis.com/compute/v1/projects/moby-datakit-ci/global/images/linuxkit-ci-builder-4
+INFO:root:Creating VM
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Getting VM details
+[2018-01-16 15:26.18] Waiting for SSH service to start...
+[2018-01-16 15:26.18] Running "ssh" "-i" "/run/secrets/builder-ssh" "-o" "UserKnownHostsFile=/dev/null" "-o" "StrictHostKeyChecking=no" "root@35.189.253.28" "uname" "-a"
+ssh: connect to host 35.189.253.28 port 22: Connection refused
+[2018-01-16 15:26.21] SSH not ready ((Failure
+  "Command \"ssh\" \"-i\" \"/run/secrets/builder-ssh\" \"-o\" \"UserKnownHostsFile=/dev/null\" \"-o\" \"StrictHostKeyChecking=no\" \"root@35.189.253.28\" \"uname\" \"-a\" exited with status 255"))
+[2018-01-16 15:26.23] Running "ssh" "-i" "/run/secrets/builder-ssh" "-o" "UserKnownHostsFile=/dev/null" "-o" "StrictHostKeyChecking=no" "root@35.189.253.28" "uname" "-a"
+Warning: Permanently added '35.189.253.28' (ECDSA) to the list of known hosts.
+Linux linuxkit-ci-3 3.16.0-4-amd64 #1 SMP Debian 3.16.39-1+deb8u2 (2017-03-07) x86_64 GNU/Linux
+[2018-01-16 15:26.24] Created new VM linuxkit-ci-3
+[2018-01-16 15:26.24] Running "ssh" "-i" "/run/secrets/builder-ssh" "-o" "UserKnownHostsFile=/dev/null" "-o" "StrictHostKeyChecking=no" "root@35.189.253.28" "/usr/local/bin/test.sh"
+
+[+  1m 01s] Warning: Permanently added '35.189.253.28' (ECDSA) to the list of known hosts.
+[+  1m 01s] + rm -rf /tmp/build
+[+  1m 01s] + mkdir /tmp/build
+[+  1m 01s] + cd /tmp/build
+[+  1m 01s] + tar xf -
+[+  1m 10s] + '[' -x ci-setup.sh ']'
+[+  1m 10s] + ./ci-setup.sh
+[+  1m 10s] + mkdir -p /tmp/build/test/_results /tmp/build/artifacts
+[+  1m 10s] + sysctl vm.overcommit_memory=1
+[+  1m 10s] vm.overcommit_memory = 1
+[+  1m 10s] + rm /tmp/build/ci-setup.sh
+[+  1m 10s] + make ci-pr
+[+  1m 10s] make clean
+[+  1m 10s] make[1]: Entering directory '/tmp/build'
+[+  1m 10s] rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar *.raw
+[+  1m 10s] make[1]: Leaving directory '/tmp/build'
+[+  1m 10s] make -j 3 GOOS=darwin tmp_rtf_bin.tar tmp_mt_bin.tar tmp_linuxkit_bin.tar
+[+  1m 10s] make[1]: Entering directory '/tmp/build'
+[+  1m 10s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy= -e GOOS=darwin linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 3e8ed35ca934259cb644c2492bf9b181954a07e1 --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=3e8ed35ca934259cb644c2492bf9b181954a07e1 -X github.com/linuxkit/rtf/cmd.Version=0.0" -o bin/rtf > tmp_rtf_bin.tar
+[+  1m 10s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy= -e GOOS=darwin linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df --clone-path github.com/estesp/manifest-tool --clone https://github.com/estesp/manifest-tool --commit bfbd11963b8e0eb5f6e400afaebeaf39820b4e90 --package github.com/estesp/manifest-tool --ldflags "-X main.gitCommit=bfbd11963b8e0eb5f6e400afaebeaf39820b4e90" -o bin/manifest-tool > tmp_mt_bin.tar
+[+  1m 10s] tar cf - -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i -e GOOS=darwin linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df --package github.com/linuxkit/linuxkit/src/cmd/linuxkit --ldflags "-X github.com/linuxkit/linuxkit/src/cmd/linuxkit/version.GitCommit=72257c61e727676acc02d27c3e6e1d2a12166c7b -X github.com/linuxkit/linuxkit/src/cmd/linuxkit/version.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+[+  1m 11s] Unable to find image 'linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df' locally
+[+  1m 11s] Unable to find image 'linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df' locally
+[+  1m 11s] Unable to find image 'linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df' locally
+[+  1m 12s] bb0c6ae2f12a1b55df24ebce2067784a931285df: Pulling from linuxkit/go-compile
+[+  1m 12s] bb0c6ae2f12a1b55df24ebce2067784a931285df: Pulling from linuxkit/go-compile
+[+  1m 13s] bb0c6ae2f12a1b55df24ebce2067784a931285df: Pulling from linuxkit/go-compile
+[+  1m 13s] 2fdfe1cd78c2: Pulling fs layer
+[+  1m 13s] 619f8576a0fb: Pulling fs layer
+[+  1m 13s] 90206da39b99: Pulling fs layer
+[+  1m 13s] 4d2cc8a061bf: Pulling fs layer
+[+  1m 13s] 8dae134962f2: Pulling fs layer
+[+  1m 13s] afd0649e644e: Pulling fs layer
+[+  1m 13s] c2df66bd4ecd: Pulling fs layer
+[+  1m 13s] d778f644203f: Pulling fs layer
+[+  1m 13s] 55e08888de00: Pulling fs layer
+[+  1m 13s] a73c135b512a: Pulling fs layer
+[+  1m 13s] 7af3ec2ce582: Pulling fs layer
+[+  1m 13s] b7b55e6ce8ff: Pulling fs layer
+[+  1m 13s] c2df66bd4ecd: Waiting
+[+  1m 13s] d778f644203f: Waiting
+[+  1m 13s] 55e08888de00: Waiting
+[+  1m 13s] a73c135b512a: Waiting
+[+  1m 13s] 7af3ec2ce582: Waiting
+[+  1m 13s] b7b55e6ce8ff: Waiting
+[+  1m 13s] 4d2cc8a061bf: Waiting
+[+  1m 13s] 8dae134962f2: Waiting
+[+  1m 13s] afd0649e644e: Waiting
+[+  1m 13s] 2fdfe1cd78c2: Pulling fs layer
+[+  1m 13s] 619f8576a0fb: Pulling fs layer
+[+  1m 13s] 90206da39b99: Pulling fs layer
+[+  1m 13s] 4d2cc8a061bf: Pulling fs layer
+[+  1m 13s] 8dae134962f2: Pulling fs layer
+[+  1m 13s] afd0649e644e: Pulling fs layer
+[+  1m 13s] c2df66bd4ecd: Pulling fs layer
+[+  1m 13s] d778f644203f: Pulling fs layer
+[+  1m 13s] 55e08888de00: Pulling fs layer
+[+  1m 13s] a73c135b512a: Pulling fs layer
+[+  1m 13s] 7af3ec2ce582: Pulling fs layer
+[+  1m 13s] b7b55e6ce8ff: Pulling fs layer
+[+  1m 13s] b7b55e6ce8ff: Waiting
+[+  1m 13s] afd0649e644e: Waiting
+[+  1m 13s] 4d2cc8a061bf: Waiting
+[+  1m 13s] 8dae134962f2: Waiting
+[+  1m 13s] 55e08888de00: Waiting
+[+  1m 13s] c2df66bd4ecd: Waiting
+[+  1m 13s] d778f644203f: Waiting
+[+  1m 13s] a73c135b512a: Waiting
+[+  1m 13s] 7af3ec2ce582: Waiting
+[+  1m 13s] 2fdfe1cd78c2: Pulling fs layer
+[+  1m 13s] 619f8576a0fb: Pulling fs layer
+[+  1m 13s] 90206da39b99: Pulling fs layer
+[+  1m 13s] 4d2cc8a061bf: Pulling fs layer
+[+  1m 13s] 8dae134962f2: Pulling fs layer
+[+  1m 13s] afd0649e644e: Pulling fs layer
+[+  1m 13s] c2df66bd4ecd: Pulling fs layer
+[+  1m 13s] d778f644203f: Pulling fs layer
+[+  1m 13s] 55e08888de00: Pulling fs layer
+[+  1m 13s] a73c135b512a: Pulling fs layer
+[+  1m 13s] 7af3ec2ce582: Pulling fs layer
+[+  1m 13s] b7b55e6ce8ff: Pulling fs layer
+[+  1m 13s] b7b55e6ce8ff: Waiting
+[+  1m 13s] afd0649e644e: Waiting
+[+  1m 13s] 4d2cc8a061bf: Waiting
+[+  1m 13s] 8dae134962f2: Waiting
+[+  1m 13s] 55e08888de00: Waiting
+[+  1m 13s] c2df66bd4ecd: Waiting
+[+  1m 13s] d778f644203f: Waiting
+[+  1m 13s] a73c135b512a: Waiting
+[+  1m 13s] 7af3ec2ce582: Waiting
+[+  1m 13s] 2fdfe1cd78c2: 2fdfe1cd78c2: Verifying Checksum
+[+  1m 13s] Verifying Checksum
+[+  1m 13s] 2fdfe1cd78c2: Verifying Checksum
+[+  1m 13s] 2fdfe1cd78c2: Download complete
+[+  1m 13s] 2fdfe1cd78c2: 2fdfe1cd78c2: Download complete
+[+  1m 13s] Download complete
+[+  1m 13s] 619f8576a0fb: Verifying Checksum
+[+  1m 13s] 619f8576a0fb: Verifying Checksum
+[+  1m 13s] 619f8576a0fb: Download complete
+[+  1m 13s] 619f8576a0fb: Download complete
+[+  1m 13s] 619f8576a0fb: Verifying Checksum
+[+  1m 13s] 619f8576a0fb: Download complete
+[+  1m 14s] 2fdfe1cd78c2: Pull complete
+[+  1m 14s] 2fdfe1cd78c2: Pull complete
+[+  1m 14s] 2fdfe1cd78c2: Pull complete
+[+  1m 14s] 90206da39b99: Verifying Checksum
+[+  1m 14s] 90206da39b99: Download complete
+[+  1m 14s] 90206da39b99: Verifying Checksum
+[+  1m 14s] 90206da39b99: Download complete
+[+  1m 14s] 90206da39b99: Verifying Checksum
+[+  1m 14s] 90206da39b99: Download complete
+[+  1m 14s] 619f8576a0fb: Pull complete
+[+  1m 14s] 619f8576a0fb: Pull complete
+[+  1m 14s] 619f8576a0fb: Pull complete
+[+  1m 14s] 90206da39b99: 90206da39b99: Pull complete
+[+  1m 14s] Pull complete
+[+  1m 14s] 90206da39b99: Pull complete
+[+  1m 14s] 4d2cc8a061bf: Verifying Checksum
+[+  1m 14s] 4d2cc8a061bf: Download complete
+[+  1m 14s] 4d2cc8a061bf: Verifying Checksum
+[+  1m 14s] 4d2cc8a061bf: Download complete
+[+  1m 14s] 4d2cc8a061bf: Verifying Checksum
+[+  1m 14s] 4d2cc8a061bf: Download complete
+[+  1m 14s] 4d2cc8a061bf: Pull complete
+[+  1m 14s] 4d2cc8a061bf: Pull complete
+[+  1m 14s] 4d2cc8a061bf: Pull complete
+[+  1m 15s] c2df66bd4ecd: Verifying Checksum
+[+  1m 15s] c2df66bd4ecd: Verifying Checksum
+[+  1m 15s] c2df66bd4ecd: Verifying Checksum
+[+  1m 15s] c2df66bd4ecd: Download complete
+[+  1m 15s] c2df66bd4ecd: Download complete
+[+  1m 15s] c2df66bd4ecd: Download complete
+[+  1m 15s] afd0649e644e: Verifying Checksum
+[+  1m 15s] afd0649e644e: Verifying Checksum
+[+  1m 15s] afd0649e644e: Verifying Checksum
+[+  1m 15s] afd0649e644e: Download complete
+[+  1m 15s] afd0649e644e: Download complete
+[+  1m 15s] afd0649e644e: Download complete
+[+  1m 16s] 55e08888de00: Verifying Checksum
+[+  1m 16s] 55e08888de00: Verifying Checksum
+[+  1m 16s] 55e08888de00: Verifying Checksum
+[+  1m 16s] 55e08888de00: Download complete
+[+  1m 16s] 55e08888de00: Download complete
+[+  1m 16s] 55e08888de00: Download complete
+[+  1m 17s] d778f644203f: Verifying Checksum
+[+  1m 17s] d778f644203f: Verifying Checksum
+[+  1m 17s] d778f644203f: Download complete
+[+  1m 17s] d778f644203f: Verifying Checksum
+[+  1m 17s] d778f644203f: Download complete
+[+  1m 17s] d778f644203f: Download complete
+[+  1m 18s] a73c135b512a: Verifying Checksum
+[+  1m 18s] a73c135b512a: Verifying Checksum
+[+  1m 18s] a73c135b512a: Verifying Checksum
+[+  1m 18s] a73c135b512a: Download complete
+[+  1m 18s] a73c135b512a: Download complete
+[+  1m 18s] a73c135b512a: Download complete
+[+  1m 18s] 7af3ec2ce582: Verifying Checksum
+[+  1m 18s] 7af3ec2ce582: Verifying Checksum
+[+  1m 18s] 7af3ec2ce582: Verifying Checksum
+[+  1m 18s] 7af3ec2ce582: Download complete
+[+  1m 18s] 7af3ec2ce582: Download complete
+[+  1m 18s] 7af3ec2ce582: Download complete
+[+  1m 19s] b7b55e6ce8ff: Verifying Checksum
+[+  1m 19s] b7b55e6ce8ff: Verifying Checksum
+[+  1m 19s] b7b55e6ce8ff: Download complete
+[+  1m 19s] b7b55e6ce8ff: Download complete
+[+  1m 19s] b7b55e6ce8ff: Verifying Checksum
+[+  1m 19s] b7b55e6ce8ff: Download complete
+[+  1m 21s] 8dae134962f2: Verifying Checksum
+[+  1m 21s] 8dae134962f2: Verifying Checksum
+[+  1m 21s] 8dae134962f2: Download complete
+[+  1m 21s] 8dae134962f2: Download complete
+[+  1m 21s] 8dae134962f2: Download complete
+[+  1m 25s] 8dae134962f2: 8dae134962f2: Pull complete
+[+  1m 25s] Pull complete
+[+  1m 25s] 8dae134962f2: Pull complete
+[+  1m 25s] afd0649e644e: Pull complete
+[+  1m 25s] afd0649e644e: Pull complete
+[+  1m 25s] afd0649e644e: Pull complete
+[+  1m 25s] c2df66bd4ecd: Pull complete
+[+  1m 25s] c2df66bd4ecd: Pull complete
+[+  1m 25s] c2df66bd4ecd: Pull complete
+[+  1m 27s] d778f644203f: Pull complete
+[+  1m 27s] d778f644203f: Pull complete
+[+  1m 27s] d778f644203f: Pull complete
+[+  1m 27s] 55e08888de00: Pull complete
+[+  1m 27s] 55e08888de00: Pull complete
+[+  1m 27s] 55e08888de00: Pull complete
+[+  1m 34s] a73c135b512a: Pull complete
+[+  1m 34s] a73c135b512a: Pull complete
+[+  1m 34s] a73c135b512a: Pull complete
+[+  1m 35s] 7af3ec2ce582: 7af3ec2ce582: Pull complete
+[+  1m 35s] Pull complete
+[+  1m 35s] 7af3ec2ce582: Pull complete
+[+  1m 35s] b7b55e6ce8ff: Pull complete
+[+  1m 35s] b7b55e6ce8ff: Pull complete
+[+  1m 35s] b7b55e6ce8ff: Pull complete
+[+  1m 35s] Digest: sha256:de6950bc03cbc2e10aadee188ce19119386c312c53d195a55be6f4e39ee5db2d
+[+  1m 35s] Digest: sha256:de6950bc03cbc2e10aadee188ce19119386c312c53d195a55be6f4e39ee5db2d
+[+  1m 35s] Digest: sha256:de6950bc03cbc2e10aadee188ce19119386c312c53d195a55be6f4e39ee5db2d
+[+  1m 35s] Status: Downloaded newer image for linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df
+[+  1m 35s] Status: Downloaded newer image for linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df
+[+  1m 35s] Status: Image is up to date for linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df
+[+  1m 36s] Cloning into '.'...
+[+  1m 36s] Cloning into '.'...
+[+  1m 36s] gofmt...
+[+  1m 37s] Note: checking out '3e8ed35ca934259cb644c2492bf9b181954a07e1'.
+[+  1m 37s] 
+[+  1m 37s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  1m 37s] changes and commit them, and you can discard any commits you make in this
+[+  1m 37s] state without impacting any branches by performing another checkout.
+[+  1m 37s] 
+[+  1m 37s] If you want to create a new branch to retain commits you create, you may
+[+  1m 37s] do so (now or later) by using -b with the checkout command again. Example:
+[+  1m 37s] 
+[+  1m 37s]   git checkout -b <new-branch-name>
+[+  1m 37s] 
+[+  1m 37s] HEAD is now at 3e8ed35... Merge pull request #25 from rn/fix
+[+  1m 37s] gofmt...
+[+  1m 38s] Note: checking out 'bfbd11963b8e0eb5f6e400afaebeaf39820b4e90'.
+[+  1m 38s] 
+[+  1m 38s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  1m 38s] changes and commit them, and you can discard any commits you make in this
+[+  1m 38s] state without impacting any branches by performing another checkout.
+[+  1m 38s] 
+[+  1m 38s] If you want to create a new branch to retain commits you create, you may
+[+  1m 38s] do so (now or later) by using -b with the checkout command again. Example:
+[+  1m 38s] 
+[+  1m 38s]   git checkout -b <new-branch-name>
+[+  1m 38s] 
+[+  1m 38s] HEAD is now at bfbd119... Merge pull request #44 from tianon/readme-tags
+[+  1m 38s] gofmt...
+[+  1m 42s] govet...
+[+  1m 42s] govet...
+[+  1m 44s] golint...
+[+  1m 45s] ineffassign...
+[+  1m 45s] go build...
+[+  1m 46s] golint...
+[+  1m 46s] ineffassign...
+[+  1m 46s] go build...
+[+  1m 49s] govet...
+[+  2m 03s] golint...
+[+  2m 03s] ineffassign...
+[+  2m 04s] go build...
+[+  3m 30s] make[1]: Leaving directory '/tmp/build'
+[+  3m 30s] make clean
+[+  3m 30s] make[1]: Entering directory '/tmp/build'
+[+  3m 30s] rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar *.raw
+[+  3m 30s] make[1]: Leaving directory '/tmp/build'
+[+  3m 30s] make -j 3 GOOS=windows tmp_rtf_bin.tar tmp_mt_bin.tar tmp_linuxkit_bin.tar
+[+  3m 30s] make[1]: Entering directory '/tmp/build'
+[+  3m 30s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy= -e GOOS=windows linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 3e8ed35ca934259cb644c2492bf9b181954a07e1 --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=3e8ed35ca934259cb644c2492bf9b181954a07e1 -X github.com/linuxkit/rtf/cmd.Version=0.0" -o bin/rtf > tmp_rtf_bin.tar
+[+  3m 30s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy= -e GOOS=windows linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df --clone-path github.com/estesp/manifest-tool --clone https://github.com/estesp/manifest-tool --commit bfbd11963b8e0eb5f6e400afaebeaf39820b4e90 --package github.com/estesp/manifest-tool --ldflags "-X main.gitCommit=bfbd11963b8e0eb5f6e400afaebeaf39820b4e90" -o bin/manifest-tool > tmp_mt_bin.tar
+[+  3m 30s] tar cf - -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i -e GOOS=windows linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df --package github.com/linuxkit/linuxkit/src/cmd/linuxkit --ldflags "-X github.com/linuxkit/linuxkit/src/cmd/linuxkit/version.GitCommit=72257c61e727676acc02d27c3e6e1d2a12166c7b -X github.com/linuxkit/linuxkit/src/cmd/linuxkit/version.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+[+  3m 30s] Cloning into '.'...
+[+  3m 31s] Cloning into '.'...
+[+  3m 31s] gofmt...
+[+  3m 32s] Note: checking out '3e8ed35ca934259cb644c2492bf9b181954a07e1'.
+[+  3m 32s] 
+[+  3m 32s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  3m 32s] changes and commit them, and you can discard any commits you make in this
+[+  3m 32s] state without impacting any branches by performing another checkout.
+[+  3m 32s] 
+[+  3m 32s] If you want to create a new branch to retain commits you create, you may
+[+  3m 32s] do so (now or later) by using -b with the checkout command again. Example:
+[+  3m 32s] 
+[+  3m 32s]   git checkout -b <new-branch-name>
+[+  3m 32s] 
+[+  3m 32s] HEAD is now at 3e8ed35... Merge pull request #25 from rn/fix
+[+  3m 32s] gofmt...
+[+  3m 32s] Note: checking out 'bfbd11963b8e0eb5f6e400afaebeaf39820b4e90'.
+[+  3m 32s] 
+[+  3m 32s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  3m 32s] changes and commit them, and you can discard any commits you make in this
+[+  3m 32s] state without impacting any branches by performing another checkout.
+[+  3m 32s] 
+[+  3m 32s] If you want to create a new branch to retain commits you create, you may
+[+  3m 32s] do so (now or later) by using -b with the checkout command again. Example:
+[+  3m 32s] 
+[+  3m 32s]   git checkout -b <new-branch-name>
+[+  3m 32s] 
+[+  3m 32s] HEAD is now at bfbd119... Merge pull request #44 from tianon/readme-tags
+[+  3m 32s] gofmt...
+[+  3m 36s] govet...
+[+  3m 37s] govet...
+[+  3m 39s] golint...
+[+  3m 39s] ineffassign...
+[+  3m 39s] go build...
+[+  3m 41s] golint...
+[+  3m 41s] ineffassign...
+[+  3m 41s] go build...
+[+  3m 43s] govet...
+[+  3m 57s] golint...
+[+  3m 58s] ineffassign...
+[+  3m 58s] go build...
+[+  5m 26s] make[1]: Leaving directory '/tmp/build'
+[+  5m 26s] make clean
+[+  5m 26s] make[1]: Entering directory '/tmp/build'
+[+  5m 26s] rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar *.raw
+[+  5m 26s] make[1]: Leaving directory '/tmp/build'
+[+  5m 26s] make -j 3 GOOS=linux tmp_rtf_bin.tar tmp_mt_bin.tar tmp_linuxkit_bin.tar
+[+  5m 26s] make[1]: Entering directory '/tmp/build'
+[+  5m 26s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy=  linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 3e8ed35ca934259cb644c2492bf9b181954a07e1 --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=3e8ed35ca934259cb644c2492bf9b181954a07e1 -X github.com/linuxkit/rtf/cmd.Version=0.0" -o bin/rtf > tmp_rtf_bin.tar
+[+  5m 26s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy=  linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df --clone-path github.com/estesp/manifest-tool --clone https://github.com/estesp/manifest-tool --commit bfbd11963b8e0eb5f6e400afaebeaf39820b4e90 --package github.com/estesp/manifest-tool --ldflags "-X main.gitCommit=bfbd11963b8e0eb5f6e400afaebeaf39820b4e90" -o bin/manifest-tool > tmp_mt_bin.tar
+[+  5m 26s] tar cf - -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i  linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df --package github.com/linuxkit/linuxkit/src/cmd/linuxkit --ldflags "-X github.com/linuxkit/linuxkit/src/cmd/linuxkit/version.GitCommit=72257c61e727676acc02d27c3e6e1d2a12166c7b -X github.com/linuxkit/linuxkit/src/cmd/linuxkit/version.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+[+  5m 26s] Cloning into '.'...
+[+  5m 26s] Cloning into '.'...
+[+  5m 27s] gofmt...
+[+  5m 28s] Note: checking out '3e8ed35ca934259cb644c2492bf9b181954a07e1'.
+[+  5m 28s] 
+[+  5m 28s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  5m 28s] changes and commit them, and you can discard any commits you make in this
+[+  5m 28s] state without impacting any branches by performing another checkout.
+[+  5m 28s] 
+[+  5m 28s] If you want to create a new branch to retain commits you create, you may
+[+  5m 28s] do so (now or later) by using -b with the checkout command again. Example:
+[+  5m 28s] 
+[+  5m 28s]   git checkout -b <new-branch-name>
+[+  5m 28s] 
+[+  5m 28s] HEAD is now at 3e8ed35... Merge pull request #25 from rn/fix
+[+  5m 28s] gofmt...
+[+  5m 28s] Note: checking out 'bfbd11963b8e0eb5f6e400afaebeaf39820b4e90'.
+[+  5m 28s] 
+[+  5m 28s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  5m 28s] changes and commit them, and you can discard any commits you make in this
+[+  5m 28s] state without impacting any branches by performing another checkout.
+[+  5m 28s] 
+[+  5m 28s] If you want to create a new branch to retain commits you create, you may
+[+  5m 28s] do so (now or later) by using -b with the checkout command again. Example:
+[+  5m 28s] 
+[+  5m 28s]   git checkout -b <new-branch-name>
+[+  5m 28s] 
+[+  5m 28s] HEAD is now at bfbd119... Merge pull request #44 from tianon/readme-tags
+[+  5m 28s] gofmt...
+[+  5m 32s] govet...
+[+  5m 33s] govet...
+[+  5m 34s] golint...
+[+  5m 35s] ineffassign...
+[+  5m 35s] go build...
+[+  5m 36s] golint...
+[+  5m 37s] ineffassign...
+[+  5m 37s] go build...
+[+  5m 40s] govet...
+[+  5m 53s] golint...
+[+  5m 55s] ineffassign...
+[+  5m 56s] go build...
+[+  7m 23s] make[1]: Leaving directory '/tmp/build'
+[+  7m 23s] make clean
+[+  7m 23s] make[1]: Entering directory '/tmp/build'
+[+  7m 23s] rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar *.raw
+[+  7m 23s] make[1]: Leaving directory '/tmp/build'
+[+  7m 23s] make
+[+  7m 23s] make[1]: Entering directory '/tmp/build'
+[+  7m 23s] tar cf - -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i  linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df --package github.com/linuxkit/linuxkit/src/cmd/linuxkit --ldflags "-X github.com/linuxkit/linuxkit/src/cmd/linuxkit/version.GitCommit=72257c61e727676acc02d27c3e6e1d2a12166c7b -X github.com/linuxkit/linuxkit/src/cmd/linuxkit/version.Version="0.0" " -o bin/linuxkit > tmp_linuxkit_bin.tar
+[+  7m 24s] gofmt...
+[+  7m 29s] govet...
+[+  7m 35s] golint...
+[+  7m 35s] ineffassign...
+[+  7m 35s] go build...
+[+  8m 39s] tar xf tmp_linuxkit_bin.tar
+[+  8m 39s] rm tmp_linuxkit_bin.tar
+[+  8m 39s] touch bin/linuxkit
+[+  8m 39s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy=  linuxkit/go-compile:bb0c6ae2f12a1b55df24ebce2067784a931285df --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 3e8ed35ca934259cb644c2492bf9b181954a07e1 --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=3e8ed35ca934259cb644c2492bf9b181954a07e1 -X github.com/linuxkit/rtf/cmd.Version=0.0" -o bin/rtf > tmp_rtf_bin.tar
+[+  8m 39s] Cloning into '.'...
+[+  8m 41s] Note: checking out '3e8ed35ca934259cb644c2492bf9b181954a07e1'.
+[+  8m 41s] 
+[+  8m 41s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  8m 41s] changes and commit them, and you can discard any commits you make in this
+[+  8m 41s] state without impacting any branches by performing another checkout.
+[+  8m 41s] 
+[+  8m 41s] If you want to create a new branch to retain commits you create, you may
+[+  8m 41s] do so (now or later) by using -b with the checkout command again. Example:
+[+  8m 41s] 
+[+  8m 41s]   git checkout -b <new-branch-name>
+[+  8m 41s] 
+[+  8m 41s] HEAD is now at 3e8ed35... Merge pull request #25 from rn/fix
+[+  8m 41s] gofmt...
+[+  8m 43s] govet...
+[+  8m 44s] golint...
+[+  8m 44s] ineffassign...
+[+  8m 44s] go build...
+[+  9m 02s] tar xf tmp_rtf_bin.tar
+[+  9m 02s] rm tmp_rtf_bin.tar
+[+  9m 02s] touch bin/rtf
+[+  9m 02s] make[1]: Leaving directory '/tmp/build'
+[+  9m 02s] make install
+[+  9m 02s] make[1]: Entering directory '/tmp/build'
+[+  9m 02s] cp -R ./bin/* /usr/local//bin
+[+  9m 02s] make[1]: Leaving directory '/tmp/build'
+[+  9m 02s] make -C test pr
+[+  9m 02s] make[1]: Entering directory '/tmp/build/test'
+[+  9m 02s] rm -rf ../artifacts
+[+  9m 02s] mkdir -p ../artifacts
+[+  9m 02s] /usr/local/bin/linuxkit build -format gcp -pull -name ../artifacts/test hack/test.yml
+[+  9m 02s] Extract kernel image: linuxkit/kernel:4.9.76
+[+  9m 05s] time="2018-01-16T15:34:28Z" level=warning msg="certificate with CN  is near expiry"
+[+  9m 05s] time="2018-01-16T15:34:28Z" level=warning msg="certificate with CN Justin Cormack is near expiry"
+[+  9m 05s] time="2018-01-16T15:34:28Z" level=warning msg="certificate with CN  is near expiry"
+[+  9m 05s] time="2018-01-16T15:34:28Z" level=warning msg="certificate with CN Justin Cormack is near expiry"
+[+  9m 05s] Pull image: docker.io/linuxkit/kernel:4.9.76@sha256:98dfce5443fba043b080e6bc799047011a6695fe63f1de5fd513f4302ab09cee
+[+  9m 11s] Add init containers:
+[+  9m 11s] Process init image: linuxkit/init:f7a3d03face99e933626533a3381ae4476fbc8de
+[+  9m 13s] time="2018-01-16T15:34:35Z" level=warning msg="certificate with CN Justin Cormack is near expiry"
+[+  9m 13s] time="2018-01-16T15:34:35Z" level=warning msg="certificate with CN  is near expiry"
+[+  9m 13s] time="2018-01-16T15:34:35Z" level=warning msg="certificate with CN  is near expiry"
+[+  9m 13s] time="2018-01-16T15:34:35Z" level=warning msg="certificate with CN Justin Cormack is near expiry"
+[+  9m 13s] time="2018-01-16T15:34:35Z" level=warning msg="certificate with CN  is near expiry"
+[+  9m 13s] Pull image: docker.io/linuxkit/init:f7a3d03face99e933626533a3381ae4476fbc8de@sha256:cf7540404a2d6270e4981fec9be43a716afe3cf9c1db7a7d8cc7f5d242570269
+[+  9m 16s] Process init image: linuxkit/runc:7b15b00b4e3507d62e3ed8d44dfe650561cd35ff
+[+  9m 18s] time="2018-01-16T15:34:40Z" level=warning msg="certificate with CN Justin Cormack is near expiry"
+[+  9m 18s] time="2018-01-16T15:34:40Z" level=warning msg="certificate with CN  is near expiry"
+[+  9m 18s] time="2018-01-16T15:34:40Z" level=warning msg="certificate with CN  is near expiry"
+[+  9m 18s] time="2018-01-16T15:34:40Z" level=warning msg="certificate with CN Justin Cormack is near expiry"
+[+  9m 18s] time="2018-01-16T15:34:41Z" level=warning msg="certificate with CN  is near expiry"
+[+  9m 18s] Pull image: docker.io/linuxkit/runc:7b15b00b4e3507d62e3ed8d44dfe650561cd35ff@sha256:b3695ac8679918b793d5034e0ab862da545a1e24e7b032f6c11816fa745142a8
+[+  9m 21s] Process init image: linuxkit/containerd:1b6b8a5884e17b26e2725cb82c436841070fca95
+[+  9m 23s] time="2018-01-16T15:34:45Z" level=warning msg="certificate with CN  is near expiry"
+[+  9m 23s] time="2018-01-16T15:34:45Z" level=warning msg="certificate with CN  is near expiry"
+[+  9m 23s] time="2018-01-16T15:34:45Z" level=warning msg="certificate with CN Justin Cormack is near expiry"
+[+  9m 23s] time="2018-01-16T15:34:45Z" level=warning msg="certificate with CN  is near expiry"
+[+  9m 23s] time="2018-01-16T15:34:46Z" level=warning msg="certificate with CN Justin Cormack is near expiry"
+[+  9m 23s] time="2018-01-16T15:34:46Z" level=warning msg="certificate with CN  is near expiry"
+[+  9m 23s] Pull image: docker.io/linuxkit/containerd:1b6b8a5884e17b26e2725cb82c436841070fca95@sha256:0a6c5558ade5a09ba9a09f6367cab87011b9720c9dd1e4389767f6268bdf205b
+[+  9m 27s] Add onboot containers:
+[+  9m 27s]   Create OCI config for linuxkit/dhcpcd:0d59a6cc03412289ef4313f2491ec666c1715cc9
+[+  9m 29s] time="2018-01-16T15:34:52Z" level=warning msg="certificate with CN  is near expiry"
+[+  9m 29s] time="2018-01-16T15:34:52Z" level=warning msg="certificate with CN Justin Cormack is near expiry"
+[+  9m 29s] time="2018-01-16T15:34:52Z" level=warning msg="certificate with CN  is near expiry"
+[+  9m 29s] time="2018-01-16T15:34:52Z" level=warning msg="certificate with CN Justin Cormack is near expiry"
+[+  9m 29s] time="2018-01-16T15:34:52Z" level=warning msg="certificate with CN  is near expiry"
+[+  9m 29s] Pull image: docker.io/linuxkit/dhcpcd:0d59a6cc03412289ef4313f2491ec666c1715cc9@sha256:181211d5fac4f2a40f9559be99aa61ee53a5b2c78375ce5750c2b29f0a9eb870
+[+  9m 32s] Pull image: docker.io/linuxkit/dhcpcd:0d59a6cc03412289ef4313f2491ec666c1715cc9@sha256:181211d5fac4f2a40f9559be99aa61ee53a5b2c78375ce5750c2b29f0a9eb870
+[+  9m 34s]   Create OCI config for linuxkit/test-kernel-config:9c3668b834540d2e776d0bf4aff661b3bcc35616
+[+  9m 34s] Pull image: linuxkit/test-kernel-config:9c3668b834540d2e776d0bf4aff661b3bcc35616
+[+  9m 37s] Pull image: linuxkit/test-kernel-config:9c3668b834540d2e776d0bf4aff661b3bcc35616
+[+  9m 39s]   Create OCI config for linuxkit/poweroff:bccfe1cb04fc7bb9f03613d2314f38abd2620f29
+[+  9m 39s] Pull image: linuxkit/poweroff:bccfe1cb04fc7bb9f03613d2314f38abd2620f29
+[+  9m 42s] Pull image: linuxkit/poweroff:bccfe1cb04fc7bb9f03613d2314f38abd2620f29
+[+  9m 46s] Create outputs:
+[+  9m 52s]   ../artifacts/test.img.tar.gz
+[+ 11m 07s] LABELS: linux, Debian, 8.7, amd64, build
+[+ 11m 07s] ID: 8ce246b1-d132-4100-a197-8e190c71c72a
+[+ 11m 17s] [PASS    ] linuxkit.build.formats.kernel+initrd 9.61s
+[+ 11m 50s] [PASS    ] linuxkit.build.formats.iso-bios 33.04s
+[+ 12m 27s] [PASS    ] linuxkit.build.formats.iso-efi 36.88s
+[+ 13m 22s] [PASS    ] linuxkit.build.formats.gcp 54.78s
+[+ 15m 28s] [PASS    ] linuxkit.build.formats.aws 126.08s
+[+ 15m 28s] [SKIP    ] linuxkit.build.formats.vhd 0.00s
+[+ 16m 24s] [PASS    ] linuxkit.build.formats.vmdk 55.98s
+[+ 16m 47s] [PASS    ] linuxkit.build.formats.raw_bios 22.74s
+[+ 17m 09s] [PASS    ] linuxkit.build.formats.raw_efi 22.55s
+[+ 18m 42s] [PASS    ] linuxkit.build.formats.qcow2_bios 93.31s
+[+ 19m 05s] [PASS    ] linuxkit.build.examples.minimal 22.69s
+[+ 20m 12s] [PASS    ] linuxkit.build.examples.docker 66.62s
+[+ 20m 38s] [PASS    ] linuxkit.build.examples.sshd 26.73s
+[+ 21m 03s] [PASS    ] linuxkit.build.examples.redis 24.37s
+[+ 21m 33s] [PASS    ] linuxkit.build.examples.swap 30.61s
+[+ 21m 57s] [PASS    ] linuxkit.build.examples.node_exporter 23.38s
+[+ 22m 26s] [PASS    ] linuxkit.build.examples.tpm 29.28s
+[+ 23m 01s] [PASS    ] linuxkit.build.examples.wireguard 35.08s
+[+ 23m 52s] [PASS    ] linuxkit.build.examples.cadvisor 51.23s
+[+ 25m 15s] [PASS    ] linuxkit.build.blueprints.docker_for_mac 82.21s
+[+ 25m 37s] [PASS    ] linuxkit.platforms.qemu.run_kernel 22.07s
+[+ 26m 00s] [PASS    ] linuxkit.platforms.qemu.run_iso 23.04s
+[+ 26m 00s] [CANCEL  ] linuxkit.platforms.qemu.run_efi 0.01s
+[+ 27m 39s] [PASS    ] linuxkit.platforms.qemu.run_qcow_bios 99.72s
+[+ 28m 10s] [PASS    ] linuxkit.platforms.qemu.run_raw_bios 30.88s
+[+ 29m 56s] [PASS    ] linuxkit.platforms.qemu.run_aws 105.15s
+[+ 29m 56s] [SKIP    ] linuxkit.platforms.qemu.container 0.00s
+[+ 30m 51s] [PASS    ] linuxkit.kernel.config_4.4.x 55.28s
+[+ 31m 43s] [PASS    ] linuxkit.kernel.config_4.9.x 52.59s
+[+ 32m 44s] [PASS    ] linuxkit.kernel.config_4.14.x 60.27s
+[+ 33m 50s] [PASS    ] linuxkit.kernel.kmod_4.4.x 66.16s
+[+ 34m 33s] [PASS    ] linuxkit.kernel.kmod_4.9.x 43.27s
+[+ 35m 22s] [PASS    ] linuxkit.kernel.kmod_4.14.x 49.16s
+[+ 35m 22s] [SKIP    ] linuxkit.security.docker-bench 0.00s
+[+ 36m 01s] [PASS    ] linuxkit.security.ports 38.22s
+[+ 36m 41s] [PASS    ] linuxkit.packages.binfmt 40.40s
+[+ 37m 22s] [PASS    ] linuxkit.packages.ca-certificates 40.93s
+[+ 48m 36s] [PASS    ] linuxkit.packages.containerd 673.93s
+[+ 49m 24s] [PASS    ] linuxkit.packages.dhcpcd 47.83s
+[+ 51m 28s] [PASS    ] linuxkit.packages.extend.ext4 124.11s
+[+ 53m 40s] [PASS    ] linuxkit.packages.extend.btrfs 131.75s
+[+ 55m 47s] [PASS    ] linuxkit.packages.extend.xfs 127.31s
+[+ 56m 45s] [PASS    ] linuxkit.packages.format_mount.auto 57.67s
+[+ 57m 42s] [PASS    ] linuxkit.packages.format_mount.by_label 57.53s
+[+ 58m 41s] [PASS    ] linuxkit.packages.format_mount.by_name 58.57s
+[+ 59m 43s] [PASS    ] linuxkit.packages.format_mount.btrfs 62.35s
+[+ 60m 39s] [PASS    ] linuxkit.packages.format_mount.xfs 56.13s
+[+ 62m 18s] [PASS    ] linuxkit.packages.format_mount.by_device_force 98.69s
+[+ 63m 35s] [PASS    ] linuxkit.packages.format_mount.multiple 76.94s
+[+ 64m 38s] [PASS    ] linuxkit.packages.getty-containerd 63.53s
+[+ 67m 05s] [PASS    ] linuxkit.packages.mkimage 146.50s
+[+ 67m 47s] [PASS    ] linuxkit.packages.sysctl 42.12s
+[+ 69m 31s] [PASS    ] linuxkit.packages.wireguard 104.61s
+[+ 69m 32s] [SUMMARY ] LogDir: 8ce246b1-d132-4100-a197-8e190c71c72a
+[+ 69m 32s] [SUMMARY ] Version: 8.7
+[+ 69m 32s] [SUMMARY ] Passed: 49
+[+ 69m 32s] [SUMMARY ] Failed: 0
+[+ 69m 32s] [SUMMARY ] Cancelled: 1
+[+ 69m 32s] [SUMMARY ] Skipped: 6
+[+ 69m 32s] [SUMMARY ] Duration: 3504.10s
+[+ 69m 32s] make[1]: Leaving directory '/tmp/build/test'
+[+ 69m 32s] make -C pkg build
+[+ 69m 32s] make[1]: Entering directory '/tmp/build/pkg'
+[+ 69m 39s] Building "linuxkit/containerd:1b6b8a5884e17b26e2725cb82c436841070fca95"
+[+ 69m 42s] time="2018-01-16T16:35:05Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 69m 42s] time="2018-01-16T16:35:05Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 69m 42s] time="2018-01-16T16:35:05Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 69m 42s] time="2018-01-16T16:35:05Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 69m 42s] time="2018-01-16T16:35:05Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 69m 43s] time="2018-01-16T16:35:06Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 69m 43s] Pull (1 of 1): linuxkit/containerd:1b6b8a5884e17b26e2725cb82c436841070fca95@sha256:0a6c5558ade5a09ba9a09f6367cab87011b9720c9dd1e4389767f6268bdf205b
+[+ 69m 44s] sha256:0a6c5558ade5a09ba9a09f6367cab87011b9720c9dd1e4389767f6268bdf205b: Pulling from linuxkit/containerd
+[+ 69m 45s] Digest: sha256:0a6c5558ade5a09ba9a09f6367cab87011b9720c9dd1e4389767f6268bdf205b
+[+ 69m 45s] Status: Image is up to date for linuxkit/containerd@sha256:0a6c5558ade5a09ba9a09f6367cab87011b9720c9dd1e4389767f6268bdf205b
+[+ 69m 45s] Tagging linuxkit/containerd@sha256:0a6c5558ade5a09ba9a09f6367cab87011b9720c9dd1e4389767f6268bdf205b as linuxkit/containerd:1b6b8a5884e17b26e2725cb82c436841070fca95
+[+ 69m 45s] Building "linuxkit/binfmt:4b1d7a8dab03c09855fb4b6060a42b2294674b47"
+[+ 69m 47s] time="2018-01-16T16:35:10Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 69m 47s] time="2018-01-16T16:35:10Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 69m 47s] time="2018-01-16T16:35:10Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 69m 47s] time="2018-01-16T16:35:10Z" level=warning msg="certificate with CN Rolf Neugebauer is near expiry" 
+[+ 69m 48s] time="2018-01-16T16:35:10Z" level=warning msg="certificate with CN Rolf Neugebauer is near expiry" 
+[+ 69m 48s] time="2018-01-16T16:35:11Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 69m 48s] time="2018-01-16T16:35:11Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 69m 48s] Pull (1 of 1): linuxkit/binfmt:4b1d7a8dab03c09855fb4b6060a42b2294674b47@sha256:a0a86770253a208267a8a4882998d505056c11a84d2872d790e627b68c4a1075
+[+ 69m 49s] sha256:a0a86770253a208267a8a4882998d505056c11a84d2872d790e627b68c4a1075: Pulling from linuxkit/binfmt
+[+ 69m 50s] Digest: sha256:a0a86770253a208267a8a4882998d505056c11a84d2872d790e627b68c4a1075
+[+ 69m 50s] Status: Image is up to date for linuxkit/binfmt@sha256:a0a86770253a208267a8a4882998d505056c11a84d2872d790e627b68c4a1075
+[+ 69m 50s] Tagging linuxkit/binfmt@sha256:a0a86770253a208267a8a4882998d505056c11a84d2872d790e627b68c4a1075 as linuxkit/binfmt:4b1d7a8dab03c09855fb4b6060a42b2294674b47
+[+ 69m 50s] Building "linuxkit/host-timesync-daemon:085e1910de6f311f96a823eaa10ffd6d92ec9679"
+[+ 69m 53s] time="2018-01-16T16:35:15Z" level=warning msg="certificate with CN Rolf Neugebauer is near expiry" 
+[+ 69m 53s] time="2018-01-16T16:35:15Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 69m 53s] time="2018-01-16T16:35:15Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 69m 53s] time="2018-01-16T16:35:15Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 69m 53s] time="2018-01-16T16:35:16Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 69m 54s] time="2018-01-16T16:35:16Z" level=warning msg="certificate with CN Rolf Neugebauer is near expiry" 
+[+ 69m 54s] Pull (1 of 1): linuxkit/host-timesync-daemon:085e1910de6f311f96a823eaa10ffd6d92ec9679@sha256:5e936860bdeb39c98d8851453fcf1f1a0ee0cea1747f7aa6acff3baa0ab23fff
+[+ 69m 56s] sha256:5e936860bdeb39c98d8851453fcf1f1a0ee0cea1747f7aa6acff3baa0ab23fff: Pulling from linuxkit/host-timesync-daemon
+[+ 69m 56s] Digest: sha256:5e936860bdeb39c98d8851453fcf1f1a0ee0cea1747f7aa6acff3baa0ab23fff
+[+ 69m 56s] Status: Image is up to date for linuxkit/host-timesync-daemon@sha256:5e936860bdeb39c98d8851453fcf1f1a0ee0cea1747f7aa6acff3baa0ab23fff
+[+ 69m 56s] Tagging linuxkit/host-timesync-daemon@sha256:5e936860bdeb39c98d8851453fcf1f1a0ee0cea1747f7aa6acff3baa0ab23fff as linuxkit/host-timesync-daemon:085e1910de6f311f96a823eaa10ffd6d92ec9679
+[+ 69m 57s] Building "linuxkit/auditd:98d63a6e0e8303f4aa43f25099080e47aeedd6f0"
+[+ 69m 59s] time="2018-01-16T16:35:22Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 69m 59s] time="2018-01-16T16:35:22Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 69m 59s] time="2018-01-16T16:35:22Z" level=warning msg="certificate with CN Rolf Neugebauer is near expiry" 
+[+ 69m 59s] time="2018-01-16T16:35:22Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 69m 59s] time="2018-01-16T16:35:22Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 70m 00s] time="2018-01-16T16:35:22Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 70m 00s] time="2018-01-16T16:35:23Z" level=warning msg="certificate with CN Rolf Neugebauer is near expiry" 
+[+ 70m 00s] Pull (1 of 1): linuxkit/auditd:98d63a6e0e8303f4aa43f25099080e47aeedd6f0@sha256:4831294624847a81a904292607e1aa489d5c25f575d6b327bbd737e33f50434a
+[+ 70m 01s] sha256:4831294624847a81a904292607e1aa489d5c25f575d6b327bbd737e33f50434a: Pulling from linuxkit/auditd
+[+ 70m 02s] 7a9e1901dc4d: Pulling fs layer
+[+ 70m 02s] 9d4fdef8538c: Pulling fs layer
+[+ 70m 02s] eab955a4d46b: Pulling fs layer
+[+ 70m 02s] 3402e96a700b: Pulling fs layer
+[+ 70m 02s] 3402e96a700b: Waiting
+[+ 70m 03s] 9d4fdef8538c: Verifying Checksum
+[+ 70m 03s] 9d4fdef8538c: Download complete
+[+ 70m 03s] eab955a4d46b: Download complete
+[+ 70m 03s] 3402e96a700b: Download complete
+[+ 70m 03s] 7a9e1901dc4d: Verifying Checksum
+[+ 70m 03s] 7a9e1901dc4d: Download complete
+[+ 70m 03s] 7a9e1901dc4d: Pull complete
+[+ 70m 04s] 9d4fdef8538c: Pull complete
+[+ 70m 04s] eab955a4d46b: Pull complete
+[+ 70m 04s] 3402e96a700b: Pull complete
+[+ 70m 04s] Digest: sha256:4831294624847a81a904292607e1aa489d5c25f575d6b327bbd737e33f50434a
+[+ 70m 04s] Status: Downloaded newer image for linuxkit/auditd@sha256:4831294624847a81a904292607e1aa489d5c25f575d6b327bbd737e33f50434a
+[+ 70m 04s] Tagging linuxkit/auditd@sha256:4831294624847a81a904292607e1aa489d5c25f575d6b327bbd737e33f50434a as linuxkit/auditd:98d63a6e0e8303f4aa43f25099080e47aeedd6f0
+[+ 70m 04s] Building "linuxkit/extend:e550c16d8464cabeffdff80f27e6fa8278f06dbb"
+[+ 70m 07s] time="2018-01-16T16:35:29Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 70m 07s] time="2018-01-16T16:35:29Z" level=warning msg="certificate with CN Moby CI is near expiry" 
+[+ 70m 07s] time="2018-01-16T16:35:29Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 70m 07s] time="2018-01-16T16:35:29Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 70m 07s] time="2018-01-16T16:35:29Z" level=warning msg="certificate with CN Rolf Neugebauer is near expiry" 
+[+ 70m 07s] time="2018-01-16T16:35:30Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 70m 08s] time="2018-01-16T16:35:30Z" level=warning msg="certificate with CN Rolf Neugebauer is near expiry" 
+[+ 70m 08s] Pull (1 of 1): linuxkit/extend:e550c16d8464cabeffdff80f27e6fa8278f06dbb@sha256:9393e4c52007fc501a65078b17521ef184e487785cec99fbc15be468c7c21b4e
+[+ 70m 09s] sha256:9393e4c52007fc501a65078b17521ef184e487785cec99fbc15be468c7c21b4e: Pulling from linuxkit/extend
+[+ 70m 09s] Digest: sha256:9393e4c52007fc501a65078b17521ef184e487785cec99fbc15be468c7c21b4e
+[+ 70m 09s] Status: Image is up to date for linuxkit/extend@sha256:9393e4c52007fc501a65078b17521ef184e487785cec99fbc15be468c7c21b4e
+[+ 70m 09s] Tagging linuxkit/extend@sha256:9393e4c52007fc501a65078b17521ef184e487785cec99fbc15be468c7c21b4e as linuxkit/extend:e550c16d8464cabeffdff80f27e6fa8278f06dbb
+[+ 70m 09s] Building "linuxkit/getty:22e27189b6b354e1d5d38fc0536a5af3f2adb79f"
+[+ 70m 12s] time="2018-01-16T16:35:35Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 70m 12s] time="2018-01-16T16:35:35Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 70m 12s] time="2018-01-16T16:35:35Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 70m 12s] time="2018-01-16T16:35:35Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 70m 13s] time="2018-01-16T16:35:35Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 70m 13s] time="2018-01-16T16:35:36Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 70m 13s] Pull (1 of 1): linuxkit/getty:22e27189b6b354e1d5d38fc0536a5af3f2adb79f@sha256:9053b334292f5c71b2c5db9e949b3e98b89ec1520debcb547f295c52a252040f
+[+ 70m 14s] sha256:9053b334292f5c71b2c5db9e949b3e98b89ec1520debcb547f295c52a252040f: Pulling from linuxkit/getty
+[+ 70m 15s] Digest: sha256:9053b334292f5c71b2c5db9e949b3e98b89ec1520debcb547f295c52a252040f
+[+ 70m 15s] Status: Image is up to date for linuxkit/getty@sha256:9053b334292f5c71b2c5db9e949b3e98b89ec1520debcb547f295c52a252040f
+[+ 70m 15s] Tagging linuxkit/getty@sha256:9053b334292f5c71b2c5db9e949b3e98b89ec1520debcb547f295c52a252040f as linuxkit/getty:22e27189b6b354e1d5d38fc0536a5af3f2adb79f
+[+ 70m 15s] Building "linuxkit/vpnkit-expose-port:728e5fe9e6b818d9825b28826b929ae75a386e9e"
+[+ 70m 17s] time="2018-01-16T16:35:40Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 70m 17s] time="2018-01-16T16:35:40Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 70m 17s] time="2018-01-16T16:35:40Z" level=warning msg="certificate with CN Rolf Neugebauer is near expiry" 
+[+ 70m 17s] time="2018-01-16T16:35:40Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 70m 18s] time="2018-01-16T16:35:40Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 70m 18s] time="2018-01-16T16:35:41Z" level=warning msg="certificate with CN Rolf Neugebauer is near expiry" 
+[+ 70m 18s] time="2018-01-16T16:35:41Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 70m 18s] Pull (1 of 1): linuxkit/vpnkit-expose-port:728e5fe9e6b818d9825b28826b929ae75a386e9e@sha256:285c1dca0f850ca6d890e90ecbcd400209b7239596fd46012876e0e0eb644434
+[+ 70m 19s] sha256:285c1dca0f850ca6d890e90ecbcd400209b7239596fd46012876e0e0eb644434: Pulling from linuxkit/vpnkit-expose-port
+[+ 70m 20s] Digest: sha256:285c1dca0f850ca6d890e90ecbcd400209b7239596fd46012876e0e0eb644434
+[+ 70m 20s] Status: Image is up to date for linuxkit/vpnkit-expose-port@sha256:285c1dca0f850ca6d890e90ecbcd400209b7239596fd46012876e0e0eb644434
+[+ 70m 20s] Tagging linuxkit/vpnkit-expose-port@sha256:285c1dca0f850ca6d890e90ecbcd400209b7239596fd46012876e0e0eb644434 as linuxkit/vpnkit-expose-port:728e5fe9e6b818d9825b28826b929ae75a386e9e
+[+ 70m 20s] Building "linuxkit/mount:3c37d46558c794e8535daa805e7037cb8e82c141"
+[+ 70m 22s] time="2018-01-16T16:35:45Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 70m 22s] time="2018-01-16T16:35:45Z" level=warning msg="certificate with CN Rolf Neugebauer is near expiry" 
+[+ 70m 22s] time="2018-01-16T16:35:45Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 70m 22s] time="2018-01-16T16:35:45Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 70m 23s] time="2018-01-16T16:35:45Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 70m 23s] time="2018-01-16T16:35:46Z" level=warning msg="certificate with CN Rolf Neugebauer is near expiry" 
+[+ 70m 24s] time="2018-01-16T16:35:46Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 70m 24s] Pull (1 of 1): linuxkit/mount:3c37d46558c794e8535daa805e7037cb8e82c141@sha256:28b42f8d3a174a6fd0d6885c85baaf8b86de9f0840b13b60ac3a1490394ff5f0
+[+ 70m 25s] sha256:28b42f8d3a174a6fd0d6885c85baaf8b86de9f0840b13b60ac3a1490394ff5f0: Pulling from linuxkit/mount
+[+ 70m 25s] Digest: sha256:28b42f8d3a174a6fd0d6885c85baaf8b86de9f0840b13b60ac3a1490394ff5f0
+[+ 70m 25s] Status: Image is up to date for linuxkit/mount@sha256:28b42f8d3a174a6fd0d6885c85baaf8b86de9f0840b13b60ac3a1490394ff5f0
+[+ 70m 25s] Tagging linuxkit/mount@sha256:28b42f8d3a174a6fd0d6885c85baaf8b86de9f0840b13b60ac3a1490394ff5f0 as linuxkit/mount:3c37d46558c794e8535daa805e7037cb8e82c141
+[+ 70m 25s] Building "linuxkit/trim-after-delete:5dad8b705f9c0ab2bb7e43a8cada06f3422feb54"
+[+ 70m 28s] time="2018-01-16T16:35:51Z" level=warning msg="certificate with CN Moby CI is near expiry" 
+[+ 70m 28s] time="2018-01-16T16:35:51Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 70m 28s] time="2018-01-16T16:35:51Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 70m 28s] time="2018-01-16T16:35:51Z" level=warning msg="certificate with CN Rolf Neugebauer is near expiry" 
+[+ 70m 28s] time="2018-01-16T16:35:51Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 70m 28s] time="2018-01-16T16:35:51Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 70m 29s] time="2018-01-16T16:35:52Z" level=warning msg="certificate with CN Rolf Neugebauer is near expiry" 
+[+ 70m 29s] Pull (1 of 1): linuxkit/trim-after-delete:5dad8b705f9c0ab2bb7e43a8cada06f3422feb54@sha256:289cb53cba29311532bf8cb46fa3a0b4006beb3e18ea11314bf1e7b70c703c1c
+[+ 70m 31s] sha256:289cb53cba29311532bf8cb46fa3a0b4006beb3e18ea11314bf1e7b70c703c1c: Pulling from linuxkit/trim-after-delete
+[+ 70m 31s] Digest: sha256:289cb53cba29311532bf8cb46fa3a0b4006beb3e18ea11314bf1e7b70c703c1c
+[+ 70m 31s] Status: Image is up to date for linuxkit/trim-after-delete@sha256:289cb53cba29311532bf8cb46fa3a0b4006beb3e18ea11314bf1e7b70c703c1c
+[+ 70m 31s] Tagging linuxkit/trim-after-delete@sha256:289cb53cba29311532bf8cb46fa3a0b4006beb3e18ea11314bf1e7b70c703c1c as linuxkit/trim-after-delete:5dad8b705f9c0ab2bb7e43a8cada06f3422feb54
+[+ 70m 32s] Building "linuxkit/metadata:f3bae5ad34d63c9ec8ff35bda8ff4e92b3420168"
+[+ 70m 34s] time="2018-01-16T16:35:57Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 70m 34s] time="2018-01-16T16:35:57Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 70m 34s] time="2018-01-16T16:35:57Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 70m 34s] time="2018-01-16T16:35:57Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 70m 35s] time="2018-01-16T16:35:58Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 70m 35s] time="2018-01-16T16:35:58Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 70m 35s] No trust data for f3bae5ad34d63c9ec8ff35bda8ff4e92b3420168
+[+ 70m 35s] No image pulled, continuing with build
+[+ 70m 38s] time="2018-01-16T16:36:01Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 70m 38s] time="2018-01-16T16:36:01Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 70m 38s] time="2018-01-16T16:36:01Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 70m 38s] time="2018-01-16T16:36:01Z" level=warning msg="certificate with CN Rolf Neugebauer is near expiry" 
+[+ 70m 38s] time="2018-01-16T16:36:01Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 70m 39s] time="2018-01-16T16:36:02Z" level=warning msg="certificate with CN Rolf Neugebauer is near expiry" 
+[+ 70m 40s] time="2018-01-16T16:36:02Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 70m 40s] time="2018-01-16T16:36:03Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 70m 40s] Sending build context to Docker daemon  457.2kB
+[+ 70m 40s] Step 1/14 : FROM linuxkit/alpine@sha256:23ff38309514359a1436f7ce80333da7ee097fcd50ef66300f1483edb2d8a8ed AS mirror
+[+ 70m 40s]  ---> 4d01d9a77113
+[+ 70m 40s] Step 2/14 : RUN apk add --no-cache go musl-dev linux-headers
+[+ 70m 40s]  ---> Running in 159fb23865e9
+[+ 70m 41s] (1/15) Installing binutils-libs (2.28-r3)
+[+ 70m 41s] (2/15) Installing binutils (2.28-r3)
+[+ 70m 41s] (3/15) Installing gmp (6.1.2-r1)
+[+ 70m 41s] (4/15) Installing isl (0.18-r0)
+[+ 70m 41s] (5/15) Installing libgomp (6.4.0-r5)
+[+ 70m 41s] (6/15) Installing libatomic (6.4.0-r5)
+[+ 70m 41s] (7/15) Installing pkgconf (1.3.10-r0)
+[+ 70m 41s] (8/15) Installing libgcc (6.4.0-r5)
+[+ 70m 41s] (9/15) Installing mpfr3 (3.1.5-r1)
+[+ 70m 41s] (10/15) Installing mpc1 (1.0.3-r1)
+[+ 70m 41s] (11/15) Installing libstdc++ (6.4.0-r5)
+[+ 70m 41s] (12/15) Installing gcc (6.4.0-r5)
+[+ 70m 42s] (13/15) Installing go (1.9.2-r1)
+[+ 70m 44s] (14/15) Installing linux-headers (4.4.6-r2)
+[+ 70m 44s] (15/15) Installing musl-dev (1.1.18-r2)
+[+ 70m 45s] Executing busybox-1.27.2-r6.trigger
+[+ 70m 45s] OK: 297 MiB in 26 packages
+[+ 70m 48s]  ---> 1712da4c09df
+[+ 70m 48s] Removing intermediate container 159fb23865e9
+[+ 70m 48s] Step 3/14 : ENV GOPATH /go PATH $PATH:/go/bin
+[+ 70m 48s]  ---> Running in 339281cfbd09
+[+ 70m 48s]  ---> 32ceacd5a377
+[+ 70m 48s] Removing intermediate container 339281cfbd09
+[+ 70m 48s] Step 4/14 : COPY . /go/src/metadata/
+[+ 70m 49s]  ---> 5fd92df1c465
+[+ 70m 49s] Removing intermediate container 8528e8ea900f
+[+ 70m 49s] Step 5/14 : RUN go-compile.sh /go/src/metadata
+[+ 70m 49s]  ---> Running in 9827a1bd9899
+[+ 70m 49s] [91mgofmt...
+[+ 70m 49s] [0m[91mgovet...
+[+ 70m 49s] [0m[91mgolint...
+[+ 70m 49s] [0m[91mineffassign...
+[+ 70m 50s] [0m[91mgo test...
+[+ 70m 50s] [0mPASS
+[+ 70m 53s] ok  	metadata	0.009s
+[+ 70m 53s] [91mgo build...
+[+ 70m 53s] [0m[91m# metadata
+[+ 71m 06s] warning: unable to find runtime/cgo.a
+[+ 71m 06s] [0m ---> c45497c512ad
+[+ 71m 06s] Removing intermediate container 9827a1bd9899
+[+ 71m 06s] Step 6/14 : RUN mkdir -p out/tmp out/var out/run out/dev out/etc out/etc/ssl/certs
+[+ 71m 07s]  ---> Running in cd9afbf1d54e
+[+ 71m 07s]  ---> 6f7c08c818bb
+[+ 71m 07s] Removing intermediate container cd9afbf1d54e
+[+ 71m 07s] Step 7/14 : FROM scratch
+[+ 71m 07s]  ---> 
+[+ 71m 07s] Step 8/14 : ENTRYPOINT 
+[+ 71m 07s]  ---> Running in a31cda1e69bc
+[+ 71m 07s]  ---> f1f5227c2c38
+[+ 71m 07s] Removing intermediate container a31cda1e69bc
+[+ 71m 07s] Step 9/14 : CMD 
+[+ 71m 07s]  ---> Running in cd8e70e46f54
+[+ 71m 08s]  ---> 91178ab1ec74
+[+ 71m 08s] Removing intermediate container cd8e70e46f54
+[+ 71m 08s] Step 10/14 : WORKDIR /
+[+ 71m 08s]  ---> 4c4529a8af6b
+[+ 71m 08s] Removing intermediate container 4f5a262b15e6
+[+ 71m 08s] Step 11/14 : COPY --from=mirror /go/bin/metadata /usr/bin/metadata
+[+ 71m 08s]  ---> 082dc8780c31
+[+ 71m 08s] Removing intermediate container 2033947e7d88
+[+ 71m 08s] Step 12/14 : COPY --from=mirror /out/ /
+[+ 71m 09s]  ---> 411ffd683716
+[+ 71m 09s] Removing intermediate container 79f91a5c4d91
+[+ 71m 09s] Step 13/14 : CMD /usr/bin/metadata
+[+ 71m 09s]  ---> Running in 6b34283abfb8
+[+ 71m 09s]  ---> e2a6cebdd03d
+[+ 71m 09s] Removing intermediate container 6b34283abfb8
+[+ 71m 09s] Step 14/14 : LABEL org.mobyproject.config '{"capabilities":["CAP_SYS_ADMIN","CAP_NET_ADMIN"],"binds":["/dev:/dev","/var:/var","/run:/run","/sys:/sys","/etc/resolv.conf:/etc/resolv.conf","/etc/ssl/certs:/etc/ssl/certs"],"tmpfs":["/tmp"],"readonly":true}' org.mobyproject.linuxkit.revision '72257c61e727676acc02d27c3e6e1d2a12166c7b' org.mobyproject.linuxkit.version '0.0' org.opencontainers.image.revision '72257c61e727676acc02d27c3e6e1d2a12166c7b' org.opencontainers.image.source 'https://github.com/linuxkit/linuxkit'
+[+ 71m 09s]  ---> Running in ba495460cdef
+[+ 71m 09s]  ---> d948fbaad6ca
+[+ 71m 09s] Removing intermediate container ba495460cdef
+[+ 71m 09s] Successfully built d948fbaad6ca
+[+ 71m 09s] Successfully tagged linuxkit/metadata:f3bae5ad34d63c9ec8ff35bda8ff4e92b3420168-amd64
+[+ 71m 09s] Tagging linuxkit/alpine@sha256:23ff38309514359a1436f7ce80333da7ee097fcd50ef66300f1483edb2d8a8ed as linuxkit/alpine:d307c8a386fa3f32cddda9409b9687e191cdd6f1
+[+ 71m 09s] Tagging linuxkit/metadata:f3bae5ad34d63c9ec8ff35bda8ff4e92b3420168-amd64 as linuxkit/metadata:f3bae5ad34d63c9ec8ff35bda8ff4e92b3420168
+[+ 71m 09s] Build complete, not pushing, all done.
+[+ 71m 09s] Building "linuxkit/modprobe:1a192d168adadec47afa860e3fc874fbc2a823ff"
+[+ 71m 12s] time="2018-01-16T16:36:35Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 71m 12s] time="2018-01-16T16:36:35Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 71m 12s] time="2018-01-16T16:36:35Z" level=warning msg="certificate with CN Rolf Neugebauer is near expiry" 
+[+ 71m 12s] time="2018-01-16T16:36:35Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 71m 12s] time="2018-01-16T16:36:35Z" level=warning msg="certificate with CN Moby CI is near expiry" 
+[+ 71m 12s] time="2018-01-16T16:36:35Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 71m 13s] time="2018-01-16T16:36:35Z" level=warning msg="certificate with CN Rolf Neugebauer is near expiry" 
+[+ 71m 13s] Pull (1 of 1): linuxkit/modprobe:1a192d168adadec47afa860e3fc874fbc2a823ff@sha256:75f322bfcb559be9f8a70fa437f0e641772d0c01f27c67827d4d027248946ae3
+[+ 71m 14s] sha256:75f322bfcb559be9f8a70fa437f0e641772d0c01f27c67827d4d027248946ae3: Pulling from linuxkit/modprobe
+[+ 71m 14s] Digest: sha256:75f322bfcb559be9f8a70fa437f0e641772d0c01f27c67827d4d027248946ae3
+[+ 71m 14s] Status: Image is up to date for linuxkit/modprobe@sha256:75f322bfcb559be9f8a70fa437f0e641772d0c01f27c67827d4d027248946ae3
+[+ 71m 14s] Tagging linuxkit/modprobe@sha256:75f322bfcb559be9f8a70fa437f0e641772d0c01f27c67827d4d027248946ae3 as linuxkit/modprobe:1a192d168adadec47afa860e3fc874fbc2a823ff
+[+ 71m 14s] Building "linuxkit/ip:284c21791d8c05c49eccbd8e8cc2fb97bbd61842"
+[+ 71m 17s] time="2018-01-16T16:36:39Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 71m 17s] time="2018-01-16T16:36:39Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 71m 17s] time="2018-01-16T16:36:39Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 71m 17s] time="2018-01-16T16:36:40Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 71m 17s] time="2018-01-16T16:36:40Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 71m 18s] time="2018-01-16T16:36:40Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 71m 18s] Pull (1 of 1): linuxkit/ip:284c21791d8c05c49eccbd8e8cc2fb97bbd61842@sha256:b52a6f9d919e74f3b181c213283d150ff29eece5f8d437b69295a7e1fd285ca5
+[+ 71m 19s] sha256:b52a6f9d919e74f3b181c213283d150ff29eece5f8d437b69295a7e1fd285ca5: Pulling from linuxkit/ip
+[+ 71m 19s] Digest: sha256:b52a6f9d919e74f3b181c213283d150ff29eece5f8d437b69295a7e1fd285ca5
+[+ 71m 19s] Status: Image is up to date for linuxkit/ip@sha256:b52a6f9d919e74f3b181c213283d150ff29eece5f8d437b69295a7e1fd285ca5
+[+ 71m 19s] Tagging linuxkit/ip@sha256:b52a6f9d919e74f3b181c213283d150ff29eece5f8d437b69295a7e1fd285ca5 as linuxkit/ip:284c21791d8c05c49eccbd8e8cc2fb97bbd61842
+[+ 71m 20s] Building "linuxkit/rngd:94e01a4b16fadb053455cdc2269c4eb0b39199cd"
+[+ 71m 22s] time="2018-01-16T16:36:45Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 71m 22s] time="2018-01-16T16:36:45Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 71m 22s] time="2018-01-16T16:36:45Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 71m 22s] time="2018-01-16T16:36:45Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 71m 23s] time="2018-01-16T16:36:46Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 71m 23s] Pull (1 of 1): linuxkit/rngd:94e01a4b16fadb053455cdc2269c4eb0b39199cd@sha256:4637e94618d1f7bf19ee19a2b5daad7ae9006bf299802e5897c1c4880fd584ad
+[+ 71m 24s] sha256:4637e94618d1f7bf19ee19a2b5daad7ae9006bf299802e5897c1c4880fd584ad: Pulling from linuxkit/rngd
+[+ 71m 24s] Digest: sha256:4637e94618d1f7bf19ee19a2b5daad7ae9006bf299802e5897c1c4880fd584ad
+[+ 71m 24s] Status: Image is up to date for linuxkit/rngd@sha256:4637e94618d1f7bf19ee19a2b5daad7ae9006bf299802e5897c1c4880fd584ad
+[+ 71m 24s] Tagging linuxkit/rngd@sha256:4637e94618d1f7bf19ee19a2b5daad7ae9006bf299802e5897c1c4880fd584ad as linuxkit/rngd:94e01a4b16fadb053455cdc2269c4eb0b39199cd
+[+ 71m 24s] Building "linuxkit/qemu-ga:61f1964a9ee6dfe30fb4c09472370ed916e91923"
+[+ 71m 27s] time="2018-01-16T16:36:50Z" level=warning msg="certificate with CN Rolf Neugebauer is near expiry" 
+[+ 71m 27s] time="2018-01-16T16:36:50Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 71m 27s] time="2018-01-16T16:36:50Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 71m 27s] time="2018-01-16T16:36:50Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 71m 27s] time="2018-01-16T16:36:50Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 71m 28s] time="2018-01-16T16:36:50Z" level=warning msg="certificate with CN Rolf Neugebauer is near expiry" 
+[+ 71m 28s] Pull (1 of 1): linuxkit/qemu-ga:61f1964a9ee6dfe30fb4c09472370ed916e91923@sha256:59cbd6fd11b0b1c9cd137ff01edce0851e8e6eb694ed70de8f06361c8c0f07ab
+[+ 71m 29s] sha256:59cbd6fd11b0b1c9cd137ff01edce0851e8e6eb694ed70de8f06361c8c0f07ab: Pulling from linuxkit/qemu-ga
+[+ 71m 29s] 7ef23f47c830: Pulling fs layer
+[+ 71m 30s] 7ef23f47c830: Verifying Checksum
+[+ 71m 30s] 7ef23f47c830: Download complete
+[+ 71m 30s] 7ef23f47c830: Pull complete
+[+ 71m 30s] Digest: sha256:59cbd6fd11b0b1c9cd137ff01edce0851e8e6eb694ed70de8f06361c8c0f07ab
+[+ 71m 30s] Status: Downloaded newer image for linuxkit/qemu-ga@sha256:59cbd6fd11b0b1c9cd137ff01edce0851e8e6eb694ed70de8f06361c8c0f07ab
+[+ 71m 30s] Tagging linuxkit/qemu-ga@sha256:59cbd6fd11b0b1c9cd137ff01edce0851e8e6eb694ed70de8f06361c8c0f07ab as linuxkit/qemu-ga:61f1964a9ee6dfe30fb4c09472370ed916e91923
+[+ 71m 30s] Building "linuxkit/runc:7b15b00b4e3507d62e3ed8d44dfe650561cd35ff"
+[+ 71m 32s] time="2018-01-16T16:36:55Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 71m 32s] time="2018-01-16T16:36:55Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 71m 32s] time="2018-01-16T16:36:55Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 71m 33s] time="2018-01-16T16:36:56Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 71m 33s] time="2018-01-16T16:36:56Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 71m 33s] Pull (1 of 1): linuxkit/runc:7b15b00b4e3507d62e3ed8d44dfe650561cd35ff@sha256:b3695ac8679918b793d5034e0ab862da545a1e24e7b032f6c11816fa745142a8
+[+ 71m 35s] sha256:b3695ac8679918b793d5034e0ab862da545a1e24e7b032f6c11816fa745142a8: Pulling from linuxkit/runc
+[+ 71m 35s] Digest: sha256:b3695ac8679918b793d5034e0ab862da545a1e24e7b032f6c11816fa745142a8
+[+ 71m 35s] Status: Image is up to date for linuxkit/runc@sha256:b3695ac8679918b793d5034e0ab862da545a1e24e7b032f6c11816fa745142a8
+[+ 71m 35s] Tagging linuxkit/runc@sha256:b3695ac8679918b793d5034e0ab862da545a1e24e7b032f6c11816fa745142a8 as linuxkit/runc:7b15b00b4e3507d62e3ed8d44dfe650561cd35ff
+[+ 71m 35s] Building "linuxkit/sysctl:4c1ef93bb5eb1a877318db4b2daa6768ed002e21"
+[+ 71m 38s] time="2018-01-16T16:37:00Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 71m 38s] time="2018-01-16T16:37:00Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 71m 38s] time="2018-01-16T16:37:00Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 71m 38s] time="2018-01-16T16:37:01Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 71m 38s] time="2018-01-16T16:37:01Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 71m 38s] Pull (1 of 1): linuxkit/sysctl:4c1ef93bb5eb1a877318db4b2daa6768ed002e21@sha256:ba090d2c2fe8282081c89eb784ffb6e1281efb9ac284f92e08f2698b417c9ea1
+[+ 71m 39s] sha256:ba090d2c2fe8282081c89eb784ffb6e1281efb9ac284f92e08f2698b417c9ea1: Pulling from linuxkit/sysctl
+[+ 71m 40s] Digest: sha256:ba090d2c2fe8282081c89eb784ffb6e1281efb9ac284f92e08f2698b417c9ea1
+[+ 71m 40s] Status: Image is up to date for linuxkit/sysctl@sha256:ba090d2c2fe8282081c89eb784ffb6e1281efb9ac284f92e08f2698b417c9ea1
+[+ 71m 40s] Tagging linuxkit/sysctl@sha256:ba090d2c2fe8282081c89eb784ffb6e1281efb9ac284f92e08f2698b417c9ea1 as linuxkit/sysctl:4c1ef93bb5eb1a877318db4b2daa6768ed002e21
+[+ 71m 40s] Building "linuxkit/format:5a1140cb65e733f26de727fa684fef1326e9d5ab"
+[+ 71m 42s] time="2018-01-16T16:37:05Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 71m 42s] time="2018-01-16T16:37:05Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 71m 42s] time="2018-01-16T16:37:05Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 71m 42s] time="2018-01-16T16:37:05Z" level=warning msg="certificate with CN Rolf Neugebauer is near expiry" 
+[+ 71m 43s] time="2018-01-16T16:37:06Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 71m 43s] time="2018-01-16T16:37:06Z" level=warning msg="certificate with CN Rolf Neugebauer is near expiry" 
+[+ 71m 44s] time="2018-01-16T16:37:07Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 71m 44s] Pull (1 of 1): linuxkit/format:5a1140cb65e733f26de727fa684fef1326e9d5ab@sha256:12d8f7badad21be58e7588acd956338db6c21cd33325717135a9e6da7560fba3
+[+ 71m 45s] sha256:12d8f7badad21be58e7588acd956338db6c21cd33325717135a9e6da7560fba3: Pulling from linuxkit/format
+[+ 71m 45s] Digest: sha256:12d8f7badad21be58e7588acd956338db6c21cd33325717135a9e6da7560fba3
+[+ 71m 45s] Status: Image is up to date for linuxkit/format@sha256:12d8f7badad21be58e7588acd956338db6c21cd33325717135a9e6da7560fba3
+[+ 71m 45s] Tagging linuxkit/format@sha256:12d8f7badad21be58e7588acd956338db6c21cd33325717135a9e6da7560fba3 as linuxkit/format:5a1140cb65e733f26de727fa684fef1326e9d5ab
+[+ 71m 45s] Building "linuxkit/openntpd:536e5947607c9e6a6771957c2ff817230cba0d3c"
+[+ 71m 48s] time="2018-01-16T16:37:11Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 71m 48s] time="2018-01-16T16:37:11Z" level=warning msg="certificate with CN Rolf Neugebauer is near expiry" 
+[+ 71m 48s] time="2018-01-16T16:37:11Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 71m 48s] time="2018-01-16T16:37:11Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 71m 48s] time="2018-01-16T16:37:11Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 71m 49s] time="2018-01-16T16:37:12Z" level=warning msg="certificate with CN Rolf Neugebauer is near expiry" 
+[+ 71m 49s] time="2018-01-16T16:37:12Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 71m 49s] Pull (1 of 1): linuxkit/openntpd:536e5947607c9e6a6771957c2ff817230cba0d3c@sha256:0b55240ecc0758d11e20191cab68cc57dfb2676ebb58b405ac168547c176dd0c
+[+ 71m 50s] sha256:0b55240ecc0758d11e20191cab68cc57dfb2676ebb58b405ac168547c176dd0c: Pulling from linuxkit/openntpd
+[+ 71m 51s] Digest: sha256:0b55240ecc0758d11e20191cab68cc57dfb2676ebb58b405ac168547c176dd0c
+[+ 71m 51s] Status: Image is up to date for linuxkit/openntpd@sha256:0b55240ecc0758d11e20191cab68cc57dfb2676ebb58b405ac168547c176dd0c
+[+ 71m 51s] Tagging linuxkit/openntpd@sha256:0b55240ecc0758d11e20191cab68cc57dfb2676ebb58b405ac168547c176dd0c as linuxkit/openntpd:536e5947607c9e6a6771957c2ff817230cba0d3c
+[+ 71m 51s] Building "linuxkit/vsudd:e4e8de4d4fae94e851fbf3d5a0455d766747ac2b"
+[+ 71m 53s] time="2018-01-16T16:37:16Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 71m 53s] time="2018-01-16T16:37:16Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 71m 53s] time="2018-01-16T16:37:16Z" level=warning msg="certificate with CN Rolf Neugebauer is near expiry" 
+[+ 71m 53s] time="2018-01-16T16:37:16Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 71m 54s] time="2018-01-16T16:37:16Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 71m 54s] time="2018-01-16T16:37:17Z" level=warning msg="certificate with CN Rolf Neugebauer is near expiry" 
+[+ 71m 54s] Pull (1 of 1): linuxkit/vsudd:e4e8de4d4fae94e851fbf3d5a0455d766747ac2b@sha256:c19a846e58df677f223fdeaa81474d50898140a79a426edc39a4c225a8c24724
+[+ 71m 55s] sha256:c19a846e58df677f223fdeaa81474d50898140a79a426edc39a4c225a8c24724: Pulling from linuxkit/vsudd
+[+ 71m 56s] Digest: sha256:c19a846e58df677f223fdeaa81474d50898140a79a426edc39a4c225a8c24724
+[+ 71m 56s] Status: Image is up to date for linuxkit/vsudd@sha256:c19a846e58df677f223fdeaa81474d50898140a79a426edc39a4c225a8c24724
+[+ 71m 56s] Tagging linuxkit/vsudd@sha256:c19a846e58df677f223fdeaa81474d50898140a79a426edc39a4c225a8c24724 as linuxkit/vsudd:e4e8de4d4fae94e851fbf3d5a0455d766747ac2b
+[+ 71m 56s] Building "linuxkit/firmware:752800978af4dc96a28fa9ccc3f68b2da69584bf"
+[+ 71m 57s] you are not authorized to perform this operation: server returned 401.
+[+ 71m 57s] No image pulled, continuing with build
+[+ 72m 00s] time="2018-01-16T16:37:23Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 72m 00s] time="2018-01-16T16:37:23Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 72m 00s] time="2018-01-16T16:37:23Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 72m 00s] time="2018-01-16T16:37:23Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 72m 01s] time="2018-01-16T16:37:24Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 72m 01s] time="2018-01-16T16:37:24Z" level=warning msg="certificate with CN Rolf Neugebauer is near expiry" 
+[+ 72m 01s] time="2018-01-16T16:37:24Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 72m 01s] time="2018-01-16T16:37:24Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 72m 01s] time="2018-01-16T16:37:24Z" level=warning msg="certificate with CN Justin Cormack is near expiry" 
+[+ 72m 01s] time="2018-01-16T16:37:24Z" level=warning msg="certificate with CN Rolf Neugebauer is near expiry" 
+[+ 72m 01s] time="2018-01-16T16:37:24Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 72m 01s] time="2018-01-16T16:37:24Z" level=warning msg="certificate with CN  is near expiry" 
+[+ 72m 01s] Sending build context to Docker daemon  5.632kB
+[+ 72m 01s] Step 1/14 : FROM linuxkit/kernel@sha256:3776e97540f934f5a8de814766afb32d4e8f06bc7b98d1fd9d6769836f72eed6 AS kernel
+[+ 72m 03s] sha256:3776e97540f934f5a8de814766afb32d4e8f06bc7b98d1fd9d6769836f72eed6: Pulling from linuxkit/kernel
+[+ 72m 03s] 2cfd57250ea6: Pulling fs layer
+[+ 72m 07s] 2cfd57250ea6: Verifying Checksum
+[+ 72m 07s] 2cfd57250ea6: Download complete
+[+ 72m 10s] 2cfd57250ea6: Pull complete
+[+ 72m 10s] Digest: sha256:3776e97540f934f5a8de814766afb32d4e8f06bc7b98d1fd9d6769836f72eed6
+[+ 72m 10s] Status: Downloaded newer image for linuxkit/kernel@sha256:3776e97540f934f5a8de814766afb32d4e8f06bc7b98d1fd9d6769836f72eed6
+[+ 72m 10s]  ---> 4d75e0cef98e
+[+ 72m 10s] Step 2/14 : FROM linuxkit/alpine@sha256:7980a7aad641a0444cec1b0eb0d264c1f22468a8379c36da0619c788a05ecc73 AS build
+[+ 72m 11s] sha256:7980a7aad641a0444cec1b0eb0d264c1f22468a8379c36da0619c788a05ecc73: Pulling from linuxkit/alpine
+[+ 72m 11s] ff3a5c916c92: Already exists
+[+ 72m 11s] a1adcf8cee7a: Pulling fs layer
+[+ 72m 11s] add94256e126: Pulling fs layer
+[+ 72m 11s] 16ddcbbfd9a6: Pulling fs layer
+[+ 72m 11s] 116db4b0d22f: Pulling fs layer
+[+ 72m 11s] f118a4a4b6ab: Pulling fs layer
+[+ 72m 11s] 516564190998: Pulling fs layer
+[+ 72m 11s] aecdb8993ce9: Pulling fs layer
+[+ 72m 11s] bff0277e3bc9: Pulling fs layer
+[+ 72m 11s] bb8a576e4d6e: Pulling fs layer
+[+ 72m 11s] aecdb8993ce9: Waiting
+[+ 72m 11s] 116db4b0d22f: Waiting
+[+ 72m 11s] f118a4a4b6ab: Waiting
+[+ 72m 11s] 516564190998: Waiting
+[+ 72m 11s] bff0277e3bc9: Waiting
+[+ 72m 11s] bb8a576e4d6e: Waiting
+[+ 72m 12s] a1adcf8cee7a: Download complete
+[+ 72m 12s] add94256e126: Verifying Checksum
+[+ 72m 12s] add94256e126: Download complete
+[+ 72m 12s] 16ddcbbfd9a6: Verifying Checksum
+[+ 72m 12s] 16ddcbbfd9a6: Download complete
+[+ 72m 12s] a1adcf8cee7a: Pull complete
+[+ 72m 12s] add94256e126: Pull complete
+[+ 72m 13s] 16ddcbbfd9a6: Pull complete
+[+ 72m 13s] 516564190998: Verifying Checksum
+[+ 72m 13s] 516564190998: Download complete
+[+ 72m 15s] f118a4a4b6ab: Verifying Checksum
+[+ 72m 15s] f118a4a4b6ab: Download complete
+[+ 72m 16s] bff0277e3bc9: Verifying Checksum
+[+ 72m 16s] bff0277e3bc9: Download complete
+[+ 72m 17s] bb8a576e4d6e: Verifying Checksum
+[+ 72m 17s] bb8a576e4d6e: Download complete
+[+ 72m 19s] aecdb8993ce9: Verifying Checksum
+[+ 72m 19s] aecdb8993ce9: Download complete
+[+ 72m 23s] 116db4b0d22f: Verifying Checksum
+[+ 72m 23s] 116db4b0d22f: Download complete
+[+ 72m 29s] 116db4b0d22f: Pull complete
+[+ 72m 29s] f118a4a4b6ab: Pull complete
+[+ 72m 29s] 516564190998: Pull complete
+[+ 72m 33s] aecdb8993ce9: Pull complete
+[+ 72m 33s] bff0277e3bc9: Pull complete
+[+ 72m 33s] bb8a576e4d6e: Pull complete
+[+ 72m 33s] Digest: sha256:7980a7aad641a0444cec1b0eb0d264c1f22468a8379c36da0619c788a05ecc73
+[+ 72m 33s] Status: Downloaded newer image for linuxkit/alpine@sha256:7980a7aad641a0444cec1b0eb0d264c1f22468a8379c36da0619c788a05ecc73
+[+ 72m 33s]  ---> 22ced575516d
+[+ 72m 33s] Step 3/14 : RUN apk add --no-cache git kmod
+[+ 72m 33s]  ---> Running in 17609c25afa8
+[+ 72m 33s] (1/8) Installing ca-certificates (20171114-r0)
+[+ 72m 33s] (2/8) Installing libssh2 (1.8.0-r2)
+[+ 72m 33s] (3/8) Installing libcurl (7.57.0-r0)
+[+ 72m 33s] (4/8) Installing expat (2.2.5-r0)
+[+ 72m 33s] (5/8) Installing pcre2 (10.30-r0)
+[+ 72m 33s] (6/8) Installing git (2.15.0-r1)
+[+ 72m 34s] (7/8) Installing xz-libs (5.2.3-r1)
+[+ 72m 34s] (8/8) Installing kmod (24-r0)
+[+ 72m 34s] Executing busybox-1.27.2-r7.trigger
+[+ 72m 34s] Executing ca-certificates-20171114-r0.trigger
+[+ 72m 34s] OK: 19 MiB in 19 packages
+[+ 72m 34s]  ---> 583dbba8679e
+[+ 72m 34s] Removing intermediate container 17609c25afa8
+[+ 72m 34s] Step 4/14 : ENV FW_URL git://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
+[+ 72m 34s]  ---> Running in 160ef4f236f2
+[+ 72m 34s]  ---> 3bcae7eb33fa
+[+ 72m 34s] Removing intermediate container 160ef4f236f2
+[+ 72m 34s] Step 5/14 : ENV FW_COMMIT 65b1c68c63f974d72610db38dfae49861117cae2
+[+ 72m 35s]  ---> Running in 1d5c99691599
+[+ 72m 35s]  ---> 5366963ad114
+[+ 72m 35s] Removing intermediate container 1d5c99691599
+[+ 72m 35s] Step 6/14 : WORKDIR /
+[+ 72m 35s]  ---> 4433d7bd5fec
+[+ 72m 35s] Removing intermediate container f108a00c745a
+[+ 72m 35s] Step 7/14 : RUN git clone ${FW_URL} &&     cd /linux-firmware &&     git checkout ${FW_COMMIT}
+[+ 72m 35s]  ---> Running in 4ab2c7e9f200
+[+ 72m 35s] [91mCloning into 'linux-firmware'...
+[+ 72m 35s] [0m[91merror: unable to write file ct2fw-3.2.3.0.bin
+[+ 72m 45s] [0m[91merror: unable to write file ct2fw-3.2.5.1.bin
+[+ 72m 45s] [0m[91merror: unable to write file ctefx.bin
+[+ 72m 45s] [0m[91merror: unable to write file ctfw-3.2.1.1.bin
+[+ 72m 45s] [0m[91merror: unable to write file ctfw-3.2.3.0.bin
+[+ 72m 45s] [0m[91merror: unable to write file ctfw-3.2.5.1.bin
+[+ 72m 45s] [0m[91merror: unable to write file ctspeq.bin
+[+ 72m 45s] fatal: cannot create directory at 'cxgb3': No space left on device
+[+ 72m 45s] warning: Clone succeeded, but checkout failed.
+[+ 72m 45s] You can inspect what was checked out with 'git status'
+[+ 72m 45s] and retry the checkout with 'git checkout -f HEAD'
+[+ 72m 45s] 
+[+ 72m 45s] [0mThe command '/bin/sh -c git clone ${FW_URL} &&     cd /linux-firmware &&     git checkout ${FW_COMMIT}' returned a non-zero code: 128
+[+ 72m 45s] exit status 128
+[+ 72m 45s] Makefile:11: recipe for target 'build' failed
+[+ 72m 45s] make[1]: Leaving directory '/tmp/build/pkg'
+[+ 72m 45s] make[1]: *** [build] Error 1
+[+ 72m 45s] Makefile:115: recipe for target 'ci-pr' failed
+[+ 72m 45s] make: *** [ci-pr] Error 2[2018-01-16 16:38.08] Fetching results
+[2018-01-16 16:38.08] Running "scp" "-r" "-i" "/run/secrets/builder-ssh" "-o" "StrictHostKeyChecking=no" "root@35.189.253.28:/tmp/build/test/_results" "."
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!
+Someone could be eavesdropping on you right now (man-in-the-middle attack)!
+It is also possible that a host key has just been changed.
+The fingerprint for the ECDSA key sent by the remote host is
+SHA256:d3CNksjSeqfDyNBOcxf88udY35zAJ52b1rar8P24JXI.
+Please contact your system administrator.
+Add correct host key in /root/.ssh/known_hosts to get rid of this message.
+Offending ECDSA key in /root/.ssh/known_hosts:132
+Password authentication is disabled to avoid man-in-the-middle attacks.
+Keyboard-interactive authentication is disabled to avoid man-in-the-middle attacks.
+[2018-01-16 16:38.12] Removing test VM...
+[2018-01-16 16:38.12] Running "/gcloud/destroy.py" "linuxkit-ci-3"
+INFO:root:Destroying VM
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+[2018-01-16 16:39.02] Failed: recipe for target 'ci-pr' failed
