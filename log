@@ -1,0 +1,69 @@
+=== Docker build CI.Dockerfile
+[2018-01-18 12:52.13] Starting...
+Cloning into '/tmp/with_clone31015261'...
+done.
+HEAD is now at f2a559e Merge pull request #32 from rn/nested
+Sending build context to Docker daemon  85.5 kB
+Step 1/19 : FROM datakit/ci@sha256:daecb5fa1e017c39323d39bebfc0e6f94762452f46c29aafe115e7270166d692 AS build-env
+sha256:daecb5fa1e017c39323d39bebfc0e6f94762452f46c29aafe115e7270166d692: Pulling from datakit/ci
+Digest: sha256:daecb5fa1e017c39323d39bebfc0e6f94762452f46c29aafe115e7270166d692
+Status: Image is up to date for datakit/ci@sha256:daecb5fa1e017c39323d39bebfc0e6f94762452f46c29aafe115e7270166d692
+ ---> f16cddfd6f02
+Step 2/19 : ARG CONFIG=dkciCI
+ ---> Using cache
+ ---> 4e74ec16c763
+Step 3/19 : ADD . /src
+ ---> Using cache
+ ---> df465c9ffe58
+Step 4/19 : WORKDIR /src
+ ---> Using cache
+ ---> 06c3160e958f
+Step 5/19 : RUN sudo chown -R opam /src
+ ---> Using cache
+ ---> 1bcdc6d21587
+Step 6/19 : RUN opam config exec make
+ ---> Using cache
+ ---> 053518f99c8f
+Step 7/19 : FROM alpine:3.5
+3.5: Pulling from library/alpine
+Digest: sha256:9148d069e50eee519ec45e5683e56a1c217b61a52ed90eb77bdce674cc212f1e
+Status: Image is up to date for alpine:3.5
+ ---> 6c6084ed97e5
+Step 8/19 : ENV REQUESTS_CA_BUNDLE /etc/ssl/certs/ca-certificates.crt
+ ---> Using cache
+ ---> 997dacecca10
+Step 9/19 : RUN apk update && apk add 	libev 	docker 	py-pip 	py-setuptools 	tar 	tzdata 	ca-certificates 	openssl 	wget 	bash 	gmp 	openssh-client 	make 	curl 	expect 	qemu-img 	qemu-system-x86_64
+ ---> Using cache
+ ---> 79401a374821
+Step 10/19 : RUN pip install google-api-python-client
+ ---> Using cache
+ ---> f438dde4b71d
+Step 11/19 : RUN pip install google-cloud-storage
+ ---> Using cache
+ ---> fe4cb96d2d05
+Step 12/19 : RUN wget https://github.com/docker/notary/releases/download/v0.4.3/notary-Linux-amd64 -O /usr/local/bin/notary
+ ---> Using cache
+ ---> 73b4e3349da5
+Step 13/19 : RUN echo '06cd02c4c2e7a3b1ad9899b03b3d4dde5392d964c675247d32f604a24661f839 */usr/local/bin/notary' | sha256sum -w -c -
+ ---> Using cache
+ ---> 001ec254c71f
+Step 14/19 : RUN chmod a+x /usr/local/bin/notary
+ ---> Using cache
+ ---> 8e615492a112
+Step 15/19 : USER root
+ ---> Using cache
+ ---> d5c782c65edc
+Step 16/19 : ENTRYPOINT /usr/local/bin/ci
+ ---> Using cache
+ ---> 45e97bf448cd
+Step 17/19 : CMD 
+ ---> Using cache
+ ---> e6c7ac862b70
+Step 18/19 : ADD run-files/gcloud /gcloud
+ ---> Using cache
+ ---> 9771a13b238f
+Step 19/19 : COPY --from=build-env /src/_build/default/src/ci.exe /usr/local/bin/ci
+ ---> Using cache
+ ---> 4cf4d70166fa
+Successfully built 4cf4d70166fa
+[2018-01-18 12:52.17] Success
