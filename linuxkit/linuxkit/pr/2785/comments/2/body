@@ -1,0 +1,13 @@
+@arm64b I am a bit confused by this. If I understood you correctly, the problem is as follows.
+
+We always pass `/dev/urandom` of host to guest as `/dev/hwrng`. This makes the guest always _think_ that it has a real `hwrng`, when it may, in fact, be backed by a lower-entropy device.
+
+Essentially, the expectation on Linux is:
+
+* use `hwrng` to discover if you really have a hardware rng
+* use `random` if you want reliable entropy and are willing to wait for it
+* use `urandom` if you want some entropy, filled in with lower quality if there isn's sufficient available
+
+By promoting `hwrng` in the guest to `urandom` in the host, we are "tricking" the guest into thinking there is a real entropy when there isn't.
+
+Is that it?
