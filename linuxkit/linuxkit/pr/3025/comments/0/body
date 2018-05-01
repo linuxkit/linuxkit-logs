@@ -1,0 +1,48 @@
+I'd just like to try to this pull request again. -- @razaborg had initiated the same issue on (#1675)
+I believe that it is really helpful to most telco people even though the changes are very simple.
+
+<!--
+Please make sure you've read and understood our contributing guidelines;
+https://github.com/linuxkit/linuxkit/blob/master/CONTRIBUTING.md
+
+** Make sure all your commits include a signature generated with `git commit -s` **
+
+For additional information on our contributing process, read our contributing
+guide https://docs.docker.com/opensource/code/
+
+If this is a bug fix, make sure your description includes "fixes #xxxx", or
+"closes #xxxx"
+
+Please provide the following information:
+-->
+
+**- What I did**
+
+I just recompiled the linuxkit moby kernel to get a SCTP support directly from the kernel.
+I personally needed it in a docker for mac usecase to get SCTP support in my containers
+
+**- How I did it**
+I edited the kernel/kernel_config file to set the CONFIG_IP_SCTP option to y and remake the kernel.
+
+**- How to verify it**
+
+```
+host>docker run -it debian
+container>cat /proc/net/protocols 
+protocol  size sockets  memory press maxhdr  slab module     cl co di ac io in de sh ss gs se re sp bi br ha uh gp em
+SCTPv6    1416      1       0   no       0   yes  kernel      y  y  y  y  y  y  y  y  y  y  y  y  n  y  y  y  y  y  y
+SCTP      1256      0       0   no       0   yes  kernel      y  y  y  y  y  y  y  y  y  y  y  y  n  y  y  y  y  y  y
+```
+
+**- Description for the changelog**
+<!--
+Write a short (one line) summary that describes the changes in this
+pull request for inclusion in the changelog:
+-->
+
+In the kernel/kernel_config file :
+```
+before: # CONFIG_IP_SCTP is not set
+after: CONFIG_IP_SCTP=y
+```
+**- A picture of a cute animal (not mandatory but encouraged)**
