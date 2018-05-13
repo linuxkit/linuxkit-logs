@@ -1,0 +1,51 @@
+```
+  * keygen-html: add zip file example
+  
+  The alpha Android app now supports importing from .zip files, so the example
+  contrib code has been updated to show people how to trivially generate .zip
+  files from ... javascript. That's right, the WireGuard repo now contains some
+  more demo javascript.
+  
+  * qemu: retry on 404 in wget for kernel.org race
+  
+  Simple fix for build.wireguard.com's handling of new kernels.
+  
+  * embeddable-wg-library: zero attribute padding
+  
+  This imports 37c876b55a2c00424ccda5a300ab5fdec1d88b22 from upstream libmnl.
+  
+  * allowedips: add selftest for allowedips_walk_by_peer
+  * allowedips: use native endian on lookup
+  * allowedips: produce better assembly with unsigned arithmetic
+  * allowedips: simplify arithmetic
+  
+  A series of bitmath improvements make allowedips lookups sleeker and faster.
+  
+  * socket: use skb_put_data
+  
+  This follows 59ae1d127ac0ae404baf414c434ba2651b793f46 in the kernel.
+  
+  * chacha20poly1305: make gcc 8.1 happy
+  
+  GCC 8.1 does not know about the invariant `0 <= ctx->num < POLY1305_BLOCK_SIZE`.
+  This results in a warning that `memcpy(ctx->data + num, inp, len);` may
+  overflow the `data` field, which is correct for arbitrary values of `num`.
+  
+  To make the invariant explicit we ensure that `num` is in the required range.
+  An alternative would be to change `ctx->num` to a 4-bit bitfield at the point
+  of declaration.
+  
+  This changes the code from `test ebp, ebp; jz end` to `and ebp, 15; jz
+  end`, which have identical performance characteristics.
+  
+  * queueing: preserve pfmemalloc header bit
+  
+  Precautionary measure. Further work on this function goes on in the netdev
+  thread: https://marc.info/?l=linux-netdev&m=152607982125178&w=2
+  
+  * compat: handle RHEL 7.5's recent backports
+  * compat: don't clear header bits on RHEL
+  
+  WireGuard now supports RHEL's latest kernel, which involved fixing some pretty
+  major crashes and clashes with RHEL's backports.
+```
