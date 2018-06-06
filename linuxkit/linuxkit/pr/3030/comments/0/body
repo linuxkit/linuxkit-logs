@@ -1,0 +1,30 @@
+When busybox's reboot processing occurs in init, it runs all SHUTDOWN
+actions that are defined in inittab.  Once those are complete, it will
+trigger either a halt, poweroff, or reboot, depending upon what signal
+is received.  The mechanism that's used to shell out through inittab
+does not allow us to pass through exactly which invocation was
+requested.
+
+Due to the way that rc.shutdown works, it invokes the poweroff action
+for any and all SHUTDOWN callbacks, whether they're a reboot, poweroff,
+or halt.  Instead of handling the reboot(2) syscall in rc.shutdown,
+return after killing and unmounting and let busybox's init process
+decide which reboot(2) action to use.
+
+Signed-off-by: Krister Johansen <krister.johansen@oracle.com>
+
+**- What I did**
+
+Since the `::shutdown` action in inittab can be invoked for multiple different types of shutdowns, use a dummy argument to `rc.shutdown` that does not trigger a reboot or poweroff.  Let init decide once the unmount and kill are complete.
+
+**- How I did it**
+
+Modified how `::shutdown` is calling `rc.shutdown` in /etc/inittab.
+
+**- How to verify it**
+
+I verified this by invoking `reboot`, `poweroff`, and `halt` and validating that each triggered the desired action.
+
+**- Description for the changelog**
+
+Ensure that reboot triggers a reboot instead of a poweroff.
