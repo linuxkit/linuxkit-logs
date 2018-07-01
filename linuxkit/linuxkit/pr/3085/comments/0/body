@@ -1,0 +1,58 @@
+**- What I did**
+
+I re-integrated `projects/logging` (written by @MagnusS ) into current master to allow optional pluggable logging systems.
+
+**- How I did it**
+
+By default everything works as before: `onboot` and `services` log to files in `/var/log`.
+
+However if the socket `/var/run/external-logging.sock` exists then the `service` command will
+
+- connect the `runc` `stdout` and `stderr` to a socketpair, where the other end has been sent to the `/var/run/external-logging.sock`
+- create FIFOs for the services, send the paths to `containerd`, open the other ends and send them to the `/var/run/external-logging.sock`
+ 
+The package `memlogd` provides the `/var/run/external-logging.sock` and writes logs to an in-memory circular buffer. Later on in the boot a service can connect to `memlogd` and stream the logs somewhere else, for example over the network.
+
+**- How to verify it**
+
+```
+$ cd examples
+$ linuxkit build -disable-content-trust logging.yml
+$ linuxkit run logging
+```
+and then in the `getty`:
+```
+/proc/1/root/usr/bin/logread -F
+2018-07-01T13:37:55Z memlogd memlogd started
+2018-07-01T13:37:55Z 001-dhcpcd.out eth0: waiting for carrier
+2018-07-01T13:37:55Z 001-dhcpcd.err eth0: could not detect a useable init system
+2018-07-01T13:37:55Z 001-dhcpcd.out eth0: carrier acquired
+2018-07-01T13:37:55Z 001-dhcpcd.out DUID 00:01:00:01:22:cb:95:b3:02:50:00:00:00:0b
+2018-07-01T13:37:55Z 001-dhcpcd.out eth0: IAID 00:00:00:0b
+2018-07-01T13:37:55Z 001-dhcpcd.out eth0: adding address fe80::3c9c:5e2e:f13c:9016
+2018-07-01T13:37:55Z 001-dhcpcd.out eth0: soliciting an IPv6 router
+2018-07-01T13:37:55Z 001-dhcpcd.out eth0: soliciting a DHCP lease
+2018-07-01T13:37:55Z 001-dhcpcd.out eth0: offered 192.168.65.13 from 192.168.65.1 `vpnkit'
+2018-07-01T13:37:55Z 001-dhcpcd.out eth0: leased 192.168.65.13 for 7200 seconds
+2018-07-01T13:37:55Z 001-dhcpcd.out eth0: adding route to 192.168.65.0/24
+2018-07-01T13:37:55Z 001-dhcpcd.out eth0: adding default route via 192.168.65.1
+2018-07-01T13:37:55Z 001-dhcpcd.out exiting due to oneshot
+2018-07-01T13:37:55Z 001-dhcpcd.out dhcpcd exited
+2018-07-01T13:37:55Z getty.out [INFO  tini (444)] Spawned child process '/usr/bin/rungetty.sh' with pid '461'
+2018-07-01T13:37:55Z getty.out getty: cmdline has console=tty0 but does not exist in /etc/securetty; will not be able to log in as root on this tty tty0.
+2018-07-01T13:37:55Z write-to-the-logs.out hello Sun Jul 1 13:37:55 UTC 2018
+2018-07-01T13:37:56Z write-to-the-logs.out hello Sun Jul 1 13:37:56 UTC 2018
+2018-07-01T13:37:57Z write-to-the-logs.out hello Sun Jul 1 13:37:57 UTC 2018
+2018-07-01T13:37:58Z write-to-the-logs.out hello Sun Jul 1 13:37:58 UTC 2018
+2018-07-01T13:37:59Z write-to-the-logs.out hello Sun Jul 1 13:37:59 UTC 2018
+2018-07-01T13:38:00Z write-to-the-logs.out hello Sun Jul 1 13:38:00 UTC 2018
+2018-07-01T13:38:01Z write-to-the-logs.out hello Sun Jul 1 13:38:01 UTC 2018
+```
+and then edit the `logging.yml` to remove `memlogd` from the `init` section. The VM will now log to files as before.
+
+**- Description for the changelog**
+Support optional pluggable logging systems
+
+**- A picture of a cute animal (not mandatory but encouraged)**
+
+![cute animals](https://pbs.twimg.com/media/Dg28-zJU0AAGYtW.jpg:large)
