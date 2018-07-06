@@ -1,0 +1,17 @@
+@rn with the new hash  `linuxkit/init:6cc1442112980c889230b6449df09d5b48de6854` (and `-disable-content-trust`)
+```
+$ cd test/cases/020_kernel/009_config_4.17.x
+$ linuxkit build -disable-content-trust test.yml
+$ linuxkit run qemu test
+...
+Limits:
+- /proc/sys/kernel/keys/root_maxkeys: 1000000
+
+Kernel config test suite PASSED
+[    5.695258] ACPI: Preparing to enter system sleep state S5
+[    5.696474] reboot: Power down
+```
+
+So ... I think it's looking ok.
+
+Regarding the poweroff delay, it looks like [poweroff.sh](https://github.com/linuxkit/linuxkit/blob/master/test/pkg/poweroff/poweroff.sh) calls `sleep` and then `poweroff -f` so I think the `poweroff -f` was killing the VM before `init` could call `DumpAll` since I mistakenly moved `DumpAll` to after the `for` loop. Now that `init` is calling `Dump` in the `for` loop it should write the test results to the console before the `poweroff.sh`
