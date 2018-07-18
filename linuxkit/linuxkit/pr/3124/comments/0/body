@@ -1,0 +1,32 @@
+```
+  * tools: only error on wg show if all interfaces fail
+  
+  wg(8) now has a more reasonable error code semantic.
+  
+  * receive: account for zero or negative budget
+  
+  A correctness fix that no other drivers implement but that we really should
+  be doing anyway.
+  
+  * recieve: disable NAPI busy polling
+  
+  This avoids adding one reference per peer to the napi_hash hashtable, as
+  normally done by netif_napi_add(). Since we potentially could have up to
+  2^20 peers this would make busy polling very slow globally. This approach is
+  preferable to having only a single napi struct because we get one gro_list
+  per peer, which means packets can be combined nicely even if we have a large
+  number of peers. This is also done by gro_cells_init() in net/core/gro_cells.c.
+  
+  * receive: use gro call instead of plain call
+  
+  This enables incredible performance improvements in some cases. Benchmark and
+  see for yourself. It should affect large TCP flows.
+  
+  * wg-quick: allow link local default gateway
+  
+  IPv6 endpoints will now work better on BSD and Darwin.
+  
+  * device: destroy workqueue before freeing queue
+  
+  Another small correctness fix.
+```
