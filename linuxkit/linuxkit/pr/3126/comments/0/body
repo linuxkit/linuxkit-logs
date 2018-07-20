@@ -1,0 +1,47 @@
+
+
+
+<!--
+Please make sure you've read and understood our contributing guidelines;
+https://github.com/linuxkit/linuxkit/blob/master/CONTRIBUTING.md
+
+** Make sure all your commits include a signature generated with `git commit -s` **
+
+For additional information on our contributing process, read our contributing
+guide https://docs.docker.com/opensource/code/
+
+If this is a bug fix, make sure your description includes "fixes #xxxx", or
+"closes #xxxx"
+
+Please provide the following information:
+-->
+
+**- What I did**
+
+Note there is a confusing name clash between the `pkg/logwrite` package which writes logs to disk and the command-line wrapper program `cmd/logwrite` (part of the `memlogd` package) modified here.
+
+In e8786d73bb5665b4d548781949e318af6967be03 the logwrite package will automatically append .log to every log filename.
+
+In 5201049f2ccb92d3933ab39f1a1a498c09dda669 the init package will send stderr of a service `s` to a log named `s` and the stdout to `s.out`. Therefore the files we create on disk are `s.log` and `s.out.log`.
+
+This patch modifies the memlogd `logwrite` command-line wrapper to use the same convention.
+
+
+**- How to verify it**
+
+```
+/ # ./pkg/memlogd/cmd/logwrite/logwrite -n hello ls /fooo
+/ # ls -1 /var/log
+...
+hello.log
+...
+/ # cat /var/log/hello.log
+2018-07-20T14:46:45Z hello ls: cannot access '/fooo': No such file or directory
+```
+
+**- Description for the changelog**
+The `logwrite` command-line wrapper now follows the same logging convention as the `init` package.
+
+**- A picture of a cute animal (not mandatory but encouraged)**
+
+![Kitten looking confused](http://boredomtherapy.com/wp-content/uploads/2015/03/19-confused-animals.jpg)
