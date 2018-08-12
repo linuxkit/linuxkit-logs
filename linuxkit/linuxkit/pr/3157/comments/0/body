@@ -1,0 +1,53 @@
+```
+  * send: switch handshake stamp to an atomic
+  
+  Rather than abusing the handshake lock, we're much better off just using
+  a boring atomic64 for this. It's simpler and performs better. Also, while
+  we're at it, we set the handshake stamp both before and after the
+  calculations, in case the calculations block for a really long time waiting
+  for the RNG to initialize. 
+  
+  * compat: better atomic acquire/release backport
+  
+  This should fix compilation and correctness on several platforms.
+  
+  * crypto: move simd context to specific type
+  
+  This was a suggestion from Andy Lutomirski on LKML.
+  
+  * chacha20poly1305: selftest: use arrays for test vectors
+  
+  We no longer have lines so long that they're rejected by SMTP servers.
+  
+  * qemu: add easy git harness
+  
+  This makes it a bit easier to use our qemu harness for testing our mainline
+  integration tree.
+  
+  * curve25519-x86_64: avoid use of r12
+  
+  This causes problems with RAP and KERNEXEC for PaX, as r12 is a
+  reserved register.
+  
+  * chacha20: use memmove in case buffers overlap
+  
+  A small correctness fix that we never actually hit in WireGuard but is
+  important especially for moving this into a general purpose library.
+  
+  * curve25519-hacl64: simplify u64_eq_mask
+  * curve25519-hacl64: correct u64_gte_mask
+  
+  Two bitmath fixes from Samuel, which come complete with a z3 script proving
+  their correctness.
+  
+  * timers: include header in right file
+  
+  This fixes compilation in some environments.
+  
+  * netlink: don't start over iteration on multipart non-first allowedips
+  
+  Matt Layher found a bug where a netlink dump of peers would never terminate in
+  some circumstances, causing wg(8) to keep trying forever. We now have a fix as
+  well as a unit test to mitigate this, and we'll be looking to create a fuzzer
+  out of Matt's nice library.
+```
