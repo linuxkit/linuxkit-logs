@@ -1,0 +1,17 @@
+**- What I did**
+
+This change ensures that docker container startup times are in the 390-450ms range.  Previously, I was seeing > 2000ms times on 4.14, and ~1260ms times on 4.17.  The timing was observed by using the example dind build, but adding a shell container so that it's possible to login and run docker commands in the dind container.  After ensuring that a hello-world image has been pulled, the test measured the total time for a 'docker run hello-world' to complete.
+
+**- How I did it**
+
+I used bcc to drill into this problem.  On 4.14, all of the pernet init functions happen serially and under a single lock.  This has been refactored since.  The predominant area where we're spending lots of time blocking in the docker run case is in network namespace creation.  Most of that time is in setup_net().  Having to call per-net initializers for all of the subsystems registered with networking is time consuming.  By switching to modules, we modprobe in just what we need and are able to save about 750ms on a docker run.
+
+The second observation was that we were spending a large amount of time in the rcu_wait_gp and rcu_barrier code in paths that were also part of network namespace creation.  These times remained long even after module conversion.  By increasing the value of HZ, the periodic timer checks more frequently to see if CPUs have reached a quiescent rcu state, which can decrease the amount of time we spend waiting for grace periods and barriers.  This provides a substantial performance increase by removing more than 800ms of time spent waiting for docker run to complete on both 4.14 and 4.17. 
+
+**- How to verify it**
+
+From a docker/dind linuxkit image,  do a nsenter(1) to enter the docker namespaces.  Pull the hello-world image, and then do a 'time docker run hello-world'.  Before this change the times would be in the 2000ms range on 4.14 and in the 1260ms range on 4.17.  Afterwards, they're in the 390-450ms range.
+
+**- Description for the changelog**
+
+Improve docker container startup times on 4.14 and 4.17.
