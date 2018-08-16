@@ -1,0 +1,58 @@
+@rn Sounds reasonable.  Would you like me to make the HZ changes to the older kernels too? (<= 4.9)  Once we get that sorted, I'll work up another version that contains the changes we've discussed.
+
+@ijc I played around with NO_HZ_FULL, but didn't find that it made much of a difference in terms of the performance that we observed for this particular benchmark.  There are some other RCU Kconfig options available in expert mode, but they seem to mostly pertain to when RCU will agree to enable dyntick mode.
+
+I haven't reported this as an issue upstream, mostly because I hadn't managed to convince myself that this was a kernel bug.  The documentation for the HZ values in Kconfig, mentions that a higher HZ rate leads to lower system latencies, though the connection between HZ and RCU isn't explicitly spelled out.  The documentation suggests that lower clock rates are better for throughput based workloads, but that ignores the case here, where we actually get better throughput and latency when RCU grace periods occur more frequently.
+
+The symptom that I observed was that we had a bunch of docker threads waiting in the rcu code for long periods of time:
+```
+    finish_task_switch
+    schedule
+    schedule_timeout
+    __wait_for_common
+    wait_for_completion
+    __wait_rcu_gp
+    synchronize_sched
+    dev_change_name
+    do_setlink
+    rtnl_setlink
+    rtnetlink_rcv_msg
+    netlink_rcv_skb
+    rtnetlink_rcv
+    netlink_unicast
+    netlink_sendmsg
+    sock_sendmsg
+    SYSC_sendto
+    sys_sendto
+    do_syscall_64
+    entry_SYSCALL_64_after_hwframe
+    -                dockerd (7162)
+        162558
+
+    finish_task_switch
+    schedule
+    schedule_timeout
+    __wait_for_common
+    wait_for_completion
+    _rcu_barrier
+    rcu_barrier_sched
+    rcu_barrier
+    dev_change_net_namespace
+    do_setlink
+    rtnl_setlink
+    rtnetlink_rcv_msg
+    netlink_rcv_skb
+    rtnetlink_rcv
+    netlink_unicast
+    netlink_sendmsg
+    sock_sendmsg
+    SYSC_sendto
+    sys_sendto
+    do_syscall_64
+    entry_SYSCALL_64_after_hwframe
+    -                dockerd (7162)
+        214721
+```
+So in the above example, the rtnl_setlink being done as part of docker network setup is blocking for 162ms in a `__wait_rcu_gp()` and 214ms in a `rcu_barrier()`.  A RCU quiescent state must occur before a grace period can advance.  The `rcu_barrier()` code is checking to ensure that all queued RCU callbacks are completed, which also waits for a grace period if any were in fact queued.
+
+The code that notes quiescent states and pokes the RCU core processing is invoked from `rcu_check_callbacks()`, which is called from `update_process_times()`.  Quiescent states may also be noted on context switch.  The update_process_times function is called by the scheduler tick handler and the periodic tick handler.  If we're invoking the periodic tick more frequently, then the kernel is actually generating quiescent states, and running the rcu core processing more frequently.  This is why we see better times. Though, it is a tradeoff.  The kernel is performing periodic work more frequently and taking more interrupts (at a factor of 10x), but it allows us to get a 3-5x improvement on container launch time.
