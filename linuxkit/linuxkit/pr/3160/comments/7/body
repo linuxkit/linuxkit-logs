@@ -1,0 +1,9 @@
+Looking at just the per-net ops_init() calls that take more than 1ms, I get the following list:
+```
+__ip_vs_ftp_init 1.205770
+clusterip_net_init 8.582198
+frame_filter_net_init 23.559237
+frame_nat_net_init 23.989305
+__ip_vs_init 99.905918
+```
+So it's likely that the majority of the savings we're getting from modularization are the result of the ipvs and frame init calls being omitted.  If the mass modularization is not desirable, I can experiment with a more targeted change here.  I haven't had a chance to dig into why these are slower on 4.14 than other versions, though.
