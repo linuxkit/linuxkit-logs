@@ -1,0 +1,30 @@
+As mentioned the test passes using hyperkit. It also passes using `qemu` with `hvf` acceleration, but using `qemu` with `tcg` the test passes but we see:
+```
+2018/09/01 19:43:07 /dev/sda has content. blkid returned: /dev/sda: PTUUID="c4fc29ba" PTTYPE="dos"
+2018/09/01 19:43:07 No eligible disks found
+[   45.443906] NOHZ: local_softirq_pending 10
+[   45.444995] NOHZ: local_softirq_pending 10
+[   45.460075] EXT4-fs (sda1): recovery complete
+[   45.460825] EXT4-fs (sda1): mounted filesystem with ordered data mode. Opts: (null)
+[  225.761164] XFS (loop0): Mounting V5 Filesystem
+[  225.785313] XFS (loop0): Ending clean mount
+[  225.854872] XFS (loop0): Unmounting Filesystem
+```
+(note the `NOHZ: local_softirq_pending` also happen with hyperkit)
+
+so there is a large delay, but this delay should not be anywhere large enough to hit the timeout for 120 minutes.
+
+similar on a linux system with tcg:
+```
+dhcpcd exited
+2018/09/01 19:51:31 /dev/sda has content. blkid returned: /dev/sda: PTUUID="e7a7bc6d" PTTYPE="dos"
+2018/09/01 19:51:31 No eligible disks found
+[  192.199479] EXT4-fs (sda1): recovery complete
+[  192.203365] EXT4-fs (sda1): mounted filesystem with ordered data mode. Opts: (null)
+[  608.010434] XFS (loop0): Mounting V5 Filesystem
+[  608.060348] XFS (loop0): Ending clean mount
+[  608.233864] XFS (loop0): Unmounting Filesystem
+[  660.780521] raid6: sse2x1   gen()   246 MB/s
+[  660.799157] raid6: sse2x1   xor()   130 MB/s
+[  660.816193] raid6: sse2x2   gen()   214 MB/s
+```
