@@ -1,0 +1,492 @@
+=== Docker build CI.Dockerfile
+[2018-09-03 11:13.19] Starting...
+Cloning into '/tmp/with_clone26bfbf8'...
+done.
+HEAD is now at 92446c2 Ensure oauth2client is installed
+Sending build context to Docker daemon 84.99 kB
+Step 1/20 : FROM datakit/ci@sha256:daecb5fa1e017c39323d39bebfc0e6f94762452f46c29aafe115e7270166d692 AS build-env
+sha256:daecb5fa1e017c39323d39bebfc0e6f94762452f46c29aafe115e7270166d692: Pulling from datakit/ci
+Digest: sha256:daecb5fa1e017c39323d39bebfc0e6f94762452f46c29aafe115e7270166d692
+Status: Image is up to date for datakit/ci@sha256:daecb5fa1e017c39323d39bebfc0e6f94762452f46c29aafe115e7270166d692
+ ---> f16cddfd6f02
+Step 2/20 : ARG CONFIG=dkciCI
+ ---> Running in 74e80382aa8b
+ ---> c511db0d8d6e
+Removing intermediate container 74e80382aa8b
+Step 3/20 : ADD . /src
+ ---> d658085abdb7
+Removing intermediate container 09f24b4b49a2
+Step 4/20 : WORKDIR /src
+ ---> 0cbb49bfdb10
+Removing intermediate container 61abe11e4bbc
+Step 5/20 : RUN sudo chown -R opam /src
+ ---> Running in 16810a982fca
+ ---> da8293085783
+Removing intermediate container 16810a982fca
+Step 6/20 : RUN opam config exec make
+ ---> Running in f3c26fd73264
+jbuilder build --dev src/ci.exe
+[91m    ocamldep src/ci.depends.ocamldep-output
+[0m[91m    ocamldep src/ci.dependsi.ocamldep-output
+[0m[91m      ocamlc src/ci.{cmi,cmti}
+[0m[91m      ocamlc src/gcp.{cmi,cmti}
+[0m[91m      ocamlc src/hash.{cmi,cmti}
+[0m[91m      ocamlc src/disk_cache.{cmi,cmti}
+[0m[91m      ocamlc src/linuxkit_test.{cmi,cmti}
+      ocamlc src/linuxkit_build.{cmi,cmti}
+[0m[91m    ocamlopt src/hash.{cmx,o}
+[0m[91m    ocamlopt src/gcp.{cmx,o}
+[0m[91m    ocamlopt src/disk_cache.{cmx,o}
+[0m[91m    ocamlopt src/linuxkit_test.{cmx,o}
+[0m[91m    ocamlopt src/linuxkit_build.{cmx,o}
+[0m[91m    ocamlopt src/ci.{cmx,o}
+[0m[91m    ocamlopt src/ci.exe
+[0m ---> 1b13604346fa
+Removing intermediate container f3c26fd73264
+Step 7/20 : FROM alpine:3.5
+3.5: Pulling from library/alpine
+Digest: sha256:4d3ec631cdde98a03b91477b411a1fb42a9cadd8139c2e78029e44e199e58433
+Status: Image is up to date for alpine:3.5
+ ---> a2b04ae28915
+Step 8/20 : ENV REQUESTS_CA_BUNDLE /etc/ssl/certs/ca-certificates.crt
+ ---> Running in 032c1bf8df1b
+ ---> dce20b50e0fc
+Removing intermediate container 032c1bf8df1b
+Step 9/20 : RUN apk update && apk add 	libev 	docker 	py-pip 	py-setuptools 	tar 	tzdata 	ca-certificates 	openssl 	wget 	bash 	gmp 	openssh-client 	make 	curl 	expect 	qemu-img 	qemu-system-x86_64
+ ---> Running in 51f804c4466f
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.5/main/x86_64/APKINDEX.tar.gz
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.5/community/x86_64/APKINDEX.tar.gz
+v3.5.2-378-g654fff1a0e [http://dl-cdn.alpinelinux.org/alpine/v3.5/main]
+v3.5.2-348-gf3907a61f6 [http://dl-cdn.alpinelinux.org/alpine/v3.5/community]
+OK: 7963 distinct packages available
+(1/78) Installing ncurses-terminfo-base (6.0_p20171125-r1)
+(2/78) Installing ncurses-terminfo (6.0_p20171125-r1)
+(3/78) Installing ncurses-libs (6.0_p20171125-r1)
+(4/78) Installing readline (6.3.008-r4)
+(5/78) Installing bash (4.3.46-r5)
+Executing bash-4.3.46-r5.post-install
+(6/78) Installing ca-certificates (20161130-r1)
+(7/78) Installing libssh2 (1.7.0-r2)
+(8/78) Installing libcurl (7.61.0-r0)
+(9/78) Installing curl (7.61.0-r0)
+(10/78) Installing libmnl (1.0.4-r0)
+(11/78) Installing libnftnl-libs (1.0.7-r0)
+(12/78) Installing iptables (1.6.0-r0)
+(13/78) Installing expat (2.2.0-r1)
+(14/78) Installing pcre (8.39-r0)
+(15/78) Installing git (2.11.3-r1)
+(16/78) Installing xz-libs (5.2.2-r1)
+(17/78) Installing xz (5.2.2-r1)
+(18/78) Installing libseccomp (2.3.1-r0)
+(19/78) Installing docker (1.12.6-r0)
+Executing docker-1.12.6-r0.pre-install
+(20/78) Installing tcl (8.6.6-r0)
+(21/78) Installing expect (5.45-r3)
+(22/78) Installing gmp (6.1.1-r0)
+(23/78) Installing libev (4.22-r0)
+(24/78) Installing make (4.2.1-r0)
+(25/78) Installing openssh-client (7.4_p1-r1)
+(26/78) Installing libcrypto1.0 (1.0.2o-r1)
+(27/78) Installing libssl1.0 (1.0.2o-r1)
+(28/78) Installing openssl (1.0.2o-r1)
+(29/78) Installing libbz2 (1.0.6-r5)
+(30/78) Installing libffi (3.2.1-r2)
+(31/78) Installing gdbm (1.12-r0)
+(32/78) Installing sqlite-libs (3.15.2-r2)
+(33/78) Installing python2 (2.7.15-r0)
+(34/78) Installing py-setuptools (29.0.1-r0)
+(35/78) Installing py2-pip (9.0.0-r1)
+(36/78) Installing libaio (0.3.110-r0)
+(37/78) Installing libgcc (6.2.1-r1)
+(38/78) Installing libintl (0.19.8.1-r0)
+(39/78) Installing libuuid (2.28.2-r1)
+(40/78) Installing libblkid (2.28.2-r1)
+(41/78) Installing libmount (2.28.2-r1)
+(42/78) Installing glib (2.50.2-r0)
+(43/78) Installing nettle (3.2-r0)
+(44/78) Installing libtasn1 (4.9-r3)
+(45/78) Installing p11-kit (0.23.2-r1)
+(46/78) Installing gnutls (3.4.17-r1)
+(47/78) Installing libnfs (1.11.0-r0)
+(48/78) Installing qemu-img (2.8.1.1-r1)
+(49/78) Installing libcap-ng (0.7.8-r0)
+(50/78) Installing libcap (2.25-r1)
+(51/78) Installing qemu (2.8.1.1-r1)
+Executing qemu-2.8.1.1-r1.pre-install
+Executing qemu-2.8.1.1-r1.post-install
+[91m*
+* If you want to run VM as unprivileged user and let Qemu create tunX devices,
+* then you must add that user to the group "qemu".
+* If you use KVM for hardware-assisted virtualization, then you may also need
+* to add that user to the group "kvm".
+*
+[0m(52/78) Installing alsa-lib (1.1.3-r0)
+(53/78) Installing libepoxy (1.3.1-r1)
+(54/78) Installing libpciaccess (0.13.4-r0)
+(55/78) Installing libdrm (2.4.71-r0)
+(56/78) Installing libxml2 (2.9.5-r0)
+(57/78) Installing wayland (1.12.0-r0)
+(58/78) Installing mesa-gbm (12.0.3-r0)
+(59/78) Installing libjpeg-turbo (1.5.1-r0)
+(60/78) Installing lzo (2.09-r1)
+(61/78) Installing pixman (0.34.0-r0)
+(62/78) Installing libpng (1.6.25-r0)
+(63/78) Installing libstdc++ (6.2.1-r1)
+(64/78) Installing snappy (1.1.3-r0)
+(65/78) Installing libogg (1.3.2-r1)
+(66/78) Installing celt051 (0.5.1.3-r0)
+(67/78) Installing opus (1.1.3-r0)
+(68/78) Installing db (5.3.28-r0)
+(69/78) Installing libsasl (2.1.26-r8)
+(70/78) Installing spice-server (0.12.8-r3)
+(71/78) Installing libusb (1.0.20-r0)
+(72/78) Installing usbredir (0.7-r2)
+(73/78) Installing libressl (2.4.4-r0)
+(74/78) Installing vde2-libs (2.3.2-r6)
+(75/78) Installing qemu-system-x86_64 (2.8.1.1-r1)
+(76/78) Installing tar (1.29-r1)
+(77/78) Installing tzdata (2016i-r0)
+(78/78) Installing wget (1.18-r4)
+Executing busybox-1.25.1-r2.trigger
+Executing ca-certificates-20161130-r1.trigger
+Executing glib-2.50.2-r0.trigger
+OK: 242 MiB in 89 packages
+ ---> 53370b3b4cf2
+Removing intermediate container 51f804c4466f
+Step 10/20 : RUN pip install google-api-python-client
+ ---> Running in e01acaa778a9
+Collecting google-api-python-client
+  Downloading https://files.pythonhosted.org/packages/4e/92/e4746e646585c8c359781c19984fe8b6b8794a6cfe382cd481329d5252ac/google-api-python-client-1.7.4.tar.gz (141kB)
+Collecting httplib2<1dev,>=0.9.2 (from google-api-python-client)
+  Downloading https://files.pythonhosted.org/packages/fd/ce/aa4a385e3e9fd351737fd2b07edaa56e7a730448465aceda6b35086a0d9b/httplib2-0.11.3.tar.gz (215kB)
+Collecting google-auth>=1.4.1 (from google-api-python-client)
+  Downloading https://files.pythonhosted.org/packages/58/cb/96dbb4e50e7a9d856e89cc9c8e36ab1055f9774f7d85f37e2156c1d79d9f/google_auth-1.5.1-py2.py3-none-any.whl (65kB)
+Collecting google-auth-httplib2>=0.0.3 (from google-api-python-client)
+  Downloading https://files.pythonhosted.org/packages/33/49/c814d6d438b823441552198f096fcd0377fd6c88714dbed34f1d3c8c4389/google_auth_httplib2-0.0.3-py2.py3-none-any.whl
+Collecting six<2dev,>=1.6.1 (from google-api-python-client)
+  Downloading https://files.pythonhosted.org/packages/67/4b/141a581104b1f6397bfa78ac9d43d8ad29a7ca43ea90a2d863fe3056e86a/six-1.11.0-py2.py3-none-any.whl
+Collecting uritemplate<4dev,>=3.0.0 (from google-api-python-client)
+  Downloading https://files.pythonhosted.org/packages/f6/25/66a49231b44409d7f07cfcf2506a8b070ce3c99fc47cc256bea833f24791/uritemplate-3.0.0-py2-none-any.whl
+Collecting pyasn1-modules>=0.2.1 (from google-auth>=1.4.1->google-api-python-client)
+  Downloading https://files.pythonhosted.org/packages/19/02/fa63f7ba30a0d7b925ca29d034510fc1ffde53264b71b4155022ddf3ab5d/pyasn1_modules-0.2.2-py2.py3-none-any.whl (62kB)
+Collecting cachetools>=2.0.0 (from google-auth>=1.4.1->google-api-python-client)
+  Downloading https://files.pythonhosted.org/packages/0a/58/cbee863250b31d80f47401d04f34038db6766f95dea1cc909ea099c7e571/cachetools-2.1.0-py2.py3-none-any.whl
+Collecting rsa>=3.1.4 (from google-auth>=1.4.1->google-api-python-client)
+  Downloading https://files.pythonhosted.org/packages/e1/ae/baedc9cb175552e95f3395c43055a6a5e125ae4d48a1d7a924baca83e92e/rsa-3.4.2-py2.py3-none-any.whl (46kB)
+Collecting pyasn1<0.5.0,>=0.4.1 (from pyasn1-modules>=0.2.1->google-auth>=1.4.1->google-api-python-client)
+  Downloading https://files.pythonhosted.org/packages/d1/a1/7790cc85db38daa874f6a2e6308131b9953feb1367f2ae2d1123bb93a9f5/pyasn1-0.4.4-py2.py3-none-any.whl (72kB)
+Installing collected packages: httplib2, six, pyasn1, pyasn1-modules, cachetools, rsa, google-auth, google-auth-httplib2, uritemplate, google-api-python-client
+  Running setup.py install for httplib2: started
+    Running setup.py install for httplib2: finished with status 'done'
+  Running setup.py install for google-api-python-client: started
+    Running setup.py install for google-api-python-client: finished with status 'done'
+Successfully installed cachetools-2.1.0 google-api-python-client-1.7.4 google-auth-1.5.1 google-auth-httplib2-0.0.3 httplib2-0.11.3 pyasn1-0.4.4 pyasn1-modules-0.2.2 rsa-3.4.2 six-1.11.0 uritemplate-3.0.0
+[91mYou are using pip version 9.0.0, however version 18.0 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+[0m ---> a55974cbb7ea
+Removing intermediate container e01acaa778a9
+Step 11/20 : RUN pip install google-cloud-storage
+ ---> Running in 61392da5e2e6
+Collecting google-cloud-storage
+  Downloading https://files.pythonhosted.org/packages/e0/8d/b953de214de5dcfc2362df0261c07e50b84e41697f84ce8e6083e9836052/google_cloud_storage-1.11.0-py2.py3-none-any.whl (52kB)
+Collecting google-cloud-core<0.29dev,>=0.28.0 (from google-cloud-storage)
+  Downloading https://files.pythonhosted.org/packages/0f/41/ae2418b4003a14cf21c1c46d61d1b044bf02cf0f8f91598af572b9216515/google_cloud_core-0.28.1-py2.py3-none-any.whl
+Collecting google-resumable-media>=0.3.1 (from google-cloud-storage)
+  Downloading https://files.pythonhosted.org/packages/77/95/2e4020a54366423ddba715f89fb7ca456c8f048b15cada6cd6a54cf10e8c/google_resumable_media-0.3.1-py2.py3-none-any.whl
+Collecting google-api-core<2.0.0dev,>=0.1.1 (from google-cloud-storage)
+  Downloading https://files.pythonhosted.org/packages/ab/d0/8393a844c1a4cf9f74908ca1b1a137665519157643e15e112a4a21b71d56/google_api_core-1.3.0-py2.py3-none-any.whl (51kB)
+Requirement already satisfied: six in /usr/lib/python2.7/site-packages (from google-resumable-media>=0.3.1->google-cloud-storage)
+Collecting googleapis-common-protos<2.0dev,>=1.5.3 (from google-api-core<2.0.0dev,>=0.1.1->google-cloud-storage)
+  Downloading https://files.pythonhosted.org/packages/00/03/d25bed04ec8d930bcfa488ba81a2ecbf7eb36ae3ffd7e8f5be0d036a89c9/googleapis-common-protos-1.5.3.tar.gz
+Collecting setuptools>=34.0.0 (from google-api-core<2.0.0dev,>=0.1.1->google-cloud-storage)
+  Downloading https://files.pythonhosted.org/packages/66/e8/570bb5ca88a8bcd2a1db9c6246bb66615750663ffaaeada95b04ffe74e12/setuptools-40.2.0-py2.py3-none-any.whl (568kB)
+Collecting futures>=3.2.0; python_version < "3.2" (from google-api-core<2.0.0dev,>=0.1.1->google-cloud-storage)
+  Downloading https://files.pythonhosted.org/packages/2d/99/b2c4e9d5a30f6471e410a146232b4118e697fa3ffc06d6a65efde84debd0/futures-3.2.0-py2-none-any.whl
+Collecting pytz (from google-api-core<2.0.0dev,>=0.1.1->google-cloud-storage)
+  Downloading https://files.pythonhosted.org/packages/30/4e/27c34b62430286c6d59177a0842ed90dc789ce5d1ed740887653b898779a/pytz-2018.5-py2.py3-none-any.whl (510kB)
+Collecting protobuf>=3.0.0 (from google-api-core<2.0.0dev,>=0.1.1->google-cloud-storage)
+  Downloading https://files.pythonhosted.org/packages/77/78/a7f1ce761e2c738e209857175cd4f90a8562d1bde32868a8cd5290d58926/protobuf-3.6.1-py2.py3-none-any.whl (390kB)
+Requirement already satisfied: google-auth<2.0.0dev,>=0.4.0 in /usr/lib/python2.7/site-packages (from google-api-core<2.0.0dev,>=0.1.1->google-cloud-storage)
+Collecting requests<3.0.0dev,>=2.18.0 (from google-api-core<2.0.0dev,>=0.1.1->google-cloud-storage)
+  Downloading https://files.pythonhosted.org/packages/65/47/7e02164a2a3db50ed6d8a6ab1d6d60b69c4c3fdf57a284257925dfc12bda/requests-2.19.1-py2.py3-none-any.whl (91kB)
+Requirement already satisfied: pyasn1-modules>=0.2.1 in /usr/lib/python2.7/site-packages (from google-auth<2.0.0dev,>=0.4.0->google-api-core<2.0.0dev,>=0.1.1->google-cloud-storage)
+Requirement already satisfied: cachetools>=2.0.0 in /usr/lib/python2.7/site-packages (from google-auth<2.0.0dev,>=0.4.0->google-api-core<2.0.0dev,>=0.1.1->google-cloud-storage)
+Requirement already satisfied: rsa>=3.1.4 in /usr/lib/python2.7/site-packages (from google-auth<2.0.0dev,>=0.4.0->google-api-core<2.0.0dev,>=0.1.1->google-cloud-storage)
+Collecting chardet<3.1.0,>=3.0.2 (from requests<3.0.0dev,>=2.18.0->google-api-core<2.0.0dev,>=0.1.1->google-cloud-storage)
+  Downloading https://files.pythonhosted.org/packages/bc/a9/01ffebfb562e4274b6487b4bb1ddec7ca55ec7510b22e4c51f14098443b8/chardet-3.0.4-py2.py3-none-any.whl (133kB)
+Collecting urllib3<1.24,>=1.21.1 (from requests<3.0.0dev,>=2.18.0->google-api-core<2.0.0dev,>=0.1.1->google-cloud-storage)
+  Downloading https://files.pythonhosted.org/packages/bd/c9/6fdd990019071a4a32a5e7cb78a1d92c53851ef4f56f62a3486e6a7d8ffb/urllib3-1.23-py2.py3-none-any.whl (133kB)
+Collecting certifi>=2017.4.17 (from requests<3.0.0dev,>=2.18.0->google-api-core<2.0.0dev,>=0.1.1->google-cloud-storage)
+  Downloading https://files.pythonhosted.org/packages/df/f7/04fee6ac349e915b82171f8e23cee63644d83663b34c539f7a09aed18f9e/certifi-2018.8.24-py2.py3-none-any.whl (147kB)
+Collecting idna<2.8,>=2.5 (from requests<3.0.0dev,>=2.18.0->google-api-core<2.0.0dev,>=0.1.1->google-cloud-storage)
+  Downloading https://files.pythonhosted.org/packages/4b/2a/0276479a4b3caeb8a8c1af2f8e4355746a97fab05a372e4a2c6a6b876165/idna-2.7-py2.py3-none-any.whl (58kB)
+Requirement already satisfied: pyasn1<0.5.0,>=0.4.1 in /usr/lib/python2.7/site-packages (from pyasn1-modules>=0.2.1->google-auth<2.0.0dev,>=0.4.0->google-api-core<2.0.0dev,>=0.1.1->google-cloud-storage)
+Installing collected packages: setuptools, protobuf, googleapis-common-protos, futures, pytz, chardet, urllib3, certifi, idna, requests, google-api-core, google-cloud-core, google-resumable-media, google-cloud-storage
+  Found existing installation: setuptools 29.0.1.post20161130
+    Uninstalling setuptools-29.0.1.post20161130:
+      Successfully uninstalled setuptools-29.0.1.post20161130
+  Running setup.py install for googleapis-common-protos: started
+    Running setup.py install for googleapis-common-protos: finished with status 'done'
+Successfully installed certifi-2018.8.24 chardet-3.0.4 futures-3.2.0 google-api-core-1.3.0 google-cloud-core-0.28.1 google-cloud-storage-1.11.0 google-resumable-media-0.3.1 googleapis-common-protos-1.5.3 idna-2.7 protobuf-3.6.1 pytz-2018.5 requests-2.19.1 setuptools-40.2.0 urllib3-1.23
+[91mYou are using pip version 9.0.0, however version 18.0 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+[0m ---> e1087cd4f1fc
+Removing intermediate container 61392da5e2e6
+Step 12/20 : RUN pip install oauth2client
+ ---> Running in 23f346abaa0a
+Collecting oauth2client
+  Downloading https://files.pythonhosted.org/packages/82/d8/3eab58811282ac7271a081ba5c0d4b875ce786ca68ce43e2a62ade32e9a8/oauth2client-4.1.2-py2.py3-none-any.whl (99kB)
+Requirement already satisfied: pyasn1>=0.1.7 in /usr/lib/python2.7/site-packages (from oauth2client)
+Requirement already satisfied: pyasn1-modules>=0.0.5 in /usr/lib/python2.7/site-packages (from oauth2client)
+Requirement already satisfied: rsa>=3.1.4 in /usr/lib/python2.7/site-packages (from oauth2client)
+Requirement already satisfied: six>=1.6.1 in /usr/lib/python2.7/site-packages (from oauth2client)
+Requirement already satisfied: httplib2>=0.9.1 in /usr/lib/python2.7/site-packages (from oauth2client)
+Installing collected packages: oauth2client
+Successfully installed oauth2client-4.1.2
+[91mYou are using pip version 9.0.0, however version 18.0 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+[0m ---> 276bd4e72901
+Removing intermediate container 23f346abaa0a
+Step 13/20 : RUN wget https://github.com/docker/notary/releases/download/v0.4.3/notary-Linux-amd64 -O /usr/local/bin/notary
+ ---> Running in a45936ca1ee4
+[91m--2018-09-03 11:13:53--  https://github.com/docker/notary/releases/download/v0.4.3/notary-Linux-amd64
+[0m[91mResolving github.com... [0m[91m192.30.253.112, 192.30.253.113
+Connecting to github.com|192.30.253.112|:443... [0m[91mconnected.
+[0m[91mHTTP request sent, awaiting response... [0m[91m301 Moved Permanently
+Location: https://github.com/theupdateframework/notary/releases/download/v0.4.3/notary-Linux-amd64 [following]
+--2018-09-03 11:13:53--  https://github.com/theupdateframework/notary/releases/download/v0.4.3/notary-Linux-amd64
+Reusing existing connection to github.com:443.
+HTTP request sent, awaiting response... [0m[91m302 Found
+Location: https://github-production-release-asset-2e65be.s3.amazonaws.com/37743436/234d864e-d354-11e6-8774-ff4b1521e53c?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20180903%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20180903T111353Z&X-Amz-Expires=300&X-Amz-Signature=3fa85d2841d487ff95237f06d8cc0e4abd554605ab5d7fba20e679dd479ae8be&X-Amz-SignedHeaders=host&actor_id=0&response-content-disposition=attachment%3B%20filename%3Dnotary-Linux-amd64&response-content-type=application%2Foctet-stream [following]
+--2018-09-03 11:13:53--  https://github-production-release-asset-2e65be.s3.amazonaws.com/37743436/234d864e-d354-11e6-8774-ff4b1521e53c?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20180903%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20180903T111353Z&X-Amz-Expires=300&X-Amz-Signature=3fa85d2841d487ff95237f06d8cc0e4abd554605ab5d7fba20e679dd479ae8be&X-Amz-SignedHeaders=host&actor_id=0&response-content-disposition=attachment%3B%20filename%3Dnotary-Linux-amd64&response-content-type=application%2Foctet-stream
+Resolving github-production-release-asset-2e65be.s3.amazonaws.com... [0m[91m52.216.229.219
+Connecting to github-production-release-asset-2e65be.s3.amazonaws.com|52.216.229.219|:443... [0m[91mconnected.
+[0m[91mHTTP request sent, awaiting response... [0m[91m200 OK
+Length: 9746920 (9.3M) [application/octet-stream]
+[0m[91mSaving to: '/usr/local/bin/notary'
+[0m[91m
+     0K .......... ......[0m[91m.... .......... ...[0m[91m....... ..........  0%  202K 47s
+    50K .......... .......[0m[91m... .......... ....[0m[91m...... ..........  1%  303K 39s
+   100K .......... ........[0m[91m.. .......... .......... ..........  1%  605K 31s
+   150K ..[0m[91m........ .......... .......... ......[0m[91m.... ..........  2%  303K 31s
+   200K .......... ..........[0m[91m .......... .......... ..........  2%  604K 28s
+   250K .......... .......... .[0m[91m......... .......... ..........  3%  605K 25s
+   300K .....[0m[91m..... .......... .......... .......... ..........  3%  605K 24s
+   350K ......[0m[91m.... .......... .......... .......... ..........  4%  605K 23s
+   400K .......[0m[91m... .......... ....[0m[91m...... .......... ..........  4%  606K 22s
+   450K .......... .......... .....[0m[91m..... .......... ..........  5%  605K 21s
+   500K .......... .......... .......... .......... ...[0m[91m.......  5%  607K 20s
+   550K .......... .......... .......... .......... ....[0m[91m......  6%  126M 18s
+   600K .......... .[0m[91m......... .......[0m[91m... .......... ..........  6%  607K 18s
+   650K ...[0m[91m....... .......... .......... .......... .....[0m[91m.[0m[91m....  7%  607K 18s
+   700K .......... .......... .......... .......... ..........  7%  146M 16s
+   750K .......... .......... ..........[0m[91m .[0m[91m......... ........[0m[91m..  8%  608K 16s
+   800K .......... .......... .......... .......... ..........  8%  130M 15s
+   850K .......... ......[0m[91m.... .......... ...[0m[91m....... ..........  9%  603K 15s
+   900K .......... .......... .......... .......... ..........  9%  206M 14s
+   950K .......... .......[0m[91m.[0m[91m.. .......... .....[0m[91m..... .......... 10%  608K 14s
+  1000K .......... .......... .......... .......... .......... 11%  156M 13s[0m[91m
+  1050K .......... ..........[0m[91m .......... .......... .......... 11% 1.25M 13s
+  1100K ....[0m[91m...... .......... .......... .......... .......... 12% 1.12M 13s
+  1150K .......... .......... .......... .........[0m[91m. .......... 12% 1.25M 12s
+  1200K .......... .......... ..[0m[91m........ .......... .......... 13% 1.12M 12s
+  1250K .......... .......... ....[0m[91m...... .......... .[0m[91m......... 13%  178M 11s
+  1300K ........[0m[91m.. .......... .......... .......... ..[0m[91m........ 14%  609K 11s
+  1350K .......... .......... .......... .......... .......... 14%  144M 11s
+  1400K .......... .......... .......[0m[91m... .......... .......... 15% 1.24M 11s
+  1450K .......... .[0m[91m......... .......... .......... .......... 15% 1.12M 11s
+  1500K .......... .......... .......... .......... ......[0m[91m.... 16%  192M 10s
+  1550K .......... .......... .........[0m[91m. .......... .......... 16% 1.26M 10s
+  1600K .......... ....[0m[91m...... .......... .......... .......... 17% 1.12M 10s
+  1650K .......... .....[0m[91m..... .......... .......... .......... 17%  168M 10s
+  1700K .......... .....[0m[91m.[0m[91m.... .......... .......... .......... 18% 1.26M 9s[0m[91m
+  1750K .......... .......... .......... ....[0m[91m...... .......... 18% 1.12M 9s
+  1800K .[0m[91m......... .......... .......... .....[0m[91m..... .......... 19%  199M 9s
+  1850K .......... .........[0m[91m. .......... .......... .......... 19% 1.27M 9s
+  1900K .......... .........[0m[91m. .......... .......... .......... 20% 1.12M 9s
+  1950K .......... .......... .[0m[91m......... .......... .......... 21%  174M 8s
+  2000K .......... .......... ..[0m[91m........ .......... .......... 21% 1.27M 8s
+  2050K .......... .......... ...[0m[91m....... .......... .......... 22% 1.12M 8s
+  2100K .......... .......... ....[0m[91m...... .......... .......... 22%  178M 8s
+  2150K .......... .......... .....[0m[91m..... .......... ..[0m[91m........ 23% 1.27M 8s
+  2200K .......... .......... .......... .......... ...[0m[91m....... 23% 1.10M 8s
+  2250K .......... .......... .......... .......... .......... 24%  131M 8s
+  2300K .......... .......... ........[0m[91m.. .......... .......... 24%  207M 7s
+  2350K .......... .......... .........[0m[91m. .......... .......... 25% 1.29M 7s
+  2400K .......... .......... ..........[0m[91m .......... .......... 25% 1.10M 7s
+  2450K .......... .......... .......... .......... .......... 26%  212M 7s
+  2500K .......... .....[0m[91m..... .......... .......... .........[0m[91m. 26%  226M 7s
+  2550K .......... ......[0m[91m.... .......... .......... .......... 27% 1.30M 7s[0m[91m
+  2600K .......... .......[0m[91m... .......... .......... .......... 27% 1.09M 7s
+  2650K .......... .......... .......... .......... .......... 28%  162M 6s
+  2700K ..[0m[91m........ .........[0m[91m. .......... .......... .......... 28%  184M 6s
+  2750K ...[0m[91m....... .......... .......... .......... .......... 29% 1.31M 6s
+  2800K .......... .......... .[0m[91m......... .......... .......... 29%[0m[91m 1.10M 6s
+  2850K .......... .......... ..........[0m[91m .......... .......... 30%  176M 6s
+  2900K .......... .......... .......... ..........[0m[91m .......... 30%  209M 6s
+  2950K .......[0m[91m... .......... .......... .......... .......... 31% 1.31M 6s
+  3000K .......... .......... .....[0m[91m..... .......... .......... 32% 1.09M 6s
+  3050K .......... .......... ......[0m[91m.... .......... .......... 32%  146M 6s
+  3100K ..........[0m[91m .......... .......... .......... ....[0m[91m...... 33%  176M 6s
+  3150K .......... .[0m[91m........[0m[91m. ........[0m[91m.. .......... .......... 33% 1.31M 5s
+  3200K .......... .......... .......... .......... ......[0m[91m.... 34% 1.10M 5s
+  3250K .......... .......... .......... .......... .......... 34%  132M 5s
+  3300K .......... ....[0m[91m...... .......... .......... ........[0m[91m.. 35%  210M 5s
+  3350K .......... .......... .......... .......... .........[0m[91m. 35% 1.30M 5s
+  3400K .......... .......... ....[0m[91m...... .......... .......... 36%  140M 5s
+  3450K .......... .......[0m[91m... .......... ....[0m[91m...... .......... 36% 1.10M 5s
+  3500K .......... .......... .......... .......... ..[0m[91m........ 37%  140M 5s
+  3550K ..[0m[91m........ .......... .......... .......... .......... 37%  201M 5s
+  3600K ...[0m[91m....... ..........[0m[91m .......... .......... .......... 38%  185M 5s
+  3650K ....[0m[91m...... .......... .......... .......... .......... 38% 1.30M 5s
+  3700K .......... .......... ..[0m[91m........ .......... .......... 39% 1.10M 5s
+  3750K .......... .......... ...[0m[91m....... .......... .......... 39%  111M 4s
+  3800K .......[0m[91m... .......... .......... .......... .[0m[91m......... 40%  197M 4s
+  3850K .......... .......... .......... .......... .[0m[91m.[0m[91m........ 40%  212M 4s
+  3900K .........[0m[91m. .......... .......... .......... .......... 41% 1.30M 4s
+  3950K .......... .......... .......... .......... ....[0m[91m...... 42% 1.09M 4s
+  4000K .......... .......... .......... .......... .......... 42%  123M 4s
+  4050K .......... .[0m[91m......... .........[0m[91m. .......... .......... 43%  155M 4s
+  4100K .......... ...[0m[91m....... .......... .......... .......[0m[91m... 43%  184M 4s
+  4150K .......... .......... ..[0m[91m........[0m[91m .......... .......... 44% 1.33M 4s
+  4200K .......... .......... .......... .......... .........[0m[91m. 44%  192M 4s
+  4250K .......... ......[0m[91m.... .......... .......... .........[0m[91m. 45% 1.09M 4s
+  4300K .......... .......... .......... .......... .......... 45%  171M 4s
+  4350K .[0m[91m......... .......... .......... .....[0m[91m..... .......... 46%  139M 4s
+  4400K .......... .......... .......[0m[91m... ......[0m[91m.... .......... 46%  176M 4s
+  4450K .......... ..........[0m[91m .......... .......... .......... 47% 1.34M 4s
+  4500K .......... .......... .......... .......... .......... 47%  185M 3s
+  4550K ....[0m[91m...... .......... .[0m[91m......... .......... .......... 48% 1.09M 3s
+  4600K ......[0m[91m.... .......... .......... .......... .......... 48%  197M 3s
+  4650K .......... .......... ....[0m[91m...... .......... .......... 49%  187M 3s
+  4700K ........[0m[91m.. .......... .......... .......... .......... 49%  242M 3s
+  4750K .......... .......[0m[91m... ......[0m[91m.... .......... .......... 50% 1.33M 3s
+  4800K .......... .......... .......... .......... ....[0m[91m...... 50%  261M 3s
+  4850K .......... .......... ........[0m[91m.. .......... .......... 51% 1.09M 3s
+  4900K .......... .[0m[91m......... .......... .......... ......[0m[91m.... 52%  186M 3s
+  4950K .......... .......... ..........[0m[91m .......... .......[0m[91m... 52%  161M 3s
+  5000K .......... .......... .......... .......... ........[0m[91m.. 53%  212M 3s
+  5050K .......... .......... .......... ..[0m[91m........ .......... 53% 1.33M 3s
+  5100K .......... .....[0m[91m..... .......... .......... .......... 54%  216M 3s
+  5150K .......... .......... .......... ....[0m[91m...... .......... 54%  233M 3s
+  5200K .[0m[91m......... .......... .......... .....[0m[91m..... .......... 55% 1.06M 3s
+  5250K ..[0m[91m........ .........[0m[91m. .......... .......... .......... 55% 84.2M 3s
+  5300K ...[0m[91m....... .......... .......... ........[0m[91m.. .......... 56%  176M 3s
+  5350K ...[0m[91m....... .......... .[0m[91m......... .......... .......... 56%  214M 3s
+  5400K .......... .......... .......... .........[0m[91m. .......... 57% 1.40M 3s
+  5450K .......... ....[0m[91m...... .......... .......... .......... 57%  169M 3s
+  5500K .......[0m[91m... .......... ....[0m[91m...... .......... .[0m[91m......... 58% 1.06M 2s
+  5550K .......... .......... .......... .......... .......... 58%  215M 2s[0m[91m
+  5600K .......... .......... .......... .......... ...[0m[91m....... 59%  178M 2s
+  5650K .......... .......... ......[0m[91m.... .......... .......... 59%  185M 2s
+  5700K .......... .[0m[91m......... ........[0m[91m.. .......... .......... 60%  183M 2s
+  5750K .......... .[0m[91m.[0m[91m........ .......... .......... ......[0m[91m.... 60% 1.40M 2s
+  5800K .......... .......... .......... .......... .......... 61%  150M 2s
+  5850K .......... .......... .......... .......... ........[0m[91m.. 61%  244M 2s
+  5900K .......... .....[0m[91m..... .......... .......... .......... 62% 1.06M 2s
+  5950K .......... ......[0m[91m.... .......... .......... .......... 63%  235M 2s
+  6000K .......... .......[0m[91m... .......... .......... .......... 63%  175M 2s
+  6050K .........[0m[91m. ........[0m[91m.. .......... .......... .......... 64%  174M 2s
+  6100K .......... ........[0m[91m.[0m[91m. .......... .......... .......... 64%  215M 2s
+  6150K ..[0m[91m.[0m[91m....... .......... .......... .......... .......... 65% 1.39M 2s
+  6200K .......... .......... .......... .......... .......... 65%  245M 2s
+  6250K .....[0m[91m..... .......... ..[0m[91m........ .........[0m[91m. .......... 66% 1.06M 2s
+  6300K .......... .......... .......... .......... .......... 66%  180M 2s
+  6350K .......... .......... ....[0m[91m...... .......... .......... 67%  256M 2s
+  6400K .......[0m[91m... .......... .......... .......... .[0m[91m......... 67%[0m[91m  154M 2s[0m[91m
+  6450K ........[0m[91m.. .......... .......... ....[0m[91m...... .......... 68%  204M 2s
+  6500K .[0m[91m......... .......... .......... .......... ....[0m[91m...... 68%  223M 2s
+  6550K ..........[0m[91m .[0m[91m......... .......... .......... .......... 69% 1.40M 2s
+  6600K .......... .......... .........[0m[91m. .......... .......... 69%  188M 2s
+  6650K .......... ...[0m[91m....... .......... .......... ......[0m[91m.... 70% 1.06M 2s
+  6700K .......... .......... .......... .......... .......... 70%  167M 2s
+  6750K ......[0m[91m.... .......... .......... ..[0m[91m........ .......... 71%  157M 1s
+  6800K .......... .....[0m[91m..... .......... .......... .......... 71%  140M 1s[0m[91m
+  6850K .......... ......[0m[91m.... .......... .......... ..[0m[91m........ 72%  171M 1s[0m[91m
+  6900K .......... ........[0m[91m.. .......... .......... .......... 73%  202M 1s
+  6950K .[0m[91m.[0m[91m........ .......... .......... .......... .......... 73% 1.40M 1s
+  7000K .......... .......... .......... .......... .......... 74%  251M 1s
+  7050K ...[0m[91m....... .......... .[0m[91m......... ........[0m[91m.. .......... 74% 1.06M 1s
+  7100K .......... .......... .......... .......... .......... 75%  185M 1s
+  7150K ......[0m[91m.... .......... .......... ..........[0m[91m .......... 75%  159M 1s
+  7200K .......... .......... ....[0m[91m...... .......... .[0m[91m......... 76%  152M 1s
+  7250K .......... ......[0m[91m.... .....[0m[91m..... .......... .......... 76%  187M 1s
+  7300K .......... .......[0m[91m... .......... .......... .......... 77%  243M 1s
+  7350K .......... .......... .......[0m[91m... .......... ...[0m[91m....... 77% 1.40M 1s
+  7400K .......... .......... .......... .......... .......... 78%  173M 1s
+  7450K .......... ..[0m[91m........ .......... .......[0m[91m... .....[0m[91m..... 78%  200M 1s
+  7500K .......... ...[0m[91m....... .........[0m[91m.[0m[91m .......... .......... 79% 1.07M 1s
+  7550K .......... .......... .......... .......... ........[0m[91m.. 79%  166M 1s
+  7600K .......... ....[0m[91m...... .......... .......... .........[0m[91m. 80%  157M 1s
+  7650K .......... .....[0m[91m..... .......... ...[0m[91m....... .[0m[91m......... 80%  179M 1s
+  7700K .......... ...[0m[91m....[0m[91m... .......... .......... .......... 81%  174M 1s[0m[91m
+  7750K .[0m[91m......... .......... .......... .......... .......... 81%  214M 1s
+  7800K ..........[0m[91m .........[0m[91m. .......... .......... .......... 82%  199M 1s
+  7850K ..[0m[91m........ .......... .......... .......... .......... 82% 1.40M 1s
+  7900K ....[0m[91m...... .......... .[0m[91m......... .......... .......... 83%  210M 1s
+  7950K .......... .......... .......... .........[0m[91m. .......... 84% 1.07M 1s
+  8000K .......... .......... .......... .......... .......... 84%  176M 1s
+  8050K .......... .......... ...[0m[91m.[0m[91m...... .......... .......... 85%  170M 1s
+  8100K .......... .......... ....[0m[91m...... ...[0m[91m....... .[0m[91m......... 85%  163M 1s
+  8150K .......... .......[0m[91m... .....[0m[91m..... .......... .......... 86%  191M 1s
+  8200K ..........[0m[91m .......... ......[0m[91m.[0m[91m... .......... .......... 86%  205M 1s
+  8250K .......... .......... .......... .......... .......... 87%  229M 1s
+  8300K .......... ..[0m[91m........ ........[0m[91m.[0m[91m. .......... .......... 87%[0m[91m 1.35M 1s
+  8350K .......... .......... ..........[0m[91m ........[0m[91m.. .......... 88%  149M 1s
+  8400K .......... .......... .......... .......... .......[0m[91m.[0m[91m.. 88%  224M 1s
+  8450K .......... .......... .......... ..[0m[91m........[0m[91m .......... 89% 1.07M 0s
+  8500K .......... .......... .......... .......... .......... 89%  230M 0s[0m[91m
+  8550K .......... .......... .......... .......... ..[0m[91m........ 90%  276M 0s
+  8600K .[0m[91m......... .......... .......... .......... .......... 90%  258M 0s
+  8650K .......... .........[0m[91m. .......... ......[0m[91m.... ....[0m[91m...... 91%  233M 0s
+  8700K ...[0m[91m....... .......... .......... .......... .......... 91%  218M 0s
+  8750K ....[0m[91m...... .......... .[0m[91m......... .......... .......... 92%  204M 0s
+  8800K ....[0m[91m.[0m[91m..... .......... ..[0m[91m........ .......... .......... 92% 1.38M 0s
+  8850K .......... .......... .......... .......... ........[0m[91m.. 93%  179M 0s
+  8900K .......... .......... ....[0m[91m...... .......... .......... 94%  215M 0s
+  8950K ........[0m[91m.. .......... .....[0m[91m..... .......... .......... 94% 1.10M 0s
+  9000K .......... .......... .......... .......... ...[0m[91m....... 95% 37.7M 0s
+  9050K .......... .......... .......... .......... ....[0m[91m...... 95%  181M 0s
+  9100K .......... .......... .......... .......... .....[0m[91m..... 96%  220M 0s
+  9150K .......... .......... .........[0m[91m. .......... .......... 96%  134M 0s
+  9200K .......... ..[0m[91m.[0m[91m....... ..........[0m[91m .......... .......[0m[91m... 97% 70.3M 0s
+  9250K .......... .......... .......... .......... ........[0m[91m.. 97%  154M 0s
+  9300K .......... .....[0m[91m..... .......... .......... .......... 98% 1.41M 0s
+  9350K .......... .......... .......... .......... .........[0m[91m. 98%  221M 0s
+  9400K .......... .......... .......... .......... .......... 99%  226M 0s
+  9450K .......... ........[0m[91m.. .......... .....[0m[91m..... .......... 99% 1.11M 0s
+  9500K .......... ........                                   100%  184M=4.2s
+
+2018-09-03 11:13:58 (2.21 MB/s) - '/usr/local/bin/notary' saved [9746920/9746920]
+
+[0m ---> ff8eb18da3d9
+Removing intermediate container a45936ca1ee4
+Step 14/20 : RUN echo '06cd02c4c2e7a3b1ad9899b03b3d4dde5392d964c675247d32f604a24661f839 */usr/local/bin/notary' | sha256sum -w -c -
+ ---> Running in 31178eb3d621
+/usr/local/bin/notary: OK
+ ---> 9d3574c80deb
+Removing intermediate container 31178eb3d621
+Step 15/20 : RUN chmod a+x /usr/local/bin/notary
+ ---> Running in d10bc24ef6fe
+ ---> 43af0268a9d3
+Removing intermediate container d10bc24ef6fe
+Step 16/20 : USER root
+ ---> Running in 1361b41a9da6
+ ---> 307f5bb6c84d
+Removing intermediate container 1361b41a9da6
+Step 17/20 : ENTRYPOINT /usr/local/bin/ci
+ ---> Running in d3b209494e55
+ ---> c47c943b5bf2
+Removing intermediate container d3b209494e55
+Step 18/20 : CMD
+ ---> Running in 53f1283e4efa
+ ---> dba7e1bbe481
+Removing intermediate container 53f1283e4efa
+Step 19/20 : ADD run-files/gcloud /gcloud
+ ---> ec652f8aee19
+Removing intermediate container 61a2bac805b0
+Step 20/20 : COPY --from=build-env /src/_build/default/src/ci.exe /usr/local/bin/ci
+ ---> f68b3ea0fbfa
+Removing intermediate container f529c19145cb
+Successfully built f68b3ea0fbfa
+[2018-09-03 11:14.04] Success
