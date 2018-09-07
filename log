@@ -1,0 +1,43 @@
+=== Test LinuxKit on GCP
+[2018-09-07 18:58.27] Starting...
+INFO:root:Connecting to storage
+INFO:root:Getting bucket
+INFO:root:Uploading /build-cache/8d45aacc114384529dd10f2b0ce26de7808b00c6650fffd83e15e2c6ca5f04da -> linuxkit-ci-2.tar.gz
+INFO:root:Removing old image
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Waiting for global operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Creating image: {'name': 'linuxkit-ci-2-test-image', 'rawDisk': {'source': u'https://www.googleapis.com/storage/v1/b/linuxkit-gcp-test-bucket/o/linuxkit-ci-2.tar.gz'}}
+INFO:root:Waiting for global operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Creating VM
+Traceback (most recent call last):
+  File "/gcloud/test.py", line 82, in <module>
+    resp = common.compute.instances().insert(body=config, project=common.project, zone=common.zone).execute()
+  File "/usr/lib/python2.7/site-packages/googleapiclient/_helpers.py", line 130, in positional_wrapper
+    return wrapped(*args, **kwargs)
+  File "/usr/lib/python2.7/site-packages/googleapiclient/http.py", line 842, in execute
+    raise HttpError(resp, content, uri=self.uri)
+googleapiclient.errors.HttpError: <HttpError 400 when requesting https://www.googleapis.com/compute/v1/projects/moby-datakit-ci/zones/europe-west1-b/instances?alt=json returned "Invalid JSON payload received. Unknown name "metadata" at 'resource': Proto field is not repeating, cannot start list.">
+[2018-09-07 18:59.18] Removing test VM...
+[2018-09-07 18:59.18] Running "/gcloud/destroy.py" "linuxkit-ci-2"
+INFO:root:Destroying VM
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+Traceback (most recent call last):
+  File "/gcloud/destroy.py", line 12, in <module>
+    resp = common.compute.instances().delete(instance=name, project=common.project, zone=common.zone).execute()
+  File "/usr/lib/python2.7/site-packages/googleapiclient/_helpers.py", line 130, in positional_wrapper
+    return wrapped(*args, **kwargs)
+  File "/usr/lib/python2.7/site-packages/googleapiclient/http.py", line 842, in execute
+    raise HttpError(resp, content, uri=self.uri)
+googleapiclient.errors.HttpError: <HttpError 404 when requesting https://www.googleapis.com/compute/v1/projects/moby-datakit-ci/zones/europe-west1-b/instances/linuxkit-ci-2?alt=json returned "The resource 'projects/moby-datakit-ci/zones/europe-west1-b/instances/linuxkit-ci-2' was not found">
+[2018-09-07 18:59.19] Failed: Command "/gcloud/test.py" "/build-cache/8d45aacc114384529dd10f2b0ce26de7808b00c6650fffd83e15e2c6ca5f04da" "linuxkit-ci-2" exited with status 1
