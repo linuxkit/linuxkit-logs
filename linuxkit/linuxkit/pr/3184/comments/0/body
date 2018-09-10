@@ -1,0 +1,34 @@
+Sorry for opening a PR per fix, It's just I'm so glad I'm making progress every time. 😋 
+
+**- What I did**
+
+Fixed more file path handling on Windows.
+
+**- How I did it**
+
+On Windows `os.PathSeparator` is `\` but here it's all unix file paths being manipulated.
+
+And not really related but `byte('/')` is really just `'/'`.
+
+**- How to verify it**
+
+Before
+```
+../bin/linuxkit build  -format iso-efi -name docker-for-mac -dir build image.yml image-mac.yml
+…
+Create outputs:
+  build\docker-for-mac-efi.iso
+[31mFATA[0m[0096] Error writing outputs: Error writing iso-efi output: docker run linuxkit/mkimage-iso-efi:248673cd3784eb3664d0f80b5bd31829465ca784 failed: exit status 1 output:
+
+```
+(errors right away with no output, no logs, no clue …)
+
+Now
+```
+../bin/linuxkit build  -format iso-efi -name docker-for-mac -dir build image.yml image-mac.yml
+…
+Create outputs:
+  build\docker-for-mac-efi.iso
+mv -fv build/docker-for-mac-efi.iso build/docker-for-mac.iso
+…
+```
