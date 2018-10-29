@@ -1,0 +1,23 @@
+- Add 4.19 kernels for all arches. The kernel config was derived from 4.18 and run through `make oldconfig`. See details below).
+- Remove support for 4.18.x for arm64 and s390x (4.18.x will be deprecated soon anyway)
+- Restructure `perf` build. Only build it for latest LTS (4.14) and latest stable. The logic was getting to complicated.
+- Disable `perf` build for arm64. The build on 4.19 is currently broken do to header conflicts. See the commit message at https://github.com/linuxkit/linuxkit/commit/e90c9a06872353395b0231caefcc3d065f50288e for more details.
+
+
+The 4.19 kernel config was derived from the 4.18.x config using `make oldconfig`. We mostly picked the default for new options except for:
+```
+BLK_CGROUP_IOLATENCY=y
+NFT_TUNNEL=y
+NFT_OSF=y
+NFT_TPROXY=y
+NETFILTER_XT_MATCH_SOCKET=y
+NET_VENDOR_CADENCE=n
+NET_VENDOR_NETERION=n
+NET_VENDOR_PACKET_ENGINES=n
+```
+
+We also disable the default `CIFS_ALLOW_INSECURE_LEGACY` as we prefer secure only communication and enable `STRUCTLEAK` and `RANDSTRUCT` for s390n as they are now supported.
+
+Note, there is also a new `RANDOM_TRUST_CPU` option which disables the kernel trusting `rdrand` and other CPU level random sources. This is disabled by default and we keep it that way.
+
+![blue-tongued-skink 1](https://user-images.githubusercontent.com/3338098/47624303-07694080-db13-11e8-973f-13ffcd2c6324.jpg)
