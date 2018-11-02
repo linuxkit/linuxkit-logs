@@ -1,0 +1,13 @@
+I think I must misunderstand how firmware loading works, perhaps some one can enlighten me.
+
+My understanding was that firmware loading was an asynchronous process (triggered by drivers while they are probing) which ends up triggering a userspace event which udev (or perhaps mdev) then satisfies by loading the firmware (by dumping it to some file under `/sys`).
+
+I don't think that `modprobe` ever does any modprobing (I don't see anything like that in `modprobe` applet in the `busybox` source, that all seems to be in the `mdev` applet).
+
+It's also my understanding that the userspace events are processed in the host/root namespace, not within any particular container, even if the device probe/driver bind that triggered the userspace firmware loading event was caused by modprobe loading some new module from inside a container.
+
+The `pkg/init/usermode-helper.c` helper executes both `modprobe` and `mdev` directly in the root namespace, it is not forwarding to a container AFAICT.
+
+What am I missing? How/where does firmware get loaded within any `modprobe` container?
+
+edit: ideally the mechanics of what are going here which justifies this as a correct change would be in the commit message, since it is non-obvious.
