@@ -1,0 +1,257 @@
+=== Build LinuxKit
+[2018-11-23 23:59.57] Starting...
+Cloning into '/tmp/with_clone16ef517e'...
+done.
+HEAD is now at 63cfbb28d kernel: Disable ACPI_WMI for x86
+[2018-11-23 23:59.58] Running "cp" "-p" "--" "/gcloud/ci-setup.sh" "/tmp/with_clone16ef517e/ci-setup.sh"
+[2018-11-23 23:59.58] Building with timeout of 120 minutes
+[2018-11-23 23:59.58] Running "/gcloud/create.py" "linuxkit-ci-1"
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Using source disk image https://www.googleapis.com/compute/v1/projects/moby-datakit-ci/global/images/linuxkit-ci-builder-9
+INFO:root:Creating VM
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Getting VM details
+[2018-11-24 00:00.18] Waiting for SSH service to start...
+[2018-11-24 00:00.18] Running "ssh" "-i" "/run/secrets/builder-ssh" "-o" "UserKnownHostsFile=/dev/null" "-o" "StrictHostKeyChecking=no" "root@35.190.199.18" "uname" "-a"
+ssh: connect to host 35.190.199.18 port 22: Connection refused
+[2018-11-24 00:00.18] SSH not ready ((Failure
+  "Command \"ssh\" \"-i\" \"/run/secrets/builder-ssh\" \"-o\" \"UserKnownHostsFile=/dev/null\" \"-o\" \"StrictHostKeyChecking=no\" \"root@35.190.199.18\" \"uname\" \"-a\" exited with status 255"))
+[2018-11-24 00:00.20] Running "ssh" "-i" "/run/secrets/builder-ssh" "-o" "UserKnownHostsFile=/dev/null" "-o" "StrictHostKeyChecking=no" "root@35.190.199.18" "uname" "-a"
+Warning: Permanently added '35.190.199.18' (ECDSA) to the list of known hosts.
+Linux linuxkit-ci-1 4.9.0-6-amd64 #1 SMP Debian 4.9.82-1+deb9u3 (2018-03-02) x86_64 GNU/Linux
+[2018-11-24 00:00.20] Created new VM linuxkit-ci-1
+[2018-11-24 00:00.20] Running "ssh" "-i" "/run/secrets/builder-ssh" "-o" "UserKnownHostsFile=/dev/null" "-o" "StrictHostKeyChecking=no" "root@35.190.199.18" "/usr/local/bin/test.sh"
+
+[+  0m 22s] Warning: Permanently added '35.190.199.18' (ECDSA) to the list of known hosts.
+[+  0m 22s] + rm -rf /tmp/build
+[+  0m 22s] + mkdir /tmp/build
+[+  0m 22s] + cd /tmp/build
+[+  0m 22s] + tar xf -
+[+  0m 23s] + '[' -x ci-setup.sh ']'
+[+  0m 23s] + ./ci-setup.sh
+[+  0m 23s] + mkdir -p /tmp/build/test/_results /tmp/build/artifacts
+[+  0m 23s] + sysctl vm.overcommit_memory=1
+[+  0m 23s] vm.overcommit_memory = 1
+[+  0m 23s] + rm /tmp/build/ci-setup.sh
+[+  0m 23s] + make ci-pr
+[+  0m 23s] make clean
+[+  0m 23s] make[1]: Entering directory '/tmp/build'
+[+  0m 23s] rm -rf bin *.log *-kernel *-cmdline *-state *.img *.iso *.gz *.qcow2 *.vhd *.vmx *.vmdk *.tar *.raw
+[+  0m 23s] make[1]: Leaving directory '/tmp/build'
+[+  0m 23s] make -j 3 GOOS=darwin tmp_rtf_bin.tar tmp_mt_bin.tar tmp_linuxkit_bin.tar
+[+  0m 23s] make[1]: Entering directory '/tmp/build'
+[+  0m 23s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy= -e GOOS=darwin linuxkit/go-compile:e1204ce9921c1d45362a374e06be7234d3bf1184 --clone-path github.com/linuxkit/rtf --clone https://github.com/linuxkit/rtf.git --commit 171155c375706f2616f0b9c96afe2240e15d1de1 --package github.com/linuxkit/rtf --ldflags "-X github.com/linuxkit/rtf/cmd.GitCommit=171155c375706f2616f0b9c96afe2240e15d1de1 -X github.com/linuxkit/rtf/cmd.Version=0.0" -o bin/rtf > tmp_rtf_bin.tar
+[+  0m 23s] docker run --rm --log-driver=none -e http_proxy= -e https_proxy= -e GOOS=darwin linuxkit/go-compile:e1204ce9921c1d45362a374e06be7234d3bf1184 --clone-path github.com/estesp/manifest-tool --clone https://github.com/estesp/manifest-tool --commit bfbd11963b8e0eb5f6e400afaebeaf39820b4e90 --package github.com/estesp/manifest-tool --ldflags "-X main.gitCommit=bfbd11963b8e0eb5f6e400afaebeaf39820b4e90" -o bin/manifest-tool > tmp_mt_bin.tar
+[+  0m 23s] tar cf - -C src/cmd/linuxkit . | docker run --rm --net=none --log-driver=none -i -e GOOS=darwin linuxkit/go-compile:e1204ce9921c1d45362a374e06be7234d3bf1184 --package github.com/linuxkit/linuxkit/src/cmd/linuxkit --ldflags "-X github.com/linuxkit/linuxkit/src/cmd/linuxkit/version.GitCommit=63cfbb28d2311de8956efc5f5e09599c9bb8afcb -X github.com/linuxkit/linuxkit/src/cmd/linuxkit/version.Version="v0.6+"" -o bin/linuxkit > tmp_linuxkit_bin.tar
+[+  0m 25s] Unable to find image 'linuxkit/go-compile:e1204ce9921c1d45362a374e06be7234d3bf1184' locally
+[+  0m 25s] Unable to find image 'linuxkit/go-compile:e1204ce9921c1d45362a374e06be7234d3bf1184' locally
+[+  0m 25s] Unable to find image 'linuxkit/go-compile:e1204ce9921c1d45362a374e06be7234d3bf1184' locally
+[+  0m 25s] docker: Error response from daemon: unauthorized: authentication required.
+[+  0m 25s] See 'docker run --help'.
+[+  0m 25s] Makefile:60: recipe for target 'tmp_linuxkit_bin.tar' failed
+[+  0m 25s] make[1]: *** [tmp_linuxkit_bin.tar] Error 125
+[+  0m 25s] make[1]: *** Deleting file 'tmp_linuxkit_bin.tar'
+[+  0m 25s] make[1]: *** Waiting for unfinished jobs....
+[+  0m 26s] e1204ce9921c1d45362a374e06be7234d3bf1184: Pulling from linuxkit/go-compile
+[+  0m 26s] e1204ce9921c1d45362a374e06be7234d3bf1184: Pulling from linuxkit/go-compile
+[+  0m 26s] 8e3ba11ec2a2: Pulling fs layer
+[+  0m 26s] e6abde4cbdbb: Pulling fs layer
+[+  0m 26s] 4642c7d14c46: Pulling fs layer
+[+  0m 26s] 8f20f96231c0: Pulling fs layer
+[+  0m 26s] 13d9b4bf4cd2: Pulling fs layer
+[+  0m 26s] 5888f31b4dca: Pulling fs layer
+[+  0m 26s] 19f5040962e1: Pulling fs layer
+[+  0m 26s] 7c1cf1343730: Pulling fs layer
+[+  0m 26s] 28bdd0e3ef4b: Pulling fs layer
+[+  0m 26s] 4ab478e17d44: Pulling fs layer
+[+  0m 26s] 9d32a059391d: Pulling fs layer
+[+  0m 26s] b0d6611e4880: Pulling fs layer
+[+  0m 26s] ec7650567b6e: Pulling fs layer
+[+  0m 26s] 8f20f96231c0: Waiting
+[+  0m 26s] 13d9b4bf4cd2: Waiting
+[+  0m 26s] 5888f31b4dca: Waiting
+[+  0m 26s] 19f5040962e1: Waiting
+[+  0m 26s] 7c1cf1343730: Waiting
+[+  0m 26s] 28bdd0e3ef4b: Waiting
+[+  0m 26s] 4ab478e17d44: Waiting
+[+  0m 26s] 9d32a059391d: Waiting
+[+  0m 26s] b0d6611e4880: Waiting
+[+  0m 26s] ec7650567b6e: Waiting
+[+  0m 26s] 8e3ba11ec2a2: Pulling fs layer
+[+  0m 26s] e6abde4cbdbb: Pulling fs layer
+[+  0m 26s] 4642c7d14c46: Pulling fs layer
+[+  0m 26s] 8f20f96231c0: Pulling fs layer
+[+  0m 26s] 13d9b4bf4cd2: Pulling fs layer
+[+  0m 26s] 5888f31b4dca: Pulling fs layer
+[+  0m 26s] 19f5040962e1: Pulling fs layer
+[+  0m 26s] 7c1cf1343730: Pulling fs layer
+[+  0m 26s] 28bdd0e3ef4b: Pulling fs layer
+[+  0m 26s] 8f20f96231c0: Waiting
+[+  0m 26s] 4ab478e17d44: Pulling fs layer
+[+  0m 26s] 9d32a059391d: Pulling fs layer
+[+  0m 26s] b0d6611e4880: Pulling fs layer
+[+  0m 26s] ec7650567b6e: Pulling fs layer
+[+  0m 26s] ec7650567b6e: Waiting
+[+  0m 26s] 13d9b4bf4cd2: Waiting
+[+  0m 26s] 5888f31b4dca: Waiting
+[+  0m 26s] 19f5040962e1: Waiting
+[+  0m 26s] 7c1cf1343730: Waiting
+[+  0m 26s] 4ab478e17d44: Waiting
+[+  0m 26s] 9d32a059391d: Waiting
+[+  0m 26s] b0d6611e4880: Waiting
+[+  0m 26s] 28bdd0e3ef4b: Waiting
+[+  0m 27s] 4642c7d14c46: Verifying Checksum
+[+  0m 27s] 4642c7d14c46: Verifying Checksum
+[+  0m 27s] 4642c7d14c46: Download complete
+[+  0m 27s] 4642c7d14c46: Download complete
+[+  0m 27s] e6abde4cbdbb: Verifying Checksum
+[+  0m 27s] e6abde4cbdbb: Verifying Checksum
+[+  0m 27s] e6abde4cbdbb: Download complete
+[+  0m 27s] e6abde4cbdbb: Download complete
+[+  0m 27s] 8e3ba11ec2a2: Verifying Checksum
+[+  0m 27s] 8e3ba11ec2a2: Download complete
+[+  0m 27s] 8e3ba11ec2a2: Download complete
+[+  0m 27s] 8e3ba11ec2a2: Pull complete
+[+  0m 27s] 8e3ba11ec2a2: Pull complete
+[+  0m 27s] e6abde4cbdbb: Pull complete
+[+  0m 27s] e6abde4cbdbb: Pull complete
+[+  0m 27s] 8f20f96231c0: Verifying Checksum
+[+  0m 27s] 8f20f96231c0: Verifying Checksum
+[+  0m 27s] 8f20f96231c0: Download complete
+[+  0m 27s] 8f20f96231c0: Download complete
+[+  0m 27s] 4642c7d14c46: Pull complete
+[+  0m 27s] 4642c7d14c46: Pull complete
+[+  0m 28s] 8f20f96231c0: Pull complete
+[+  0m 28s] 8f20f96231c0: Pull complete
+[+  0m 28s] 5888f31b4dca: Verifying Checksum
+[+  0m 28s] 5888f31b4dca: Download complete
+[+  0m 28s] 5888f31b4dca: Verifying Checksum
+[+  0m 28s] 5888f31b4dca: Download complete
+[+  0m 28s] 19f5040962e1: Verifying Checksum
+[+  0m 28s] 19f5040962e1: Verifying Checksum
+[+  0m 28s] 19f5040962e1: Download complete
+[+  0m 28s] 19f5040962e1: Download complete
+[+  0m 29s] 28bdd0e3ef4b: Verifying Checksum
+[+  0m 29s] 28bdd0e3ef4b: Verifying Checksum
+[+  0m 29s] 28bdd0e3ef4b: Download complete
+[+  0m 29s] 28bdd0e3ef4b: Download complete
+[+  0m 29s] 7c1cf1343730: Verifying Checksum
+[+  0m 29s] 7c1cf1343730: Verifying Checksum
+[+  0m 29s] 7c1cf1343730: Download complete
+[+  0m 29s] 7c1cf1343730: Download complete
+[+  0m 29s] 4ab478e17d44: Verifying Checksum
+[+  0m 29s] 4ab478e17d44: 4ab478e17d44: Verifying Checksum
+[+  0m 29s] 4ab478e17d44: Download complete
+[+  0m 29s] Download complete
+[+  0m 30s] b0d6611e4880: Verifying Checksum
+[+  0m 30s] b0d6611e4880: Download complete
+[+  0m 30s] b0d6611e4880: Verifying Checksum
+[+  0m 30s] b0d6611e4880: Download complete
+[+  0m 31s] ec7650567b6e: Verifying Checksum
+[+  0m 31s] ec7650567b6e: Verifying Checksum
+[+  0m 31s] ec7650567b6e: Download complete
+[+  0m 31s] ec7650567b6e: Download complete
+[+  0m 31s] 13d9b4bf4cd2: Verifying Checksum
+[+  0m 31s] 13d9b4bf4cd2: Verifying Checksum
+[+  0m 31s] 13d9b4bf4cd2: Download complete
+[+  0m 31s] 13d9b4bf4cd2: Download complete
+[+  0m 31s] 9d32a059391d: 9d32a059391d: Verifying Checksum
+[+  0m 31s] Verifying Checksum
+[+  0m 31s] 9d32a059391d: Download complete
+[+  0m 31s] 9d32a059391d: Download complete
+[+  0m 35s] 13d9b4bf4cd2: Pull complete
+[+  0m 35s] 13d9b4bf4cd2: Pull complete
+[+  0m 36s] 5888f31b4dca: Pull complete
+[+  0m 36s] 5888f31b4dca: Pull complete
+[+  0m 36s] 19f5040962e1: Pull complete
+[+  0m 36s] 19f5040962e1: Pull complete
+[+  0m 39s] 7c1cf1343730: Pull complete
+[+  0m 39s] 7c1cf1343730: Pull complete
+[+  0m 39s] 28bdd0e3ef4b: 28bdd0e3ef4b: Pull complete
+[+  0m 39s] Pull complete
+[+  0m 40s] 4ab478e17d44: 4ab478e17d44: Pull complete
+[+  0m 40s] Pull complete
+[+  0m 45s] 9d32a059391d: Pull complete
+[+  0m 45s] 9d32a059391d: Pull complete
+[+  0m 46s] b0d6611e4880: Pull complete
+[+  0m 46s] b0d6611e4880: Pull complete
+[+  0m 46s] ec7650567b6e: Pull complete
+[+  0m 46s] ec7650567b6e: Pull complete
+[+  0m 46s] Digest: sha256:7575dcd5468bbaac90f3dd8719eeb70013eca5e21bb41f11a8161f69da0a7c74
+[+  0m 46s] Digest: sha256:7575dcd5468bbaac90f3dd8719eeb70013eca5e21bb41f11a8161f69da0a7c74
+[+  0m 46s] Status: Downloaded newer image for linuxkit/go-compile:e1204ce9921c1d45362a374e06be7234d3bf1184
+[+  0m 46s] Status: Downloaded newer image for linuxkit/go-compile:e1204ce9921c1d45362a374e06be7234d3bf1184
+[+  0m 47s] Cloning into '.'...
+[+  0m 47s] Cloning into '.'...
+[+  0m 49s] Note: checking out '171155c375706f2616f0b9c96afe2240e15d1de1'.
+[+  0m 49s] 
+[+  0m 49s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  0m 49s] changes and commit them, and you can discard any commits you make in this
+[+  0m 49s] state without impacting any branches by performing another checkout.
+[+  0m 49s] 
+[+  0m 49s] If you want to create a new branch to retain commits you create, you may
+[+  0m 49s] do so (now or later) by using -b with the checkout command again. Example:
+[+  0m 49s] 
+[+  0m 49s]   git checkout -b <new-branch-name>
+[+  0m 49s] 
+[+  0m 49s] HEAD is now at 171155c Merge pull request #40 from rn/pwsh
+[+  0m 49s] gofmt...
+[+  0m 49s] Note: checking out 'bfbd11963b8e0eb5f6e400afaebeaf39820b4e90'.
+[+  0m 49s] 
+[+  0m 49s] You are in 'detached HEAD' state. You can look around, make experimental
+[+  0m 49s] changes and commit them, and you can discard any commits you make in this
+[+  0m 49s] state without impacting any branches by performing another checkout.
+[+  0m 49s] 
+[+  0m 49s] If you want to create a new branch to retain commits you create, you may
+[+  0m 49s] do so (now or later) by using -b with the checkout command again. Example:
+[+  0m 49s] 
+[+  0m 49s]   git checkout -b <new-branch-name>
+[+  0m 49s] 
+[+  0m 49s] HEAD is now at bfbd119 Merge pull request #44 from tianon/readme-tags
+[+  0m 49s] gofmt...
+[+  0m 52s] govet...
+[+  0m 52s] govet...
+[+  0m 53s] golint...
+[+  0m 53s] ineffassign...
+[+  0m 53s] go build...
+[+  0m 54s] golint...
+[+  0m 54s] ineffassign...
+[+  0m 55s] go build...
+[+  1m 36s] make[1]: Leaving directory '/tmp/build'
+[+  1m 36s] Makefile:64: recipe for target 'test-cross' failed
+[+  1m 36s] make: *** [test-cross] Error 2[2018-11-24 00:01.35] Fetching results
+[2018-11-24 00:01.35] Running "scp" "-r" "-i" "/run/secrets/builder-ssh" "-o" "StrictHostKeyChecking=no" "root@35.190.199.18:/tmp/build/test/_results" "."
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!
+Someone could be eavesdropping on you right now (man-in-the-middle attack)!
+It is also possible that a host key has just been changed.
+The fingerprint for the ECDSA key sent by the remote host is
+SHA256:xvzR/uzewdytBa4fpxzHgb/Ma0SiE92vlbLNrZODEZ4.
+Please contact your system administrator.
+Add correct host key in /root/.ssh/known_hosts to get rid of this message.
+Offending ECDSA key in /root/.ssh/known_hosts:59
+Password authentication is disabled to avoid man-in-the-middle attacks.
+Keyboard-interactive authentication is disabled to avoid man-in-the-middle attacks.
+[2018-11-24 00:01.35] Removing test VM...
+[2018-11-24 00:01.35] Running "/gcloud/destroy.py" "linuxkit-ci-1"
+INFO:root:Destroying VM
+INFO:oauth2client.transport:Attempting refresh to obtain initial access_token
+INFO:oauth2client.client:Refreshing access_token
+INFO:root:Waiting for zone operation to finish
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+INFO:root:Operation in progress... waiting...
+[2018-11-24 00:02.30] Failed: recipe for target 'test-cross' failed
