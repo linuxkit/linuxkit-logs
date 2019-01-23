@@ -1,0 +1,50 @@
+* tools: curve25519: handle unaligned loads/stores safely
+
+This should fix sporadic crashes with `wg pubkey` on certain architectures.
+
+* netlink: auth socket changes against namespace of socket
+
+In WireGuard, the underlying UDP socket lives in the namespace where the
+interface was created and doesn't move if the interface is moved. This
+allows one to create the interface in some privileged place that has
+Internet access, and then move it into a container namespace that only
+has the WireGuard interface for egress. Consider the following
+situation:
+
+1. Interface created in namespace A. Socket therefore lives in namespace A.
+2. Interface moved to namespace B. Socket remains in namespace A.
+3. Namespace B now has access to the interface and changes the listen
+port and/or fwmark of socket. Change is reflected in namespace A.
+
+This behavior is arguably _fine_ and perhaps even expected or
+acceptable. But there's also an argument to be made that B should have
+A's cred to do so. So, this patch adds a simple ns_capable check.
+
+* ratelimiter: build tests with !IPV6
+
+Should reenable building in debug mode for systems without IPv6.
+
+* noise: replace getnstimeofday64 with ktime_get_real_ts64
+* ratelimiter: totalram_pages is now a function
+* qemu: enable FP on MIPS
+
+Linux 5.0 support.
+
+* keygen-html: bring back pure javascript implementation
+
+Benoît Viguier has proofs that values will stay well within 2^53. We
+also have an improved carry function that's much simpler. Probably more
+constant time than emscripten's 64-bit integers.
+
+* contrib: introduce simple highlighter library
+
+This is the highlighter library being used in:
+- https://twitter.com/EdgeSecurity/status/1085294681003454465
+- https://twitter.com/EdgeSecurity/status/1081953278248796165
+
+It's included here as a contrib example, so that others can paste it into
+their own GUI clients for having the same strictly validating highlighting.
+
+* netlink: use __kernel_timespec for handshake time
+
+This readies us for Y2038. See https://lwn.net/Articles/776435/ for more info.
