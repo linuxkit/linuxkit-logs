@@ -1,0 +1,102 @@
+```console
+# cat pr3287.yml
+kernel:
+  image: linuxkit/kernel:4.19.20
+  cmdline: "console=ttyS0"
+init:
+  - linuxkit/init:4448c4b6d4308244160b71c423bc9df32bc180db
+  - linuxkit/runc:a81d48a1568f41b1c2e048fe017dbd88c6a4bdcc
+  - linuxkit/containerd:56e03cfa92d75d6eb5a7fc44742e50f427ba29a3
+  - linuxkit/ca-certificates:v0.6
+onboot:
+  - name: sysctl
+    image: linuxkit/sysctl:v0.6
+  - name: rngd1
+    image: linuxkit/rngd:v0.6
+    command: ["/sbin/rngd", "-1"]
+  - name: format
+    image: linuxkit/format:v0.6
+  - name: mount
+    image: linuxkit/mount:v0.6
+    command: ["/usr/bin/mountie", "/var/lib"]
+services:
+  - name: getty
+    image: linuxkit/getty:2eb742cd7a68e14cf50577c02f30147bc406e478
+    env:
+     - INSECURE=true
+  - name: rngd
+    image: linuxkit/rngd:v0.6
+  - name: dhcpcd
+    image: linuxkit/dhcpcd:v0.6
+  - name: sshd
+    image: linuxkit/sshd:c4bc89cf0d66733c923ab9cb46198b599eb99320
+    binds:
+      - /var/lib:/persistent
+      - /root/.ssh:/root/.ssh
+      - /etc/resolv.conf:/etc/resolv.conf
+      - /run:/run
+      - /tmp:/tmp
+      - /etc:/hostroot/etc
+      - /usr/bin/ctr:/usr/bin/ctr
+      - /usr/bin/runc:/usr/bin/runc
+      - /containers:/containers
+      - /var/log:/var/log
+      - /var/lib/containerd:/var/lib/containerd
+      - /dev:/dev
+      - /sys:/sys
+files:
+  - path: root/.ssh/authorized_keys
+    source: ~/.ssh/id_rsa.pub
+    mode: "0600"
+    optional: true
+trust:
+  org:
+    - linuxkit
+# linuxkit build pr3287.yml
+...
+# linuxkit run -publish 2222:22 -disk size=2G pr3287
+```
+then in the ssh session:
+```console
+(ns: sshd) linuxkit-4e725ef9a167:~# df -h /persistent/
+Filesystem                Size      Used Available Use% Mounted on
+/dev/sda1                 1.9G      6.2M      1.8G   0% /persistent
+(ns: sshd) linuxkit-4e725ef9a167:~# apk add -U attr strace
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.8/main/x86_64/APKINDEX.tar.gz
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.8/community/x86_64/APKINDEX.tar.gz
+(1/3) Installing libattr (2.4.47-r7)
+(2/3) Installing attr (2.4.47-r7)
+(3/3) Installing strace (4.22-r0)
+Executing busybox-1.28.4-r1.trigger
+OK: 19 MiB in 29 packages
+(ns: sshd) linuxkit-4e725ef9a167:~# touch /persistent/foo
+(ns: sshd) linuxkit-4e725ef9a167:~# attr -s foo -V bar /persistent/foo 
+Attribute "foo" set to a 3 byte value for /persistent/foo:
+bar
+(ns: sshd) linuxkit-4e725ef9a167:~# strace attr -s foo -V bar /persistent/foo 
+execve("/usr/bin/attr", ["attr", "-s", "foo", "-V", "bar", "/persistent/foo"], 0x7ffcd1fdd818 /* 15 vars */) = 0
+arch_prctl(ARCH_SET_FS, 0x7fc49bef5b88) = 0
+set_tid_address(0x7fc49bef5bc0)         = 691
+open("/etc/ld-musl-x86_64.path", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+open("/lib/libattr.so.1", O_RDONLY|O_CLOEXEC) = 3
+fcntl(3, F_SETFD, FD_CLOEXEC)           = 0
+fstat(3, {st_mode=S_IFREG|0644, st_size=18144, ...}) = 0
+read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\370\21\0\0\0\0\0\0"..., 960) = 960
+mmap(NULL, 2117632, PROT_READ|PROT_EXEC, MAP_PRIVATE, 3, 0) = 0x7fc49ba60000
+mmap(0x7fc49bc63000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED, 3, 0x3000) = 0x7fc49bc63000
+close(3)                                = 0
+mprotect(0x7fc49bc63000, 4096, PROT_READ) = 0
+mprotect(0x7fc49bef2000, 4096, PROT_READ) = 0
+mprotect(0x555575fe5000, 4096, PROT_READ) = 0
+lsetxattr("/persistent/foo", "user.foo", "bar", 3, 0) = 0
+ioctl(1, TIOCGWINSZ, {ws_row=41, ws_col=149, ws_xpixel=2533, ws_ypixel=1312}) = 0
+writev(1, [{iov_base="Attribute \"foo\" set to a 3 byte "..., iov_len=57}, {iov_base=":\n", iov_len=2}], 2Attribute "foo" set to a 3 byte value for /persistent/foo:
+) = 59
+writev(1, [{iov_base="bar", iov_len=3}, {iov_base="\n", iov_len=1}], 2bar
+) = 4
+exit_group(0)                           = ?
+```
+
+So that works, suggesting the issue is with overlay filesystems.
+
+I'm not sure yet why my hack to the test case to move it to the persistent didn't work.

@@ -1,0 +1,60 @@
+`linuxkit` source has no mention of `userxattr` so I suppose it doesn't pass that.
+
+Looking at my running (non-Linuxkit) laptop system, `/proc/mounts` doesn't suggest Docker does either mind.
+
+I tried a quick hack in the `run.sh` in the test-containerd:
+```shell
+mkdir -p /var/lib/go/src/github.com/containerd/
+cp -r $GOPATH/src/github.com/containerd/containerd /var/lib/go/src/github.com/containerd/containerd
+export GOPATH=/var/lib/go
+cd /var/lib/go/src/github.com/containerd/containerd
+mount -o remount,user_xattr /var/lib
+```
+(i.e. moving the source off the overlay fs onto the persistent disk and ensuring user xattrs were on) the result was the same though.
+
+I also reproduced with `linuxkit build examples/sshd.yaml` then logging in and:
+```console
+(ns: sshd) linuxkit-4a444fac9d0f:~# apk add -U strace attr
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.8/main/x86_64/APKINDEX.tar.gz
+fetch http://dl-cdn.alpinelinux.org/alpine/v3.8/community/x86_64/APKINDEX.tar.gz
+(1/3) Installing libattr (2.4.47-r7)
+(2/3) Installing attr (2.4.47-r7)
+(3/3) Installing strace (4.22-r0)
+Executing busybox-1.28.4-r1.trigger
+OK: 19 MiB in 29 packages
+(ns: sshd) linuxkit-4a444fac9d0f:~# touch foo
+(ns: sshd) linuxkit-4a444fac9d0f:~# attr -s user.foo -V bar foo 
+attr_set: Not supported
+Could not set "user.foo" for foo
+(ns: sshd) linuxkit-4a444fac9d0f:~# strace attr -s user.foo -V bar foo 
+execve("/usr/bin/attr", ["attr", "-s", "user.foo", "-V", "bar", "foo"], 0x7ffced0963c8 /* 15 vars */) = 0
+arch_prctl(ARCH_SET_FS, 0x7fb889818b88) = 0
+set_tid_address(0x7fb889818bc0)         = 577
+open("/etc/ld-musl-x86_64.path", O_RDONLY|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+open("/lib/libattr.so.1", O_RDONLY|O_CLOEXEC) = 3
+fcntl(3, F_SETFD, FD_CLOEXEC)           = 0
+fstat(3, {st_mode=S_IFREG|0644, st_size=18144, ...}) = 0
+read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\370\21\0\0\0\0\0\0"..., 960) = 960
+mmap(NULL, 2117632, PROT_READ|PROT_EXEC, MAP_PRIVATE, 3, 0) = 0x7fb889383000
+mmap(0x7fb889586000, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED, 3, 0x3000) = 0x7fb889586000
+close(3)                                = 0
+mprotect(0x7fb889586000, 4096, PROT_READ) = 0
+mprotect(0x7fb889815000, 4096, PROT_READ) = 0
+mprotect(0x5600439e4000, 4096, PROT_READ) = 0
+lsetxattr("foo", "user.user.foo", "bar", 3, 0) = -1 EOPNOTSUPP (Not supported)
+lsetxattr("foo", "user.user.foo", "bar", 3, 0) = -1 EOPNOTSUPP (Not supported)
+writev(2, [{iov_base="", iov_len=0}, {iov_base="attr_set", iov_len=8}], 2attr_set) = 8
+writev(2, [{iov_base="", iov_len=0}, {iov_base=":", iov_len=1}], 2:) = 1
+writev(2, [{iov_base="", iov_len=0}, {iov_base=" ", iov_len=1}], 2 ) = 1
+writev(2, [{iov_base="", iov_len=0}, {iov_base="Not supported", iov_len=13}], 2Not supported) = 13
+writev(2, [{iov_base="", iov_len=0}, {iov_base="\n", iov_len=1}], 2
+) = 1
+writev(2, [{iov_base="Could not set \"user.foo\" for foo"..., iov_len=33}, {iov_base=NULL, iov_len=0}], 2Could not set "user.foo" for foo
+) = 33
+exit_group(1)                           = ?
++++ exited with 1 +++
+```
+
+That's a bit easier to experiment with at least.
+
+(I see from the `strace` that the `user.` is implied with `attr -s`, hence I got `user.user.foo`, oops, the result is the same without the redundant prefix)
