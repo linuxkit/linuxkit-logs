@@ -1,0 +1,27 @@
+> [PASS    ] linuxkit.packages.containerd 399.59s
+from:
+```diff
+diff --git a/test/pkg/containerd/run.sh b/test/pkg/containerd/run.sh
+index 23dc8d2b8..a4ea7b907 100755
+--- a/test/pkg/containerd/run.sh
++++ b/test/pkg/containerd/run.sh
+@@ -5,10 +5,17 @@ function failed {
+        exit 1
+ }
+ 
++set -x
++
+ # Get these into the logs.
+ git describe HEAD
+ git rev-parse HEAD
+ 
++mkdir -p /var/lib/tmp
++chmod 1777 /var/lib/tmp
++# The unit tests need user_xattr support, which /tmp (a tmpfs) does not support.
++export TMPDIR=/var/lib/tmp
++
+ # unset -race (does not work on alpine; see golang/go#14481)
+ export TESTFLAGS=
+ make root-test || failed
+```
+(Probably the `chmod` is not needed, but I added it because the test cycle is pretty slow...)
