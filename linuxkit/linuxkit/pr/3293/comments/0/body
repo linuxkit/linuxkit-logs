@@ -1,0 +1,74 @@
+```
+* wg-quick: freebsd: allow loopback to work
+
+FreeBSD adds a route for point-to-point destination addresses. We don't
+really want to specify any destination address, but unfortunately we
+have to. Before we tried to cheat by giving our own address as the
+destination, but this had the unfortunate effect of preventing
+loopback from working on our local ip address. We work around this with
+yet another kludge: we set the destination address to 127.0.0.1. Since
+127.0.0.1 is already assigned to an interface, this has the same effect
+of not specifying a destination address, and therefore we accomplish the
+intended behavior. Note that the bad behavior is still present in Darwin,
+where such workaround does not exist.
+
+* tools: remove unused check phony declaration
+* highlighter: when subtracting char, cast to unsigned
+* chacha20: name enums
+* tools: fight compiler slightly harder
+* tools: c_acc doesn't need to be initialized
+* queueing: more reasonable allocator function convention
+
+Usual nits.
+
+* systemd: wg-quick should depend on nss-lookup.target
+
+Since wg-quick(8) calls wg(8) which does hostname lookups, we should
+probably only run this after we're allowed to look up hostnames.
+
+* compat: backport ALIGN_DOWN
+* noise: whiten the nanoseconds portion of the timestamp
+
+This mitigates unrelated sidechannel attacks that think they can turn
+WireGuard into a useful time oracle.
+
+* hashtables: decouple hashtable allocations from the main device allocation
+
+The hashtable allocations are quite large, and cause the device allocation in
+the net framework to stall sometimes while it tries to find a contiguous
+region that can fit the device struct. To fix the allocation stalls, decouple
+the hashtable allocations from the device allocation and allocate the
+hashtables with kvmalloc's implicit __GFP_NORETRY so that the allocations fall
+back to vmalloc with little resistance.
+
+* chacha20poly1305: permit unaligned strides on certain platforms
+
+The map allocations required to fix this are mostly slower than unaligned
+paths.
+
+* noise: store clamped key instead of raw key
+
+This causes `wg show` to now show the right thing. Useful for doing
+comparisons.
+
+* compat: ipv6_stub is sometimes null
+
+On ancient kernels, ipv6_stub is sometimes null in cases where IPv6 has
+been disabled with a command line flag or other failures.
+
+* Makefile: don't duplicate code in install and modules-install
+* Makefile: make the depmod path configurable
+
+* queueing: net-next has changed signature of skb_probe_transport_header
+
+A 5.1 change. This could change again, but for now it allows us to keep this
+snapshot aligned with our upstream submissions.
+
+* netlink: don't remove allowed ips for new peers
+* peer: only synchronize_rcu_bh and traverse trie once when removing all peers
+* allowedips: maintain per-peer list of allowedips
+
+This is a rather big and important change that makes it much much faster to do
+operations involving thousands of peers. Batch peer/allowedip addition and
+clearing is several orders of magnitude faster now.
+```
