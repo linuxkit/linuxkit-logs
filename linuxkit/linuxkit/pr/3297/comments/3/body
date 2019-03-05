@@ -1,0 +1,18 @@
+CI failed with kmod tests for 4.14.x onwards. Running locally, i get:
+```
+make -C /usr/src/linux-headers-4.14.104-linuxkit M=/kmod modules
+make[1]: Entering directory '/usr/src/linux-headers-4.14.104-linuxkit'
+  CC [M]  /kmod/hello_world.o
+cc1: error: cannot load plugin ./scripts/gcc-plugins/structleak_plugin.so
+   Error relocating ./scripts/gcc-plugins/structleak_plugin.so: _ZN11symtab_node10dump_tableEP8_IO_FILE: symbol not found
+cc1: error: cannot load plugin ./scripts/gcc-plugins/randomize_layout_plugin.so
+   Error relocating ./scripts/gcc-plugins/randomize_layout_plugin.so: _Z13size_int_kindl14size_type_kind: symbol not found
+make[2]: *** [scripts/Makefile.build:333: /kmod/hello_world.o] Error 1
+make[1]: *** [Makefile:1535: _module_/kmod] Error 2
+make[1]: Leaving directory '/usr/src/linux-headers-4.14.104-linuxkit'
+make: *** [Makefile:4: all] Error 2
+```
+
+The problem seems to be that the plugins were compiled with an older version of gcc.
+
+Also looks like the LinuxKit kernel build is broken with this update. Will try to unbreak this first, and if that fixes the kmod tests push an update.
