@@ -1,0 +1,46 @@
+<!--
+Please make sure you've read and understood our contributing guidelines;
+https://github.com/linuxkit/linuxkit/blob/master/CONTRIBUTING.md
+
+** Make sure all your commits include a signature generated with `git commit -s` **
+
+For additional information on our contributing process, read our contributing
+guide https://docs.docker.com/opensource/code/
+
+If this is a bug fix, make sure your description includes "fixes #xxxx", or
+"closes #xxxx"
+
+Please provide the following information:
+-->
+
+**- What I did**
+
+Extracted the building of grub from the various places that use it - `tools/mkimage-raw-efi`, `tools/mkimage-iso-efi`, `tools/mkimage-qcow2-efi` - into its own package `linuxkit/grub` from source `tools/grub`, and just copy over the compiled `*.EFI` image as needed.
+
+This will speed up builds of those images, and more importantly make it easier to move them to upstream grub and off of orphaned CoreOS grub, when ready.
+
+**- How I did it**
+
+Moved the common Dockerfile info over and updated the Dockerfiles in each of those packages.
+
+**- How to verify it**
+
+1. Build the grub image
+2. Build the `mkimage-*-efi` image(s)
+3. `lkt build -format tar | docker run -i <your mkimage>`
+4. Boot
+
+**- Description for the changelog**
+<!--
+Write a short (one line) summary that describes the changes in this
+pull request for inclusion in the changelog:
+-->
+
+Centralize common grub builds.
+
+
+**- A picture of a cute animal (not mandatory but encouraged)**
+
+**Note:** The images have not been fully pushed to docker hub quite yet. `arm64` pushes have been stuck. Will comment here when ready.
+
+This will simplify much of #3309 
