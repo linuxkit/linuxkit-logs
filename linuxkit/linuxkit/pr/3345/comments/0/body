@@ -1,0 +1,41 @@
+Linux has documented but somewhat unusual behavior around
+SIGSTOP/SIGCONT and certain syscalls, of which epoll_wait(2) is one.  In
+this particular case, rngd exited unexpectedly after getting ptrace'd
+mid-epoll_wait.  Fix this by handling EINTR from this syscall, and
+continuing to add entropy and wait.
+
+Signed-off-by: Krister Johansen <krister.johansen@oracle.com>
+
+<!--
+Please make sure you've read and understood our contributing guidelines;
+https://github.com/linuxkit/linuxkit/blob/master/CONTRIBUTING.md
+
+** Make sure all your commits include a signature generated with `git commit -s` **
+
+For additional information on our contributing process, read our contributing
+guide https://docs.docker.com/opensource/code/
+
+If this is a bug fix, make sure your description includes "fixes #xxxx", or
+"closes #xxxx"
+
+Please provide the following information:
+-->
+
+**- What I did**
+
+Changed rngd so that it will no longer exit 1 upon being ptrace'd.
+
+**- How I did it**
+
+This change requires that the error handling around the `epoll_wait(2)` in rngd be modified so that it can cope with receiving an EINTR (or any temporary error) and continue instead of exiting.
+
+**- How to verify it**
+
+I validated this by running `strace(1)` against `rngd`.  Prior to the fix it would exit moments after the tracer attached.  With this fix, it's possible to observe the behavior of `rngd` with strace, and to have it attach and detach without issue.
+
+**- Description for the changelog**
+
+Rngd should gracefully handle SIGSTOP/SIGCONT
+
+**- A picture of a cute animal (not mandatory but encouraged)**
+![920x920](https://user-images.githubusercontent.com/26471578/57337558-b8fab700-70de-11e9-9c82-bf70bfeb2b40.jpg)
