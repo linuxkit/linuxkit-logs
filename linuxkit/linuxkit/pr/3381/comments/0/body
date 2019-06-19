@@ -1,0 +1,72 @@
+<!--
+Please make sure you've read and understood our contributing guidelines;
+https://github.com/linuxkit/linuxkit/blob/master/CONTRIBUTING.md
+
+** Make sure all your commits include a signature generated with `git commit -s` **
+
+For additional information on our contributing process, read our contributing
+guide https://docs.docker.com/opensource/code/
+
+If this is a bug fix, make sure your description includes "fixes #xxxx", or
+"closes #xxxx"
+
+Please provide the following information:
+-->
+
+**- What I did**
+Updated ZFS to 0.8.1 to be able to use its native encryption (added in 0.8.0)
+
+**- How I did it**
+Updated kernel/Dockerfile.zfs and tested with kernel 4.19.49
+
+**- How to verify it**
+Tested on docker-for-mac with this zfs.yml
+```
+kernel:
+  image: test/kernel:<tag-from-make-command>
+  cmdline: "console=tty0 console=ttyS0 console=ttyAMA0 console=ttysclp0"
+init:
+  - test/zfs-kmod:<tag-from-make-command>
+  - linuxkit/init:v0.7
+  - linuxkit/runc:v0.7
+  - linuxkit/containerd:v0.7
+  - linuxkit/ca-certificates:v0.7
+onboot:
+  - name: sysctl
+    image: linuxkit/sysctl:v0.7
+  - name: modprobe
+    image: linuxkit/modprobe:v0.7
+    command: ["modprobe", "-a", "zfs"]
+services:
+  - name: getty
+    image: linuxkit/getty:v0.7
+    env:
+    - INSECURE=true
+  - name: rngd
+    image: linuxkit/rngd:v0.7
+  - name: dhcpcd
+    image: linuxkit/dhcpcd:v0.7
+trust:
+  org:
+    - linuxkit
+    - library
+```
+```
+cd kernel
+make ORG=test build_zfs_4.19.x
+linuxkit build -format kernel+initrd zfs.yml
+linuxkit run hyperkit -kernel zfs
+apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main zfs
+fallocate -l 70M /tmp/disk
+zpool create rpool /tmp/disk
+zfs create -o encryption=on -o keyformat=passphrase rpool/encrypted
+zfs get encryption rpool/encrypted
+```
+**- Description for the changelog**
+<!--
+Write a short (one line) summary that describes the changes in this
+pull request for inclusion in the changelog:
+-->
+Update zfs to be able to use native encryption
+
+**- A picture of a cute animal (not mandatory but encouraged)**
