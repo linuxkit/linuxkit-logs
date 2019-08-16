@@ -1,9 +1,0 @@
-@ijc here's a few things you're missing:
-  * while it is true that by default modprobe container doesn't do modprobe it actually has the binary to do so and a capability CAP_SYS_MODULE to allow it. Hence the typical usage is to specify something like command: ["modprobe", "-a", "XXX" ] in your linuxkit.yml file. The problem, of course, is how that interacts with the case when the firmware is required for the driver being modrpobed. Which brings us to...
-  * ...how firmware gets loaded (note this changed at around 2016 https://lwn.net/Articles/676101/): modern linux kernels actually default to read firmware from the filesystem (instead of going through udev and userspace). The question then becomes what namespace does it look under. This gets determined by whether the firmware loading event got triggered from within a container (or even chroot for that matter or not). 
-
-You're right that in linuxkit all of this a bit manual since we're not using anything like mdev (although as @rn pointed out we do have this issue pending https://github.com/linuxkit/linuxkit/issues/2836). However, I'd argue that for as long as we use modprobe package for manually orchestrating something that mdev would've done -- we might as well empower it to do its job.
-
-Of course, to @justincormack point -- nobody's suggesting that we add capabilities all -- that's still need to get clarified. The rest, however, I would argue stands.
-
-Does it make it clear(er)?
